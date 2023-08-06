@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sd-webui-inference-api
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: sd-webui-inference-api
+  template:
+    metadata:
+      labels:
+        app: sd-webui-inference-api
+    spec:
+      serviceAccountName: sd-webui-queue-proxy-sa
+      terminationGracePeriodSeconds: 0
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: sd-webui-inference-api
+        image: 373534280245.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/inference-api:latest
+        resources:
+          requests:
+            nvidia.com/gpu: 1
+          limits:
+            nvidia.com/gpu: 1
+        volumeMounts:
+        - mountPath: /tmp/models
+          name: models
+      - name: sd-webui-queue-agent
+        image: 373534280245.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/queue-agent:latest
+        env:
+        - name: AWS_REGION
+          value: us-west-2
+        - name: SQS_QUEUE_URL
+          value: https://sqs.us-west-2.amazonaws.com/373534280245/sd-standard-requests-queue
+        - name: S3_BUCKET
+          value: sd-standard-requests-pdx
+        - name: SNS_TOPIC_ARN
+          value: arn:aws:sns:us-west-2:373534280245:sd-results-notification-topic       
+      volumes:
+      - name: models
+        hostPath:
+          path: /tmp/models

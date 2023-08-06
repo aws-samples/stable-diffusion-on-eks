@@ -1,0 +1,35 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: sd-on-eks-demo
+  region: us-west-2
+  version: "1.27"
+  tags:
+    karpenter.sh/discovery: sd-on-eks-demo
+
+managedNodeGroups:
+- instanceType: m5.large
+  amiFamily: AmazonLinux2
+  name: infra-ng
+  desiredCapacity: 2
+  minSize: 1
+  maxSize: 3
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: karpenter
+      namespace: karpenter
+    roleName: sd-on-eks-demo-karpenter
+    attachPolicyARNs:
+    - arn:aws:iam::373534280245:policy/KarpenterControllerPolicy-sd-on-eks-demo
+    roleOnly: true
+
+iamIdentityMappings:
+- arn: "arn:aws:iam::373534280245:role/KarpenterNodeRole-sd-on-eks-demo"
+  username: system:node:{{EC2PrivateDNSName}}
+  groups:
+  - system:bootstrappers
+  - system:nodes

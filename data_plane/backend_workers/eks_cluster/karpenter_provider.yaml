@@ -1,0 +1,47 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: gpu
+spec:
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["spot", "on-demand"]
+    - key: node.kubernetes.io/instance-type
+      operator: In
+      values: ["g5.xlarge", "g5.2xlarge"]
+  taints:
+    - key: nvidia.com/gpu
+      effect: "NoSchedule"
+  limits:
+    resources:
+      gpu: 100
+  providerRef:
+    name: gpu
+  ttlSecondsAfterEmpty: 30
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: gpu
+spec:
+  subnetSelector:
+    karpenter.sh/discovery: sd-on-eks-demo
+    Name: "*Private*"
+  securityGroupSelector:
+    karpenter.sh/discovery: sd-on-eks-demo
+    Name: "*ClusterSharedNode*"
+  amiFamily: "AL2"
+  amiSelector:
+    aws::ids: ami-00a267b1ecf2ea971
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 200Gi
+        volumeType: gp3
+        iops: 4000
+        deleteOnTermination: true
+        throughput: 1000
+  userData:  |
+      #!/bin/bash
+      time s5cmd cp --concurrency 20 "s3://sd-models-pdx/*" /tmp/models/
