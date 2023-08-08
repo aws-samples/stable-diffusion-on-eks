@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/sd-on-eks.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/stable-difussion-on-eks.ts",
   "watch": {
     "include": [
       "**"
