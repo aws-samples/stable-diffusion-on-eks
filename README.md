@@ -1,3 +1,1 @@
-
 # Stable Difussion on EKS
-
