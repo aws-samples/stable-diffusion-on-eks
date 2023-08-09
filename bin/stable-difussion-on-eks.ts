@@ -8,6 +8,11 @@ import DataPlaneStack from "../data_plane/component";
 
 const app = new cdk.App();
 
-const dataPlaneSandboxStack = new DataPlaneStack(app, Constants.APP_NAME + "DataPlaneSandbox");
+const sanboxEnv = {
+    account: "057313215210",
+    region: "us-west-2",
+}
 
-const controlPlaneSandboxStack = new ControlPlane(app, Constants.APP_NAME + "ControlPlaneSandbox");
+const dataPlaneSandboxStack = new DataPlaneStack(app, Constants.APP_NAME + "DataPlaneSandbox", {env: sanboxEnv});
+
+const controlPlaneSandboxStack = new ControlPlane(app, Constants.APP_NAME + "ControlPlaneSandbox", {env: sanboxEnv});

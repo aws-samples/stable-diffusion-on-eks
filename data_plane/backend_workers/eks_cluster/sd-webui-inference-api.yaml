@@ -12,7 +12,7 @@ spec:
       labels:
         app: sd-webui-inference-api
     spec:
-      serviceAccountName: sd-webui-queue-proxy-sa
+      serviceAccountName: sd-webui-sa
       terminationGracePeriodSeconds: 0
       tolerations:
       - key: nvidia.com/gpu
@@ -30,16 +30,16 @@ spec:
         - mountPath: /tmp/models
           name: models
       - name: sd-webui-queue-agent
-        image: 373534280245.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/queue-agent:latest
+        image: 057313215210.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/queue-agent:latest
         env:
         - name: AWS_REGION
           value: us-west-2
         - name: SQS_QUEUE_URL
-          value: https://sqs.us-west-2.amazonaws.com/373534280245/sd-standard-requests-queue
+          value: https://sqs.us-west-2.amazonaws.com/057313215210/SdOnEksDataPlaneSandbox-eksClusterInputQueue19310EEB5-yK9YLbLTv5rI
         - name: S3_BUCKET
-          value: sd-standard-requests-pdx
+          value: sdoneksdataplanesandbox-eksclustersdoutputpdx31c2-2e684zsv4h1n
         - name: SNS_TOPIC_ARN
-          value: arn:aws:sns:us-west-2:373534280245:sd-results-notification-topic       
+          value: arn:aws:sns:us-west-2:057313215210:SdOnEksDataPlaneSandbox-eksClustersdnotificationpdx1BF5B43B-D0FaamuF2rIt
       volumes:
       - name: models
         hostPath:

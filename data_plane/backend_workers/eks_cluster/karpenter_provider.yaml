@@ -9,7 +9,7 @@ spec:
       values: ["spot", "on-demand"]
     - key: node.kubernetes.io/instance-type
       operator: In
-      values: ["g5.xlarge", "g5.2xlarge"]
+      values: ["g5.2xlarge"]
   taints:
     - key: nvidia.com/gpu
       effect: "NoSchedule"
@@ -18,7 +18,8 @@ spec:
       gpu: 100
   providerRef:
     name: gpu
-  ttlSecondsAfterEmpty: 30
+  consolidation:
+    enabled: true
 ---
 apiVersion: karpenter.k8s.aws/v1alpha1
 kind: AWSNodeTemplate
@@ -26,11 +27,9 @@ metadata:
   name: gpu
 spec:
   subnetSelector:
-    karpenter.sh/discovery: sd-on-eks-demo
-    Name: "*Private*"
+    Name: "SdOnEksDataPlaneSandbox/eksClusterStack/eksClusterStack-vpc/PrivateSubnet*"
   securityGroupSelector:
-    karpenter.sh/discovery: sd-on-eks-demo
-    Name: "*ClusterSharedNode*"
+    "kubernetes.io/cluster/eksClusterStack": "owned"
   amiFamily: "AL2"
   amiSelector:
     aws::ids: ami-00a267b1ecf2ea971
@@ -44,4 +43,4 @@ spec:
         throughput: 1000
   userData:  |
       #!/bin/bash
-      time s5cmd cp --concurrency 20 "s3://sd-models-pdx/*" /tmp/models/
+      time s5cmd cp --concurrency 20 "s3://sd-on-eks-pdx/*" /tmp/models/

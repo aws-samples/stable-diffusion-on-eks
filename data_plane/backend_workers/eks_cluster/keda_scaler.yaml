@@ -24,6 +24,7 @@ spec:
     authenticationRef:
       name: keda-trigger-auth-aws-credentials
     metadata:
-      queueURL: https://sqs.us-west-2.amazonaws.com/373534280245/sd-standard-requests-queue
+      queueURL: https://sqs.us-west-2.amazonaws.com/057313215210/SdOnEksDataPlaneSandbox-eksClusterInputQueue19310EEB5-yK9YLbLTv5rI
       queueLength: "10"
       awsRegion: "us-west-2"
+      identityOwner: operator
