@@ -8,6 +8,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class EksClusterConstruct extends Construct {
+    outputBucket: s3.IBucket;
+
+
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id);
 
@@ -50,9 +53,9 @@ export class EksClusterConstruct extends Construct {
         const inputQueue1 = new sqs.Queue(this, 'InputQueue1');
         inputQueue1.grantConsumeMessages(WebUISA);
 
-        const outputBucket = new s3.Bucket(this, 'sd-output-pdx');
-        outputBucket.grantWrite(WebUISA);
-        outputBucket.grantPutAcl(WebUISA);
+        this.outputBucket = new s3.Bucket(this, 'sd-output-pdx');
+        this.outputBucket.grantWrite(WebUISA);
+        this.outputBucket.grantPutAcl(WebUISA);
 
         const notificationTopic = new sns.Topic(this, 'sd-notification-pdx');
         notificationTopic.grantPublish(WebUISA);

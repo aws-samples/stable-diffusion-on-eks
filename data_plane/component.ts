@@ -10,6 +10,6 @@ export default class DataPlaneStack extends cdk.Stack {
 
     const eksCluster = new BackendWorkers.EksClusterConstruct(this, "eksCluster");
     
-    const frontendApi = new FrontendApi.FrontendApiConstruct(this, "FrontendApi");
+    const frontendApi = new FrontendApi.FrontendApiConstruct(this, "FrontendApi", eksCluster.outputBucket);
   }
 }

@@ -4,10 +4,11 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as path from 'path';
+import { IBucket } from 'aws-cdk-lib/aws-s3';
 
 
 export class FrontendApiConstruct extends Construct {
-    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    constructor(scope: Construct, id: string, outputBucket: IBucket, props?: cdk.StackProps) {
         super(scope, id);
 
         const sns_topic = new sns.Topic(this, 'Topic', {
@@ -19,7 +20,8 @@ export class FrontendApiConstruct extends Construct {
             handler: 'app.lambda_handler',
             runtime: lambda.Runtime.PYTHON_3_9,
             environment: {
-                "SNS_TOPIC_ARN": sns_topic.topicArn
+                "SNS_TOPIC_ARN": sns_topic.topicArn,
+                "S3_OUTPUT_BUCKET": outputBucket.bucketName
             }
         });
 
