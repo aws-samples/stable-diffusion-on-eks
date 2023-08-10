@@ -68,11 +68,11 @@ export class frontApiStack extends cdk.Stack {
 
         const api = new LambdaRestApi(this, 'myapi', {
             handler: lambdaFunction,
-            proxy: false
+            proxy: true
         });
-        const items = api.root.addResource('items');
-        items.addMethod('GET');  // GET /items
-        items.addMethod('POST'); // POST /items
+        // const items = api.root.addResource('items');
+        // items.addMethod('GET');  // GET /items
+        // items.addMethod('POST'); // POST /items
     
 
 
