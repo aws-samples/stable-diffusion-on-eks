@@ -18,6 +18,9 @@ export class FrontendApiConstruct extends Construct {
             code: lambda.Code.fromAsset(path.join(__dirname, 'src/lambda')),
             handler: 'app.lambda_handler',
             runtime: lambda.Runtime.PYTHON_3_9,
+            environment: {
+                "SNS_TOPIC_ARN": sns_topic.topicArn
+            }
         });
 
         sns_topic.grantPublish(lambdaFunction);
