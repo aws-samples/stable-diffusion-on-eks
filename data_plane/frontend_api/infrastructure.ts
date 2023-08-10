@@ -1,8 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
-import * as sqs from 'aws-cdk-lib/aws-sqs';
+// import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
+// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as iam from 'aws-cdk-lib/aws-iam'
 
 import {
     Aws,
@@ -61,10 +62,16 @@ export class frontApiStack extends cdk.Stack {
         // const invokeUrl = `https://${mgmt_rest_api.restApiId}.execute-api.${Aws.REGION}.amazonaws.com.cn/prod`
 
         const lambdaFunction = new lambda.Function(this, 'MyLambda', {
-            code: lambda.Code.fromAsset(path.join(__dirname, 'assets')),
+            code: lambda.Code.fromAsset(path.join(__dirname, 'src/lambda')),
             handler: 'app.lambda_handler',
             runtime: lambda.Runtime.PYTHON_3_9,
           });
+          
+        lambdaFunction.addToRolePolicy(new iam.PolicyStatement({
+            resources: [sns_topic.topicArn],
+            actions: ["sns:*"],
+            effect: iam.Effect.ALLOW,
+        }));
 
         const api = new LambdaRestApi(this, 'myapi', {
             handler: lambdaFunction,
