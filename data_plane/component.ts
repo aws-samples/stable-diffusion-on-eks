@@ -8,7 +8,8 @@ export default class DataPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // const eksCluster = new BackendWorkers.EksClusterConstruct(this, "eksCluster");
-    const frontApi = new FrontendApi.frontApiStack(this, "frontApi");
+    const eksCluster = new BackendWorkers.EksClusterConstruct(this, "eksCluster");
+    
+    const frontendApi = new FrontendApi.FrontendApiConstruct(this, "FrontendApi");
   }
 }

@@ -9,7 +9,7 @@ import DataPlaneStack from "../data_plane/component";
 const app = new cdk.App();
 
 const sanboxEnv = {
-    // account: "057313215210",
+    account: "057313215210",
     region: "us-west-2",
 }
 
