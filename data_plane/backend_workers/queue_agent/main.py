@@ -60,8 +60,8 @@ def main():
         for message in received_messages:
             try:
                 snsPayload = json.loads(message.body)
-                payload = json.loads(snsPayload['message'])
-                print(snsPayload['message'])
+                payload = json.loads(snsPayload['Message'])
+                print(snsPayload['Message'])
                 taskHeader = payload.pop('alwayson_scripts', None)
                 taskType = taskHeader['task']
                 print(
