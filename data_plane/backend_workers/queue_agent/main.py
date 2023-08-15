@@ -13,7 +13,7 @@ from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
 
 logger = logging.getLogger(__name__)
-awsRegion = os.getenv("AWS_REGION")
+awsRegion = os.getenv("AWS_DEFAULT_REGION")
 sqsQueueUrl = os.getenv("SQS_QUEUE_URL")
 snsTopicArn = os.getenv("SNS_TOPIC_ARN")
 s3Bucket = os.getenv("S3_BUCKET")
@@ -61,6 +61,7 @@ def main():
             try:
                 payload = json.loads(message.body)
 
+                print(message.body)
                 taskHeader = payload.pop('alwayson_scripts', None)
                 taskType = taskHeader['task']
                 print(
