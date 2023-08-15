@@ -59,9 +59,9 @@ def main():
         received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
         for message in received_messages:
             try:
-                payload = json.loads(message.body)
-
-                print(message.body)
+                snsPayload = json.loads(message.body)
+                payload = json.loads(snsPayload['message'])
+                print(snsPayload['message'])
                 taskHeader = payload.pop('alwayson_scripts', None)
                 taskType = taskHeader['task']
                 print(
