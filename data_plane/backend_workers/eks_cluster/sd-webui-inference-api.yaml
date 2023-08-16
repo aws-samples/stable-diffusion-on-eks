@@ -18,21 +18,24 @@ spec:
       - key: nvidia.com/gpu
         operator: Exists
         effect: NoSchedule
+      volumes:
+      - name: models
+        emptyDir: {}
       containers:
       - name: sd-webui-inference-api
-        image: 373534280245.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/inference-api:latest
+        image: 057313215210.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/inference-api:0.1.0
         resources:
           requests:
             nvidia.com/gpu: 1
           limits:
             nvidia.com/gpu: 1
         volumeMounts:
-        - mountPath: /tmp/models
-          name: models
+        - name: models
+          mountPath: /tmp/models            
       - name: sd-webui-queue-agent
         image: 057313215210.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/queue-agent:latest
         env:
-        - name: AWS_REGION
+        - name: AWS_DEFAULT_REGION
           value: us-west-2
         - name: SQS_QUEUE_URL
           value: https://sqs.us-west-2.amazonaws.com/057313215210/SdOnEksDataPlaneSandbox-eksClusterInputQueue19310EEB5-yK9YLbLTv5rI
@@ -40,7 +43,6 @@ spec:
           value: sdoneksdataplanesandbox-eksclustersdoutputpdx31c2-2e684zsv4h1n
         - name: SNS_TOPIC_ARN
           value: arn:aws:sns:us-west-2:057313215210:SdOnEksDataPlaneSandbox-eksClustersdnotificationpdx1BF5B43B-D0FaamuF2rIt
-      volumes:
-      - name: models
-        hostPath:
-          path: /tmp/models
+        volumeMounts:
+        - name: models
+          mountPath: /tmp/models

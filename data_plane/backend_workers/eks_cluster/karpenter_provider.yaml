@@ -30,17 +30,19 @@ spec:
     Name: "SdOnEksDataPlaneSandbox/eksClusterStack/eksClusterStack-vpc/PrivateSubnet*"
   securityGroupSelector:
     "kubernetes.io/cluster/eksClusterStack": "owned"
-  amiFamily: "AL2"
-  amiSelector:
-    aws::ids: ami-00a267b1ecf2ea971
+  amiFamily: "Bottlerocket"
   blockDeviceMappings:
     - deviceName: /dev/xvda
       ebs:
-        volumeSize: 200Gi
+        volumeSize: 10Gi
+        volumeType: gp3
+        deleteOnTermination: true
+    - deviceName: /dev/xvdb
+      ebs:
+        volumeSize: 80Gi
         volumeType: gp3
         iops: 4000
-        deleteOnTermination: true
         throughput: 1000
-  userData:  |
-      #!/bin/bash
-      time s5cmd cp --concurrency 20 "s3://sd-on-eks-pdx/*" /tmp/models/
+        deleteOnTermination: true
+        snapshotID: snap-080513d57bfb8fc4a
+        
