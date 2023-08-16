@@ -10,3 +10,4 @@ retry-requests==2.0.0
 s3transfer==0.6.1
 six==1.16.0
 urllib3==1.26.16
+Pillow==9.4.0
