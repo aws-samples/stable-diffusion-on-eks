@@ -79,11 +79,11 @@ def main():
                 if taskType == 'text-to-image':
                     r = invoke_txt2img(apiFullPath, payload)
                     imgOutputs = post_invocations(
-                        bucket, payload['s3_output_path'], r['images'], 80)
+                        bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
                 elif taskType == 'image-to-image':
                     r = invoke_img2img(apiFullPath, payload, taskHeader)
                     imgOutputs = post_invocations(
-                        bucket, payload['s3_output_path'], r['images'], 80)
+                        bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
 
             except Exception as e:
                 publish_message(topic, json.dumps(failed(taskHeader, repr(e))))
@@ -159,6 +159,10 @@ def get_bucket_and_key(s3uri):
     bucket = s3uri[5: pos]
     key = s3uri[pos + 1:]
     return bucket, key
+
+def get_prefix(path):
+    pos = path.find('/')
+    return path[pos + 1:]
 
 
 def delete_message(message):
