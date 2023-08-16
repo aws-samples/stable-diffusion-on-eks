@@ -113,7 +113,7 @@ def check_readiness(url):
                 print('Service is ready.')
                 break
         except Exception as e:
-            time.sleep(5)
+            time.sleep(1)
 
 
 def get_time(f):
