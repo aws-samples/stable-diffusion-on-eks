@@ -11,6 +11,7 @@ import traceback
 import uuid
 from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
+from requests.adapters import HTTPAdapter, Retry
 
 logger = logging.getLogger(__name__)
 awsRegion = os.getenv("AWS_DEFAULT_REGION")
@@ -22,18 +23,23 @@ sqsRes = boto3.resource('sqs')
 snsRes = boto3.resource('sns')
 s3Res = boto3.resource('s3')
 
+apiClient = requests.Session()
+retries = Retry(
+    total=3,
+    connect=100,
+    backoff_factor=0.1,
+    allowed_methods=["GET", "POST"])
+apiClient.mount('http://', HTTPAdapter(max_retries=retries))
+REQUESTS_TIMEOUT_SECONDS = 30
+
 
 def main():
-    # initialization
+    # initialization:
     # 1. Prepare environments;
     # 2. AWS services resources(sqs/sns/s3);
     # 3. Parameter map;
-    # 4. SD api base url;
-
-    print(awsRegion)
-    print(sqsQueueUrl)
-    print(snsTopicArn)
-    print(s3Bucket)
+    # 4. SD api base url and http session client;
+    print_env()
 
     queue = sqsRes.Queue(sqsQueueUrl)
     SQS_WAIT_TIME_SECONDS = 20
@@ -46,6 +52,8 @@ def main():
                     'extras-single-image': 'extra-single-image', 'extras-batch-images': 'extra-batch-images', 'interrogate': 'interrogate'}
 
     apiBaseUrl = "http://localhost:8080/sdapi/v1/"
+
+    check_readiness(apiBaseUrl+"memory")
 
     # main loop
     # todo: Implement scaleDown hook signal
@@ -71,11 +79,11 @@ def main():
                 if taskType == 'text-to-image':
                     r = invoke_txt2img(apiFullPath, payload)
                     imgOutputs = post_invocations(
-                        bucket, taskHeader['save_dir']+taskHeader['id_task'], r['images'], 80)
+                        bucket, payload['s3_output_path'], r['images'], 80)
                 elif taskType == 'image-to-image':
                     r = invoke_img2img(apiFullPath, payload, taskHeader)
                     imgOutputs = post_invocations(
-                        bucket, taskHeader['save_dir']+taskHeader['id_task'], r['images'], 80)
+                        bucket, payload['s3_output_path'], r['images'], 80)
 
             except Exception as e:
                 publish_message(topic, json.dumps(failed(taskHeader, repr(e))))
@@ -87,6 +95,25 @@ def main():
                 delete_message(message)
                 print(
                     f"End process {taskType} task with ID: {taskHeader['id_task']}")
+
+
+def print_env():
+    print(awsRegion)
+    print(sqsQueueUrl)
+    print(snsTopicArn)
+    print(s3Bucket)
+
+
+def check_readiness(url):
+    while True:
+        try:
+            print('Checking service readiness...')
+            r = apiClient.get(url, timeout=(1.0, 1.0))
+            if r.status_code == 200:
+                print('Service is ready.')
+                break
+        except Exception as e:
+            time.sleep(5)
 
 
 def get_time(f):
@@ -256,7 +283,10 @@ def failed(header, message):
 
 @get_time
 def do_invocations(url, body):
-    response = requests.post(url=url, json=body)
+    response = apiClient.post(
+        url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
+    if response.status_code != 200:
+        response.raise_for_status()
     return response.json()
 
 
@@ -264,24 +294,20 @@ def post_invocations(bucket, folder, b64images, quality):
     defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
     if not folder:
         folder = defaultFolder
-    if True:
-        images = []
-        for b64image in b64images:
-            bytesData = export_pil_to_bytes(
-                decode_to_image(b64image), quality)
-            imageId = datetime.datetime.now().strftime(
-                f"%Y%m%d%H%M%S-{uuid.uuid4()}")
-            suffix = 'png'
-            bucket.put_object(
-                Body=bytesData,
-                Key=f'{folder}/{imageId}.{suffix}',
-                ContentType=f'image/{suffix}'
-            )
-            images.append(f's3://{s3Bucket}/{folder}/{imageId}.{suffix}')
-        return images
-    # todo
-    else:
-        return b64images
+    images = []
+    for b64image in b64images:
+        bytesData = export_pil_to_bytes(
+            decode_to_image(b64image), quality)
+        imageId = datetime.datetime.now().strftime(
+            f"%Y%m%d%H%M%S-{uuid.uuid4()}")
+        suffix = 'png'
+        bucket.put_object(
+            Body=bytesData,
+            Key=f'{folder}/{imageId}.{suffix}',
+            ContentType=f'image/{suffix}'
+        )
+        images.append(f's3://{s3Bucket}/{folder}/{imageId}.{suffix}')
+    return images
 
 
 def publish_message(topic, message):
