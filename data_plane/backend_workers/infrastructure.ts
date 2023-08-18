@@ -27,8 +27,12 @@ export class EksClusterConstruct extends Construct {
             new blueprints.addons.KubeProxyAddOn(),
             new blueprints.addons.EbsCsiDriverAddOn(),
             new blueprints.addons.EfsCsiDriverAddOn(),
+            new blueprints.addons.AwsLoadBalancerControllerAddOn(),
             new blueprints.addons.KarpenterAddOn({ interruptionHandling: true }),
             new blueprints.addons.KedaAddOn(kedaParams),
+            new blueprints.addons.CertManagerAddOn(),
+            new blueprints.addons.AdotCollectorAddOn(),
+            new blueprints.addons.XrayAdotAddOn(),
         ];
 
         const blueprint = blueprints.EksBlueprint.builder()
@@ -46,9 +50,6 @@ export class EksClusterConstruct extends Construct {
             bucketArn: 'arn:aws:s3:::sd-on-eks-pdx',
         });
         modelBucket.grantRead(WebUISA);
-
-        const karpenterNodeRole = iam.Role.fromRoleName(this, 'KarpenterNodeRole', cdk.Fn.importValue('SdOnEksDataPlaneSandboxeksClusterStackC763FDF9KarpenterNodeRoleName'));
-        modelBucket.grantRead(karpenterNodeRole);
 
         const inputQueue1 = new sqs.Queue(this, 'InputQueue1');
         inputQueue1.grantConsumeMessages(WebUISA);
