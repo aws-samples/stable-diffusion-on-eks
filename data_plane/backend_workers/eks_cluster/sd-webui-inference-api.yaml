@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 2Ti
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,7 +32,8 @@ spec:
         effect: NoSchedule
       volumes:
       - name: models
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: efs-claim
       containers:
       - name: sd-webui-inference-api
         image: 057313215210.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/inference-api:0.1.0
@@ -30,8 +43,14 @@ spec:
           limits:
             nvidia.com/gpu: 1
         volumeMounts:
-        - name: models
-          mountPath: /tmp/models            
+        - mountPath: /tmp/models
+          name: models
+        startupProbe:
+          httpGet:
+            path: /sdapi/v1/memory
+            port: 8080
+          failureThreshold: 120
+          periodSeconds: 1
       - name: sd-webui-queue-agent
         image: 057313215210.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui/queue-agent:latest
         env:
@@ -43,6 +62,17 @@ spec:
           value: sdoneksdataplanesandbox-eksclustersdoutputpdx31c2-2e684zsv4h1n
         - name: SNS_TOPIC_ARN
           value: arn:aws:sns:us-west-2:057313215210:SdOnEksDataPlaneSandbox-eksClustersdnotificationpdx1BF5B43B-D0FaamuF2rIt
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: service.name=SDWebUI
+        - name: OTEL_PYTHON_DISABLED_INSTRUMENTATIONS
+          value: urllib3
+        - name: OTEL_PYTHON_ID_GENERATOR
+          value: xray
+        - name: OTEL_PROPAGATORS
+          value: xray
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://otel-collector-xray-collector:4317
         volumeMounts:
-        - name: models
-          mountPath: /tmp/models
+        - mountPath: /tmp/models
+          name: models
+          
