@@ -77,7 +77,7 @@ def main():
                 apiFullPath = apiBaseUrl + taskTransMap[taskType]
 
                 if taskType == 'text-to-image':
-                    r = invoke_txt2img(apiFullPath, payload)
+                    r = invoke_txt2img(apiFullPath, payload, taskHeader)
                     imgOutputs = post_invocations(
                         bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
                 elif taskType == 'image-to-image':
@@ -160,6 +160,7 @@ def get_bucket_and_key(s3uri):
     key = s3uri[pos + 1:]
     return bucket, key
 
+
 def get_prefix(path):
     pos = path.find('/')
     return path[pos + 1:]
@@ -240,13 +241,27 @@ def export_pil_to_bytes(image, quality):
     return bytes_data
 
 
-def invoke_txt2img(url, body):
+def get_controlnet_params(header):
+    if 'controlnet' in header:
+        imgUrl = header['controlnet']['args'][0]['image_link']
+        header['controlnet']['args'][0]['image'] = encode_to_base64(imgUrl)
+        return {'alwayson_scripts': {'controlnet': header['controlnet']}}
+    return None
+
+
+def invoke_txt2img(url, body, header):
+    cnParams = get_controlnet_params(header)
+    if cnParams != None:
+        body.update(cnParams)
     return do_invocations(url, body)
 
 
 def invoke_img2img(url, body, header):
     imgUrls = header['image_link'].split(',')
     body['init_images'] = [encode_to_base64(x) for x in imgUrls]
+    cnParams = get_controlnet_params(header)
+    if cnParams != None:
+        body.update(cnParams)
     return do_invocations(url, body)
 
 
