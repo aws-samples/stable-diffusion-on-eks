@@ -112,6 +112,8 @@ def check_readiness(url):
             if r.status_code == 200:
                 print('Service is ready.')
                 break
+            else:
+                r.raise_for_status()
         except Exception as e:
             time.sleep(1)
 
