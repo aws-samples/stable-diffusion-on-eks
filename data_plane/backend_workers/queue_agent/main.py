@@ -12,8 +12,14 @@ import uuid
 from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
 from requests.adapters import HTTPAdapter, Retry
+from aws_xray_sdk.core import xray_recorder, patch_all
+from aws_xray_sdk.core.models.trace_header import TraceHeader
 
+patch_all()
+
+logging.getLogger("aws_xray_sdk").setLevel(logging.ERROR)
 logger = logging.getLogger(__name__)
+
 awsRegion = os.getenv("AWS_DEFAULT_REGION")
 sqsQueueUrl = os.getenv("SQS_QUEUE_URL")
 snsTopicArn = os.getenv("SNS_TOPIC_ARN")
@@ -64,37 +70,51 @@ def main():
     # 5. Decode, upload and notify;
     # 6. Delete msg;
     while True:
-        received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
-        for message in received_messages:
-            try:
-                snsPayload = json.loads(message.body)
-                payload = json.loads(snsPayload['Message'])
-                print(snsPayload['Message'])
-                taskHeader = payload.pop('alwayson_scripts', None)
-                taskType = taskHeader['task']
-                print(
-                    f"Start process {taskType} task with ID: {taskHeader['id_task']}")
-                apiFullPath = apiBaseUrl + taskTransMap[taskType]
+        with xray_recorder.in_segment('Queue-Agent') as segment:
 
-                if taskType == 'text-to-image':
-                    r = invoke_txt2img(apiFullPath, payload)
-                    imgOutputs = post_invocations(
-                        bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
-                elif taskType == 'image-to-image':
-                    r = invoke_img2img(apiFullPath, payload, taskHeader)
-                    imgOutputs = post_invocations(
-                        bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
+            received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
 
-            except Exception as e:
-                publish_message(topic, json.dumps(failed(taskHeader, repr(e))))
-                traceback.print_exc()
-            else:
-                publish_message(topic, json.dumps(
-                    succeed(imgOutputs, r, taskHeader)))
-            finally:
-                delete_message(message)
-                print(
-                    f"End process {taskType} task with ID: {taskHeader['id_task']}")
+            # Skip empty SQS pulls
+            if len(received_messages) == 0:
+                segment.sampled = 0
+
+            for message in received_messages:
+                # Retrieve x-ray trace header from SQS message
+                traceHeaderStr = message.attributes['AWSTraceHeader']
+                sqsTraceHeader = TraceHeader.from_header_str(traceHeaderStr)
+                # Update current segment to link with SQS
+                segment.trace_id = sqsTraceHeader.root
+                segment.parent_id = sqsTraceHeader.parent
+                segment.sampled = sqsTraceHeader.sampled
+
+                try:
+                    snsPayload = json.loads(message.body)
+                    payload = json.loads(snsPayload['Message'])
+                    print(snsPayload['Message'])
+                    taskHeader = payload.pop('alwayson_scripts', None)
+                    taskType = taskHeader['task']
+                    print(f"Start process {taskType} task with ID: {taskHeader['id_task']}")
+                    apiFullPath = apiBaseUrl + taskTransMap[taskType]
+
+                    if taskType == 'text-to-image':
+                        r = invoke_txt2img(apiFullPath, payload)
+                        imgOutputs = post_invocations(
+                            bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
+                    elif taskType == 'image-to-image':
+                        r = invoke_img2img(apiFullPath, payload, taskHeader)
+                        imgOutputs = post_invocations(
+                            bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
+
+                except Exception as e:
+                    publish_message(topic, json.dumps(failed(taskHeader, repr(e))))
+                    traceback.print_exc()
+                else:
+                    publish_message(topic, json.dumps(
+                        succeed(imgOutputs, r, taskHeader)))
+                finally:
+                    delete_message(message)
+                    print(
+                        f"End process {taskType} task with ID: {taskHeader['id_task']}")
 
 
 def print_env():
@@ -114,8 +134,7 @@ def check_readiness(url):
                 break
         except Exception as e:
             time.sleep(1)
-
-
+        
 def get_time(f):
 
     def inner(*arg, **kwarg):
@@ -143,7 +162,9 @@ def receive_messages(queue, max_number, wait_time):
     try:
         messages = queue.receive_messages(
             MaxNumberOfMessages=max_number,
-            WaitTimeSeconds=wait_time
+            WaitTimeSeconds=wait_time,
+            AttributeNames=['All'],
+            MessageAttributeNames=['All'],
         )
         for msg in messages:
             logger.info("Received message: %s: %s", msg.message_id, msg.body)
@@ -239,11 +260,11 @@ def export_pil_to_bytes(image, quality):
 
     return bytes_data
 
-
+@xray_recorder.capture('text-to-image')
 def invoke_txt2img(url, body):
     return do_invocations(url, body)
 
-
+@xray_recorder.capture('image-to-image')
 def invoke_img2img(url, body, header):
     imgUrls = header['image_link'].split(',')
     body['init_images'] = [encode_to_base64(x) for x in imgUrls]

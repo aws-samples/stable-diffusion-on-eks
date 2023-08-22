@@ -62,16 +62,10 @@ spec:
           value: sdoneksdataplanesandbox-eksclustersdoutputpdx31c2-2e684zsv4h1n
         - name: SNS_TOPIC_ARN
           value: arn:aws:sns:us-west-2:057313215210:SdOnEksDataPlaneSandbox-eksClustersdnotificationpdx1BF5B43B-D0FaamuF2rIt
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: service.name=SDWebUI
-        - name: OTEL_PYTHON_DISABLED_INSTRUMENTATIONS
-          value: urllib3
-        - name: OTEL_PYTHON_ID_GENERATOR
-          value: xray
-        - name: OTEL_PROPAGATORS
-          value: xray
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://otel-collector-xray-collector:4317
+        - name: AWS_XRAY_DAEMON_ADDRESS
+          value: xray-service.amazon-cloudwatch:2000
+        - name: AWS_XRAY_CONTEXT_MISSING
+          value: IGNORE_ERROR
         volumeMounts:
         - mountPath: /tmp/models
           name: models
