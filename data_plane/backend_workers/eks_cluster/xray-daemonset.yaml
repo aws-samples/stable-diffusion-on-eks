@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: amazon-cloudwatch
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: xray-daemon
+  namespace: amazon-cloudwatch
+spec:
+  selector:
+    matchLabels:
+      name: xray-daemon
+  template:
+    metadata:
+      labels:
+        name: xray-daemon
+    spec:
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule    
+      serviceAccountName: xray-daemon
+      containers:
+        - name: xray-daemon
+          image: public.ecr.aws/xray/aws-xray-daemon:3.3.7
+          ports:
+            - containerPort: 2000
+              protocol: UDP
+---      
+# k8s service definition for AWS X-Ray daemon headless service
+apiVersion: v1
+kind: Service
+metadata:
+  name: xray-service
+  namespace: amazon-cloudwatch  
+spec:
+  selector:
+    name: xray-daemon
+  clusterIP: None
+  ports:
+  - name: incoming
+    port: 2000
+    protocol: UDP

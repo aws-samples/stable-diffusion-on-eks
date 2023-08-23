@@ -137,8 +137,7 @@ def check_readiness(url):
                 r.raise_for_status()
         except Exception as e:
             time.sleep(1)
-
-
+        
 def get_time(f):
 
     def inner(*arg, **kwarg):
