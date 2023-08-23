@@ -6,14 +6,12 @@ import time
 import datetime
 import requests
 import boto3
-import logging
 import traceback
 import uuid
 from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
 from requests.adapters import HTTPAdapter, Retry
 
-logger = logging.getLogger(__name__)
 awsRegion = os.getenv("AWS_DEFAULT_REGION")
 sqsQueueUrl = os.getenv("SQS_QUEUE_URL")
 snsTopicArn = os.getenv("SNS_TOPIC_ARN")
@@ -147,25 +145,22 @@ def receive_messages(queue, max_number, wait_time):
             MaxNumberOfMessages=max_number,
             WaitTimeSeconds=wait_time
         )
-        for msg in messages:
-            logger.info("Received message: %s: %s", msg.message_id, msg.body)
     except ClientError as error:
-        logger.exception("Couldn't receive messages from queue: %s", queue)
+        traceback.print_exc()
         raise error
     else:
         return messages
 
 
-def get_bucket_and_key(s3uri):
-    pos = s3uri.find('/', 5)
-    bucket = s3uri[5: pos]
-    key = s3uri[pos + 1:]
-    return bucket, key
-
-
-def get_prefix(path):
-    pos = path.find('/')
-    return path[pos + 1:]
+def publish_message(topic, message):
+    try:
+        response = topic.publish(Message=message)
+        message_id = response['MessageId']
+    except ClientError as error:
+        traceback.print_exc()
+        raise error
+    else:
+        return message_id
 
 
 def delete_message(message):
@@ -179,10 +174,21 @@ def delete_message(message):
     """
     try:
         message.delete()
-        logger.info("Deleted message: %s", message.message_id)
     except ClientError as error:
-        logger.exception("Couldn't delete message: %s", message.message_id)
+        traceback.print_exc()
         raise error
+
+
+def get_bucket_and_key(s3uri):
+    pos = s3uri.find('/', 5)
+    bucket = s3uri[5: pos]
+    key = s3uri[pos + 1:]
+    return bucket, key
+
+
+def get_prefix(path):
+    pos = path.find('/')
+    return path[pos + 1:]
 
 
 def encode_to_base64(imgUrl):
@@ -245,8 +251,9 @@ def export_pil_to_bytes(image, quality):
 
 def get_controlnet_params(header):
     if 'controlnet' in header:
-        imgUrl = header['controlnet']['args'][0]['image_link']
-        header['controlnet']['args'][0]['image'] = encode_to_base64(imgUrl)
+        for x in header['controlnet']['args']:
+            if 'image_link' in x:
+                x['input_image'] = encode_to_base64(x['image_link'])
         return {'alwayson_scripts': {'controlnet': header['controlnet']}}
     return None
 
@@ -329,19 +336,6 @@ def post_invocations(bucket, folder, b64images, quality):
         )
         images.append(f's3://{s3Bucket}/{folder}/{imageId}.{suffix}')
     return images
-
-
-def publish_message(topic, message):
-    try:
-        response = topic.publish(Message=message)
-        message_id = response['MessageId']
-        logger.info(
-            "Published message to topic %s.", topic.arn)
-    except ClientError:
-        logger.exception("Couldn't publish message to topic %s.", topic.arn)
-        raise
-    else:
-        return message_id
 
 
 if __name__ == '__main__':
