@@ -16,7 +16,7 @@ spec:
   scaleTargetRef:
     name: sd-webui-inference-api
   pollingInterval: 1
-  cooldownPeriod: 300
+  cooldownPeriod: 60
   minReplicaCount: 1        # Optional. Default: 0
   maxReplicaCount: 20       # Optional. Default: 100      
   triggers:

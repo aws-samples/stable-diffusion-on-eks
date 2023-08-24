@@ -1,0 +1,87 @@
+global:
+  awsRegion: us-west-2
+  repository: 373534280245.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui
+  stackName: ""
+
+karpenter:
+  provisioner:
+    labels: {}
+    capacityType:
+      onDemand: true
+      spot: true
+    instanceType:
+    - "g5.xlarge"
+    - "g5.2xlarge"
+    extraRequirements: []
+    extraTaints: []
+    resourceLimits:
+      nvidia.com/gpu: 100
+    consolidation: true
+  nodeTemplate:
+    securityGroupSelector: {}
+    subnetSelector: {}
+    tags: {}
+    os:
+      bottleRocket:
+        osDisk:
+          volumeSize: 10Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 3000
+          throughput: 125
+        dataDisk:
+          volumeSize: 80Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 4000
+          throughput: 1000
+#      AL2:
+#        osDisk:
+#          volumeSize: 100Gi
+#          volumeType: gp3
+#          deleteOnTermination: true
+#          iops: 3000
+#          throughput: 125
+    userData: ""
+sdWebuiInferenceApi:
+  labels: {}
+  annotations: {}
+  serviceAccountName: sd-webui-sa
+  replicas: 0
+  scaling:
+    queueLength: 10
+  inferenceApi:
+    image:
+      name: inference-api
+      tag: latest
+    SD_MODEL_CHECKPOINT: v1-5-pruned-emaonly.safetensors
+    extraEnv: {}
+    resources:
+      limits:
+        nvidia.com/gpu: "1"
+      requests:
+        nvidia.com/gpu: "1"
+        cpu: 3
+        memory: 8Gi
+  queueAgent:
+    extraEnv: {}
+    s3Bucket: sdoneksdataplanesandbox-eksclustersdoutputpdx31c2-2e684zsv4h1n
+    snsTopicArn: arn:aws:sns:us-west-2:057313215210:SdOnEksDataPlaneSandbox-eksClustersdnotificationpdx1BF5B43B-D0FaamuF2rIt
+    sqsQueueUrl: https://sqs.us-west-2.amazonaws.com/057313215210/SdOnEksDataPlaneSandbox-eksClusterInputQueue19310EEB5-yK9YLbLTv5rI
+    image:
+      name: queue-agent
+      tag: latest
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    XRay:
+      enabled: true
+  persistence:
+    enabled: true
+    labels: {}
+    annotations: {}
+    storageClass: efs-model-storage-sc
+    size: 2Ti
+    accessModes:
+    - ReadWriteMany

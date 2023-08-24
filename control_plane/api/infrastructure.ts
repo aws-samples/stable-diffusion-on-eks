@@ -1,1 +1,0 @@
-const NAME = "api"
