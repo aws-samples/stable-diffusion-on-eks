@@ -137,7 +137,8 @@ export default class DataPlaneStack {
                 "effect": "NoSchedule"
             }
             ]
-          }
+          },
+          createNamespace: true
       }),
       new nvidiaDevicePluginAddon({}),
       new SharedComponentAddOn(SharedComponentAddOnParams),
