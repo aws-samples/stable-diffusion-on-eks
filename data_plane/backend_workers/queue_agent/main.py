@@ -18,7 +18,6 @@ from aws_xray_sdk.core.models.trace_header import TraceHeader
 patch_all()
 
 logging.getLogger("aws_xray_sdk").setLevel(logging.ERROR)
-logger = logging.getLogger(__name__)
 
 awsRegion = os.getenv("AWS_DEFAULT_REGION")
 sqsQueueUrl = os.getenv("SQS_QUEUE_URL")
@@ -72,7 +71,8 @@ def main():
     while True:
         with xray_recorder.in_segment('Queue-Agent') as segment:
 
-            received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
+            received_messages = receive_messages(
+                queue, 1, SQS_WAIT_TIME_SECONDS)
 
             # Skip empty SQS pulls
             if len(received_messages) == 0:
@@ -90,14 +90,14 @@ def main():
                 try:
                     snsPayload = json.loads(message.body)
                     payload = json.loads(snsPayload['Message'])
-                    print(snsPayload['Message'])
                     taskHeader = payload.pop('alwayson_scripts', None)
                     taskType = taskHeader['task']
-                    print(f"Start process {taskType} task with ID: {taskHeader['id_task']}")
+                    print(
+                        f"Start process {taskType} task with ID: {taskHeader['id_task']}")
                     apiFullPath = apiBaseUrl + taskTransMap[taskType]
 
                     if taskType == 'text-to-image':
-                        r = invoke_txt2img(apiFullPath, payload)
+                        r = invoke_txt2img(apiFullPath, payload, taskHeader)
                         imgOutputs = post_invocations(
                             bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
                     elif taskType == 'image-to-image':
@@ -106,7 +106,8 @@ def main():
                             bucket, get_prefix(payload['s3_output_path']), r['images'], 80)
 
                 except Exception as e:
-                    publish_message(topic, json.dumps(failed(taskHeader, repr(e))))
+                    publish_message(topic, json.dumps(
+                        failed(taskHeader, repr(e))))
                     traceback.print_exc()
                 else:
                     publish_message(topic, json.dumps(
@@ -132,6 +133,8 @@ def check_readiness(url):
             if r.status_code == 200:
                 print('Service is ready.')
                 break
+            else:
+                r.raise_for_status()
         except Exception as e:
             time.sleep(1)
         
@@ -164,26 +167,24 @@ def receive_messages(queue, max_number, wait_time):
             MaxNumberOfMessages=max_number,
             WaitTimeSeconds=wait_time,
             AttributeNames=['All'],
-            MessageAttributeNames=['All'],
+            MessageAttributeNames=['All']
         )
-        for msg in messages:
-            logger.info("Received message: %s: %s", msg.message_id, msg.body)
     except ClientError as error:
-        logger.exception("Couldn't receive messages from queue: %s", queue)
+        traceback.print_exc()
         raise error
     else:
         return messages
 
 
-def get_bucket_and_key(s3uri):
-    pos = s3uri.find('/', 5)
-    bucket = s3uri[5: pos]
-    key = s3uri[pos + 1:]
-    return bucket, key
-
-def get_prefix(path):
-    pos = path.find('/')
-    return path[pos + 1:]
+def publish_message(topic, message):
+    try:
+        response = topic.publish(Message=message)
+        message_id = response['MessageId']
+    except ClientError as error:
+        traceback.print_exc()
+        raise error
+    else:
+        return message_id
 
 
 def delete_message(message):
@@ -197,10 +198,21 @@ def delete_message(message):
     """
     try:
         message.delete()
-        logger.info("Deleted message: %s", message.message_id)
     except ClientError as error:
-        logger.exception("Couldn't delete message: %s", message.message_id)
+        traceback.print_exc()
         raise error
+
+
+def get_bucket_and_key(s3uri):
+    pos = s3uri.find('/', 5)
+    bucket = s3uri[5: pos]
+    key = s3uri[pos + 1:]
+    return bucket, key
+
+
+def get_prefix(path):
+    pos = path.find('/')
+    return path[pos + 1:]
 
 
 def encode_to_base64(imgUrl):
@@ -260,14 +272,31 @@ def export_pil_to_bytes(image, quality):
 
     return bytes_data
 
+
+def get_controlnet_params(header):
+    if 'controlnet' in header:
+        for x in header['controlnet']['args']:
+            if 'image_link' in x:
+                x['input_image'] = encode_to_base64(x['image_link'])
+        return {'alwayson_scripts': {'controlnet': header['controlnet']}}
+    return None
+
+
 @xray_recorder.capture('text-to-image')
-def invoke_txt2img(url, body):
+def invoke_txt2img(url, body, header):
+    cnParams = get_controlnet_params(header)
+    if cnParams != None:
+        body.update(cnParams)
     return do_invocations(url, body)
+
 
 @xray_recorder.capture('image-to-image')
 def invoke_img2img(url, body, header):
     imgUrls = header['image_link'].split(',')
     body['init_images'] = [encode_to_base64(x) for x in imgUrls]
+    cnParams = get_controlnet_params(header)
+    if cnParams != None:
+        body.update(cnParams)
     return do_invocations(url, body)
 
 
@@ -333,19 +362,6 @@ def post_invocations(bucket, folder, b64images, quality):
         )
         images.append(f's3://{s3Bucket}/{folder}/{imageId}.{suffix}')
     return images
-
-
-def publish_message(topic, message):
-    try:
-        response = topic.publish(Message=message)
-        message_id = response['MessageId']
-        logger.info(
-            "Published message to topic %s.", topic.arn)
-    except ClientError:
-        logger.exception("Couldn't publish message to topic %s.", topic.arn)
-        raise
-    else:
-        return message_id
 
 
 if __name__ == '__main__':
