@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sdchart.fullname" . }}-sd-webui-inference-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+  {{- if .Values.sdWebuiInferenceApi.labels }}
+  {{- toYaml .Values.sdWebuiInferenceApi.labels | nindent 4 }}
+  {{- end }}
+
+  {{- if .Values.sdWebuiInferenceApi.annotations }}
+  annotations:
+  {{ toYaml .Values.sdWebuiInferenceApi.annotations | nindent 4 }}
+  {{- end }}
+
+spec:
+  replicas: {{ .Values.sdWebuiInferenceApi.replicas }}
+  selector:
+    matchLabels:
+      app: sd-webui-inference-api
+    {{- include "sdchart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: sd-webui-inference-api
+      {{- include "sdchart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: sd-webui-inference-api
+        image: {{ .Values.global.repository }}/{{ .Values.sdWebuiInferenceApi.inferenceApi.image.name }}:{{  .Values.sdWebuiInferenceApi.inferenceApi.image.tag }}
+        env:
+        - name: SD_MODEL_CHECKPOINT
+          value: {{ .Values.sdWebuiInferenceApi.inferenceApi.SD_MODEL_CHECKPOINT }}
+        {{- if .Values.sdWebuiInferenceApi.inferenceApi.extraEnv }}
+        {{- toYaml .Values.sdWebuiInferenceApi.inferenceApi.extraEnv | nindent 10 }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.sdWebuiInferenceApi.inferenceApi.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /tmp/models
+          name: models
+        imagePullPolicy: IfNotPresent
+        startupProbe:
+          httpGet:
+            path: /sdapi/v1/memory
+            port: 8080
+          failureThreshold: 120
+          periodSeconds: 1
+      - name: sd-webui-queue-agent
+        envFrom:
+        - configMapRef:
+            name: {{ include "sdchart.fullname" . }}-sd-webui-config
+        env:
+        {{- if .Values.sdWebuiInferenceApi.queueAgent.extraEnv }}
+        {{- toYaml .Values.sdWebuiInferenceApi.queueAgent.extraEnv | nindent 10 }}
+        {{- end }}
+        {{- if .Values.sdWebuiInferenceApi.queueAgent.XRay.enabled }}
+        - name: AWS_XRAY_DAEMON_ADDRESS
+          value: localhost:2000
+        - name: AWS_XRAY_CONTEXT_MISSING
+          value: IGNORE_ERROR
+        {{- end }}
+        image: {{ .Values.global.repository }}/{{ .Values.sdWebuiInferenceApi.queueAgent.image.name }}:{{  .Values.sdWebuiInferenceApi.queueAgent.image.tag }}
+        name: sd-webui-queue-agent
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /tmp/models
+          name: models
+        resources:
+        {{- toYaml .Values.sdWebuiInferenceApi.queueAgent.resources | nindent 10 }}
+        {{- if .Values.sdWebuiInferenceApi.queueAgent.XRay.enabled }}
+      - name: xray-daemon
+        image: public.ecr.aws/xray/aws-xray-daemon:3.3.7
+        ports:
+        - containerPort: 2000
+          protocol: UDP
+        {{- end }}
+      serviceAccountName: {{ .Values.sdWebuiInferenceApi.serviceAccountName }}
+      terminationGracePeriodSeconds: 60
+      tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Exists
+      - effect: NoSchedule
+        key: runtime
+        value: {{ include "sdchart.fullname" . }}
+      volumes:
+      - name: models
+      {{- if .Values.sdWebuiInferenceApi.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ include "sdchart.fullname" . }}-model-claim
+      {{- else }}
+        emptyDir: {}
+      {{- end }}

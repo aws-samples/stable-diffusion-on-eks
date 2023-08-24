@@ -14,7 +14,6 @@ export class FrontendApiConstruct extends Construct {
         const sns_topic = new sns.Topic(this, 'Topic', {
             displayName: "Notification-" + cdk.Aws.STACK_NAME,
         });
-
         const lambdaFunction = new lambda.Function(this, 'MyLambda', {
             code: lambda.Code.fromAsset(path.join(__dirname, 'src/lambda')),
             handler: 'app.lambda_handler',
@@ -31,6 +30,5 @@ export class FrontendApiConstruct extends Construct {
             handler: lambdaFunction,
             proxy: true
         });
-
     }
 }

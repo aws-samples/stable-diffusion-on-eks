@@ -1,0 +1,30 @@
+{{- if .Values.sdWebuiInferenceApi.persistence.enabled }}
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "sdchart.fullname" . }}-model-claim
+  {{- if .Values.sdWebuiInferenceApi.persistence.annotations }}
+  annotations:
+  {{ toYaml .Values.sdWebuiInferenceApi.persistence.annotations | indent 4 }}
+  {{- end }}
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+  {{- if .Values.sdWebuiInferenceApi.persistence.labels }}
+  {{ toYaml .Values.sdWebuiInferenceApi.persistence.labels | indent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{ toYaml .Values.sdWebuiInferenceApi.persistence.accessModes }}
+  resources:
+    requests:
+      storage: "{{ .Values.sdWebuiInferenceApi.persistence.size }}"
+      {{- if .Values.sdWebuiInferenceApi.persistence.storageClass }}
+      {{- if (eq "-" .Values.sdWebuiInferenceApi.persistence.storageClass) }}
+  storageClassName: ""
+      {{- else }}
+  storageClassName: "{{ .Values.sdWebuiInferenceApi.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
+
+{{- end }}

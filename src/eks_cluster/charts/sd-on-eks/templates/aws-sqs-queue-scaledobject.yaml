@@ -1,0 +1,23 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "sdchart.fullname" . }}-aws-sqs-queue-scaledobject
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+spec:
+  cooldownPeriod: 60
+  maxReplicaCount: 20
+  minReplicaCount: 1
+  pollingInterval: 1
+  scaleTargetRef:
+    name: {{ include "sdchart.fullname" . }}-sd-webui-inference-api
+  triggers:
+  - authenticationRef:
+      name: {{ include "sdchart.fullname" . }}-keda-trigger-auth-aws-credentials
+    metadata:
+      awsRegion: {{ quote .Values.global.awsregion }}
+      identityOwner: operator
+      queueLength: {{ quote .Values.sdWebuiInferenceApi.scaling.queueLength }}
+      queueURL: {{ quote .Values.sdWebuiInferenceApi.queueAgent.sqsQueueUrl }}
+    type: aws-sqs-queue

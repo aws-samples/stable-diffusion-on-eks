@@ -1,0 +1,56 @@
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: {{ include "sdchart.fullname" . }}-nodetemplate-gpu
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+spec:
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: optional
+  securityGroupSelector:
+    "aws:eks:cluster-name": {{ quote .Values.global.stackName }}
+  subnetSelector:
+    "aws-cdk:subnet-type": "Private"
+    "aws:cloudformation:stack-name": {{ .Values.global.stackName }}
+  {{- if .Values.karpenter.nodeTemplate.tags }}
+  tags:
+  {{- toYaml .Values.karpenter.nodeTemplate.tags | nindent 4 }}
+  {{- end }}
+  {{- if .Values.karpenter.nodeTemplate.os.bottleRocket }}
+  amiFamily: Bottlerocket
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.osDisk.volumeSize }}
+        volumeType: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.osDisk.volumeType }}
+        deleteOnTermination: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.osDisk.deleteOnTermination }}
+        iops: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.osDisk.iops }}
+        throughput: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.osDisk.throughput }}
+    - deviceName: /dev/xvdb
+      ebs:
+        volumeSize: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.dataDisk.volumeSize }}
+        volumeType: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.dataDisk.volumeType }}
+        deleteOnTermination: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.dataDisk.deleteOnTermination }}
+        iops: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.dataDisk.iops }}
+        throughput: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.dataDisk.throughput }}
+        {{- if .Values.karpenter.nodeTemplate.os.bottleRocket.dataDisk.snapshotID }}
+        snapshotID: {{ .Values.karpenter.nodeTemplate.os.bottleRocket.dataDisk.snapshotID }}
+        {{-  end }}
+  {{- else }}
+  amiFamily: AL2
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: {{ .Values.karpenter.nodeTemplate.os.AL2.osDisk.volumeSize }}
+        volumeType: {{ .Values.karpenter.nodeTemplate.os.AL2.osDisk.volumeType }}
+        deleteOnTermination: {{ .Values.karpenter.nodeTemplate.os.AL2.osDisk.deleteOnTermination }}
+        iops: {{ .Values.karpenter.nodeTemplate.os.AL2.osDisk.iops }}
+        throughput: {{ .Values.karpenter.nodeTemplate.os.AL2.osDisk.throughput }}
+  {{- end }}
+  {{- if .Values.karpenter.nodeTemplate.userData }}
+  userData: |-
+  {{- tpl .Values.karpenter.nodeTemplate.userData . | nindent 4 }}
+  {{- end }}

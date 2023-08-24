@@ -1,1 +1,0 @@
-export const NAME = "event_router"
