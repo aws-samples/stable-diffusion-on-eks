@@ -69,16 +69,10 @@ def main():
     # 5. Decode, upload and notify;
     # 6. Delete msg;
     while True:
-        with xray_recorder.in_segment('Queue-Agent') as segment:
+        received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
 
-            received_messages = receive_messages(
-                queue, 1, SQS_WAIT_TIME_SECONDS)
-
-            # Skip empty SQS pulls
-            if len(received_messages) == 0:
-                segment.sampled = 0
-
-            for message in received_messages:
+        for message in received_messages:
+            with xray_recorder.in_segment('Queue-Agent') as segment:
                 # Retrieve x-ray trace header from SQS message
                 traceHeaderStr = message.attributes['AWSTraceHeader']
                 sqsTraceHeader = TraceHeader.from_header_str(traceHeaderStr)
