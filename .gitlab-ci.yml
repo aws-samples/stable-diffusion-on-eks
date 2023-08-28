@@ -26,7 +26,7 @@ mirror:
     # Discard changes before checking out branch
     - git reset HEAD --hard
     # Push "main" branch
-    - git branch -M main && git push mirror main
+    - git checkout main && git push mirror main
 
   rules:
     # Only trigger through push event in main branch
