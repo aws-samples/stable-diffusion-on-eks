@@ -1,3 +1,3 @@
-# Stable Diffussion on EKS
+# Stable Diffusion on EKS
 
-This repo contains code for Stable Diffussion on EKS demo. 
+This repo contains code for Stable Diffusion on EKS demo. 
