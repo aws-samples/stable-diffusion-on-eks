@@ -22,7 +22,7 @@ mirror:
     # ssh connect to GitHub
     - ssh -T git@github.com || ":" # workaround) force exit code 0
     # Add a new remote location called "mirror"
-    - git remote add mirror git@github.com:bnusunny/stable-difussion-on-eks.git
+    - git remote add mirror git@github.com:bnusunny/stable-diffussion-on-eks.git
     # Discard changes before checking out branch
     - git reset HEAD --hard
     # Push "main" branch
