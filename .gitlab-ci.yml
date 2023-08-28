@@ -1,0 +1,37 @@
+image: node:alpine
+
+mirror:
+  before_script:
+    # Install prerequisites
+    - 'which ssh-agent || (apk update && apk add openssh-client git)'
+    ## Import SSH key
+    # Launch ssh-agent
+    - eval $(ssh-agent -s)
+    # Add private key from CI variable
+    - echo "$GH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    # Create ~/.ssh folder if not exist
+    - mkdir -p ~/.ssh
+    # Restrict the folder privilege
+    - chmod 700 ~/.ssh
+    # Add GitHub key fingerprint
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+
+  script:
+    ## Update GitHub mirror
+    # ssh connect to GitHub
+    - ssh -T git@github.com || ":" # workaround) force exit code 0
+    # Add a new remote location called "mirror"
+    - git remote add mirror git@github.com:bnusunny/stable-difussion-on-eks.git
+    # Discard changes before checking out branch
+    - git reset HEAD --hard
+    # Push "main" branch
+    - git checkout main && git push mirror main
+
+  rules:
+    # Only trigger through push event in main branch
+    - if: '$CI_COMMIT_REF_NAME == "main" && $CI_PIPELINE_SOURCE == "push"'
+      when: always
+    # Only trigger through "Run pipeline" in main branch
+    - if: '$CI_COMMIT_REF_NAME == "main" && $CI_PIPELINE_SOURCE == "web"'
+      when: always
