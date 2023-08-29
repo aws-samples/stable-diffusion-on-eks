@@ -1,5 +1,6 @@
 import os
 import io
+import asyncio
 import base64
 import json
 import time
@@ -9,6 +10,8 @@ import boto3
 import logging
 import traceback
 import uuid
+import aioboto3
+from aiohttp_client_cache import CachedSession, CacheBackend
 from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
 from requests.adapters import HTTPAdapter, Retry
@@ -19,14 +22,16 @@ patch_all()
 
 logging.getLogger("aws_xray_sdk").setLevel(logging.ERROR)
 
-awsRegion = os.getenv("AWS_DEFAULT_REGION")
-sqsQueueUrl = os.getenv("SQS_QUEUE_URL")
-snsTopicArn = os.getenv("SNS_TOPIC_ARN")
-s3Bucket = os.getenv("S3_BUCKET")
+aws_default_region = os.getenv("AWS_DEFAULT_REGION")
+sqs_queue_url = os.getenv("SQS_QUEUE_URL")
+sns_topic_arn = os.getenv("SNS_TOPIC_ARN")
+s3_bucket = os.getenv("S3_BUCKET")
+dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 
 sqsRes = boto3.resource('sqs')
 snsRes = boto3.resource('sns')
 s3Res = boto3.resource('s3')
+as3Session = aioboto3.Session()
 
 apiClient = requests.Session()
 retries = Retry(
@@ -37,6 +42,11 @@ retries = Retry(
 apiClient.mount('http://', HTTPAdapter(max_retries=retries))
 REQUESTS_TIMEOUT_SECONDS = 30
 
+cache = CacheBackend(
+    cache_name='memory-cache',
+    expire_after=600
+)
+
 
 def main():
     # initialization:
@@ -46,12 +56,12 @@ def main():
     # 4. SD api base url and http session client;
     print_env()
 
-    queue = sqsRes.Queue(sqsQueueUrl)
+    queue = sqsRes.Queue(sqs_queue_url)
     SQS_WAIT_TIME_SECONDS = 20
 
-    topic = snsRes.Topic(snsTopicArn)
+    topic = snsRes.Topic(sns_topic_arn)
 
-    bucket = s3Res.Bucket(s3Bucket)
+    bucket = s3Res.Bucket(s3_bucket)
 
     taskTransMap = {'text-to-image': 'txt2img', 'image-to-image': 'img2img',
                     'extras-single-image': 'extra-single-image', 'extras-batch-images': 'extra-batch-images', 'interrogate': 'interrogate'}
@@ -61,7 +71,7 @@ def main():
     check_readiness(apiBaseUrl+"memory")
 
     # main loop
-    # todo: Implement scaleDown hook signal
+    # todo: Implement scale-in hook signal
     # 1. Pull msg from sqs;
     # 2. Translate parameteres;
     # 3. (opt)Download and encode;
@@ -113,10 +123,11 @@ def main():
 
 
 def print_env():
-    print(awsRegion)
-    print(sqsQueueUrl)
-    print(snsTopicArn)
-    print(s3Bucket)
+    print(f'AWS_DEFAULT_REGION={aws_default_region}')
+    print(f'SQS_QUEUE_URL={sqs_queue_url}')
+    print(f'SNS_TOPIC_ARN={sns_topic_arn}')
+    print(f'S3_BUCKET={s3_bucket}')
+    print(f'DYNAMIC_SD_MODEL={dynamic_sd_model}')
 
 
 def check_readiness(url):
@@ -131,7 +142,8 @@ def check_readiness(url):
                 r.raise_for_status()
         except Exception as e:
             time.sleep(1)
-        
+
+
 def get_time(f):
 
     def inner(*arg, **kwarg):
@@ -209,22 +221,8 @@ def get_prefix(path):
     return path[pos + 1:]
 
 
-def encode_to_base64(imgUrl):
-    b64 = None
-    try:
-        if imgUrl.startswith("http://") or imgUrl.startswith("https://"):
-            response = requests.get(imgUrl)
-            if response.status_code == 200:
-                b64 = str(base64.b64encode(response.content))[2:-1]
-            else:
-                response.raise_for_status()
-        elif imgUrl.startswith("s3://"):
-            bucket, key = get_bucket_and_key(imgUrl)
-            response = s3Res.Object(bucket, key).get()
-            b64 = str(base64.b64encode(response['Body'].read()))[2:-1]
-        return b64
-    except Exception as e:
-        raise e
+def encode_to_base64(buffer):
+    return str(base64.b64encode(buffer))[2:-1]
 
 
 def decode_to_image(encoding):
@@ -267,31 +265,14 @@ def export_pil_to_bytes(image, quality):
     return bytes_data
 
 
-def get_controlnet_params(header):
-    if 'controlnet' in header:
-        for x in header['controlnet']['args']:
-            if 'image_link' in x:
-                x['input_image'] = encode_to_base64(x['image_link'])
-        return {'alwayson_scripts': {'controlnet': header['controlnet']}}
-    return None
-
-
 @xray_recorder.capture('text-to-image')
 def invoke_txt2img(url, body, header):
-    cnParams = get_controlnet_params(header)
-    if cnParams != None:
-        body.update(cnParams)
-    return do_invocations(url, body)
+    return do_invocations(url, prepare_payload(body, header))
 
 
 @xray_recorder.capture('image-to-image')
 def invoke_img2img(url, body, header):
-    imgUrls = header['image_link'].split(',')
-    body['init_images'] = [encode_to_base64(x) for x in imgUrls]
-    cnParams = get_controlnet_params(header)
-    if cnParams != None:
-        body.update(cnParams)
-    return do_invocations(url, body)
+    return do_invocations(url, prepare_payload(body, header))
 
 
 def succeed(images, response, header):
@@ -354,8 +335,63 @@ def post_invocations(bucket, folder, b64images, quality):
             Key=f'{folder}/{imageId}.{suffix}',
             ContentType=f'image/{suffix}'
         )
-        images.append(f's3://{s3Bucket}/{folder}/{imageId}.{suffix}')
+        images.append(f's3://{s3_bucket}/{folder}/{imageId}.{suffix}')
     return images
+
+
+async def async_get(imgUrl):
+    try:
+        if imgUrl.startswith("http://") or imgUrl.startswith("https://"):
+            async with CachedSession(cache=cache) as session:
+                async with session.get(imgUrl) as res:
+                    res.raise_for_status()
+                    # todo: need a counter to delete expired responses
+                    # await session.delete_expired_responses()
+                    # print(res.from_cache, res.created_at, res.expires, res.is_expired)
+                    return await res.read()
+        elif imgUrl.startswith("s3://"):
+            bucket, key = get_bucket_and_key(imgUrl)
+            async with as3Session.resource("s3") as s3:
+                obj = await s3.Object(bucket, key)
+                res = await obj.get()
+                return await res['Body'].read()
+    except Exception as e:
+        raise e
+
+
+def prepare_payload(body, header):
+    try:
+        urls = []
+        offset = 0
+        # img2img image link
+        if 'image_link' in header:
+            urls.extend(header['image_link'].split(','))
+            offset = len(urls)
+        # ControlNet image link
+        if 'controlnet' in header:
+            for x in header['controlnet']['args']:
+                if 'image_link' in x:
+                    urls.append(x['image_link'])
+        # Generate payload including ControlNet units
+        if len(urls) > 0:
+            loop = asyncio.get_event_loop()
+            tasks = [async_get(u) for u in urls]
+            results = loop.run_until_complete(asyncio.gather(*tasks))
+            if offset > 0:
+                init_images = [encode_to_base64(x) for x in results[:offset]]
+                body.update({"init_images": init_images})
+
+            if 'controlnet' in header:
+                for x in header['controlnet']['args']:
+                    if 'image_link' in x:
+                        l = results[offset:]
+                        x['input_image'] = encode_to_base64(l.pop(0))
+                body.update(
+                    {'alwayson_scripts': {'controlnet': header['controlnet']}})
+    except Exception as e:
+        raise e
+
+    return body
 
 
 if __name__ == '__main__':

@@ -13,3 +13,5 @@ s3transfer==0.6.1
 six==1.16.0
 urllib3==1.26.16
 wrapt==1.15.0
+aiohttp-client-cache==0.8.2
+aioboto3==11.3.0
