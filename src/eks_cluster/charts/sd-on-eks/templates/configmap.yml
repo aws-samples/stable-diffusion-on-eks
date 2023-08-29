@@ -18,3 +18,6 @@ data:
   SQS_QUEUE_URL: {{ quote .Values.sdWebuiInferenceApi.queueAgent.sqsQueueUrl }}
   S3_BUCKET: {{ quote .Values.sdWebuiInferenceApi.queueAgent.s3Bucket }}
   SNS_TOPIC_ARN: {{ quote .Values.sdWebuiInferenceApi.queueAgent.snsTopicArn }}
+  {{- if .Values.sdWebuiInferenceApi.queueAgent.dynamicModel }}
+  DYNAMIC_SD_MODEL: "true"
+  {{- end }}

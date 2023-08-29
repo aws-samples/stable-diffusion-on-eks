@@ -65,6 +65,7 @@ sdWebuiInferenceApi:
         memory: 8Gi
   queueAgent:
     extraEnv: {}
+    dynamicModel: false
     s3Bucket: sdoneksdataplanesandbox-eksclustersdoutputpdx31c2-2e684zsv4h1n
     snsTopicArn: arn:aws:sns:us-west-2:057313215210:SdOnEksDataPlaneSandbox-eksClustersdnotificationpdx1BF5B43B-D0FaamuF2rIt
     sqsQueueUrl: https://sqs.us-west-2.amazonaws.com/057313215210/SdOnEksDataPlaneSandbox-eksClusterInputQueue19310EEB5-yK9YLbLTv5rI

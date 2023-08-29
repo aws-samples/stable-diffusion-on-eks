@@ -31,7 +31,7 @@ spec:
         image: {{ .Values.global.repository }}/{{ .Values.sdWebuiInferenceApi.inferenceApi.image.name }}:{{  .Values.sdWebuiInferenceApi.inferenceApi.image.tag }}
         env:
         - name: SD_MODEL_CHECKPOINT
-          value: {{ .Values.sdWebuiInferenceApi.inferenceApi.SD_MODEL_CHECKPOINT }}
+          value: {{ quote .Values.sdWebuiInferenceApi.inferenceApi.SD_MODEL_CHECKPOINT }}
         {{- if .Values.sdWebuiInferenceApi.inferenceApi.extraEnv }}
         {{- toYaml .Values.sdWebuiInferenceApi.inferenceApi.extraEnv | nindent 10 }}
         {{- end }}
@@ -69,13 +69,13 @@ spec:
           name: models
         resources:
         {{- toYaml .Values.sdWebuiInferenceApi.queueAgent.resources | nindent 10 }}
-        {{- if .Values.sdWebuiInferenceApi.queueAgent.XRay.enabled }}
+      {{- if .Values.sdWebuiInferenceApi.queueAgent.XRay.enabled }}
       - name: xray-daemon
         image: public.ecr.aws/xray/aws-xray-daemon:3.3.7
         ports:
         - containerPort: 2000
           protocol: UDP
-        {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.sdWebuiInferenceApi.serviceAccountName }}
       terminationGracePeriodSeconds: 60
       tolerations:
