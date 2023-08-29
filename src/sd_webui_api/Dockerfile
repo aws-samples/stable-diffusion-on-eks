@@ -15,6 +15,8 @@ RUN git clone https://github.com/Mikubill/sd-webui-controlnet.git /opt/ml/code/e
 
 ENV MPLCONFIGDIR=/tmp TRANSFORMERS_CACHE=/tmp
 
+ENV SD_MODEL_CHECKPOINT="v1-5-pruned-emaonly.safetensors"
+
 COPY serve.sh /opt/ml/code
 
 ENTRYPOINT ["/bin/bash"]

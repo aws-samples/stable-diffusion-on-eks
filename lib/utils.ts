@@ -1,3 +1,4 @@
+import * as cdk from 'aws-cdk-lib';
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import { Construct } from "constructs";
@@ -6,7 +7,13 @@ export class SNSResourceProvider implements blueprints.ResourceProvider<sns.ITop
   constructor(readonly topicName: string, readonly displayName?: string) { }
 
   provide(context: blueprints.ResourceContext): sns.ITopic {
-    return new sns.Topic(context.scope, this.topicName);
+
+    const cfnTopic = new cdk.aws_sns.CfnTopic(context.scope, this.topicName + 'Cfn', {
+      displayName: this.displayName,
+      tracingConfig: 'Active'
+    });
+
+    return sns.Topic.fromTopicArn(context.scope, this.topicName, cfnTopic.attrTopicArn)
   }
 }
 
