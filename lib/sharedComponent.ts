@@ -44,7 +44,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
     const roleforAPIGWLogging = new iam.Role(cluster.stack, 'APIGatewayLoggingRole', {
       assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
       managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonAPIGatewayPushToCloudWatchLogs")
+        iam.ManagedPolicy.fromAwsManagedPolicyName("service-role/AmazonAPIGatewayPushToCloudWatchLogs")
       ]
     })
 
