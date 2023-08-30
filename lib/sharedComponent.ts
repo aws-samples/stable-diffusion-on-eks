@@ -6,6 +6,7 @@ import * as efs from 'aws-cdk-lib/aws-efs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as xray from "aws-cdk-lib/aws-xray"
+import * as iam from "aws-cdk-lib/aws-iam"
 import * as path from 'path';
 
 export interface SharedComponentAddOnProps {
@@ -38,14 +39,22 @@ export class SharedComponentAddOn implements ClusterAddOn {
 
     this.options.inputSns.grantPublish(lambdaFunction);
 
+    //Create IAM role for API GW logging
+
+    const roleforAPIGWLogging = new iam.Role(cluster.stack, 'APIGatewayLoggingRole', {
+      assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonAPIGatewayPushToCloudWatchLogs")
+      ]
+    })
+
     const api = new apigw.LambdaRestApi(cluster.stack, 'FrontApi', {
       handler: lambdaFunction,
       proxy: true,
       deploy: true,
+      cloudWatchRole: true,
       deployOptions: {
         stageName: "prod",
-        loggingLevel: apigw.MethodLoggingLevel.INFO,
-        dataTraceEnabled: true,
         tracingEnabled: true,
         metricsEnabled: true,
       }
@@ -85,6 +94,6 @@ export class SharedComponentAddOn implements ClusterAddOn {
       policyDocument: '{"Version":"2012-10-17","Statement":[{"Sid":"SNSAccess","Effect":"Allow","Principal":{"Service":"sns.amazonaws.com"},"Action":["xray:PutTraceSegments","xray:GetSamplingRules","xray:GetSamplingTargets"],"Resource":"*","Condition":{"StringEquals":{"aws:SourceAccount":"'+cluster.stack.account+'"},"StringLike":{"aws:SourceArn":"' + cluster.stack.formatArn({service: "sns", resource: '*'}) + '"}}}]}'
     })
 
-    return Promise.resolve(api);
+    return Promise.resolve(plan);
   }
 }
