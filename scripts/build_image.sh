@@ -12,7 +12,7 @@ aws ecr-public get-login-password --region us-east-1 | helm registry login publi
 
 # Build images
 docker build -t $AGENT_IMAGE_NAME:$IMAGE_TAG src/queue_agent/
-docker tag $AGENT_IMAGE_NAME:$(IMAGE_TAG) $REPO/$AGENT_IMAGE_NAME:$IMAGE_TAG
+docker tag $AGENT_IMAGE_NAME:$IMAGE_TAG $REPO/$AGENT_IMAGE_NAME:$IMAGE_TAG
 docker push $REPO/$AGENT_IMAGE_NAME:$IMAGE_TAG
 
 docker build -t $SDWEBUI_IMAGE_NAME:$IMAGE_TAG src/sd_webui_api/
@@ -25,4 +25,4 @@ echo "$REPO/$SDWEBUI_IMAGE_NAME:$IMAGE_TAG"
 
 # Build EBS snapshot
 echo "Building EBS snapshot: "
-/bin/bash -c $(echo "../utils/snapshot.sh $REPO/$AGENT_IMAGE_NAME:$IMAGE_TAG, $REPO/$SDWEBUI_IMAGE_NAME:$IMAGE_TAG"
+/bin/bash -c $(echo "utils/snapshot.sh $REPO/$AGENT_IMAGE_NAME:$IMAGE_TAG, $REPO/$SDWEBUI_IMAGE_NAME:$IMAGE_TAG")
