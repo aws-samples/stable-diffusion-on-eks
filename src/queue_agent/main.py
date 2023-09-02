@@ -29,8 +29,7 @@ s3_bucket = os.getenv("S3_BUCKET")
 dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 
 sqsRes = boto3.resource('sqs')
-snsRes = boto3.resource('sns')
-as3Session = aioboto3.Session()
+ab3_session = aioboto3.Session()
 
 apiClient = requests.Session()
 retries = Retry(
@@ -57,8 +56,6 @@ def main():
 
     queue = sqsRes.Queue(sqs_queue_url)
     SQS_WAIT_TIME_SECONDS = 20
-
-    topic = snsRes.Topic(sns_topic_arn)
 
     taskTransMap = {'text-to-image': 'txt2img', 'image-to-image': 'img2img',
                     'extras-single-image': 'extra-single-image', 'extras-batch-images': 'extra-batch-images', 'interrogate': 'interrogate'}
@@ -93,27 +90,25 @@ def main():
                     payload = json.loads(snsPayload['Message'])
                     taskHeader = payload.pop('alwayson_scripts', None)
                     taskType = taskHeader['task']
+                    folder = get_prefix(payload['s3_output_path'])
                     print(
                         f"Start process {taskType} task with ID: {taskHeader['id_task']}")
                     apiFullPath = apiBaseUrl + taskTransMap[taskType]
 
                     if taskType == 'text-to-image':
                         r = invoke_txt2img(apiFullPath, payload, taskHeader)
-                        imgOutputs = post_invocations(
-                            get_prefix(payload['s3_output_path']), r, 80)
                     elif taskType == 'image-to-image':
                         r = invoke_img2img(apiFullPath, payload, taskHeader)
-                        imgOutputs = post_invocations(
-                            get_prefix(payload['s3_output_path']), r, 80)
+
+                    imgOutputs = post_invocations(folder, r, 80)
 
                 except Exception as e:
-                    publish_message(topic, json.dumps(
-                        failed(taskHeader, repr(e))))
+                    content = json.dumps(failed(taskHeader, repr(e)))
                     traceback.print_exc()
                 else:
-                    publish_message(topic, json.dumps(
-                        succeed(imgOutputs, r, taskHeader)))
+                    content = json.dumps(succeed(imgOutputs, r, taskHeader))
                 finally:
+                    handle_outputs(content, folder)
                     delete_message(message)
                     print(
                         f"End process {taskType} task with ID: {taskHeader['id_task']}")
@@ -323,6 +318,13 @@ def post_invocations(folder, response, quality):
     return results
 
 
+def handle_outputs(content, folder):
+    loop = asyncio.get_event_loop()
+    tasks = [async_upload(content, folder, None, suffix='out'),
+             async_publish_message(content)]
+    loop.run_until_complete(asyncio.wait(tasks))
+
+
 async def async_get(url):
     try:
         if url.startswith("http://") or url.startswith("https://"):
@@ -335,7 +337,7 @@ async def async_get(url):
                     return await res.read()
         elif url.startswith("s3://"):
             bucket, key = get_bucket_and_key(url)
-            async with as3Session.resource("s3") as s3:
+            async with ab3_session.resource("s3") as s3:
                 obj = await s3.Object(bucket, key)
                 res = await obj.get()
                 return await res['Body'].read()
@@ -343,17 +345,35 @@ async def async_get(url):
         raise e
 
 
-async def async_upload(object_bytes, folder):
+async def async_upload(object_bytes, folder, file_name=None, suffix=None):
     try:
-        async with as3Session.resource("s3") as s3:
-            imageId = datetime.datetime.now().strftime(
-                f"%Y%m%d%H%M%S-{uuid.uuid4()}")
-            suffix = 'png'
+        async with ab3_session.resource("s3") as s3:
+            if suffix == 'out':
+                content_type = f'application/json'
+                if file_name is None:
+                    file_name = 'response'
+            else:
+                suffix = 'png'
+                content_type = f'image/{suffix}'
+                if file_name is None:
+                    file_name = datetime.datetime.now().strftime(
+                        f"%Y%m%d%H%M%S-{uuid.uuid4()}")
+
             bucket = await s3.Bucket(s3_bucket)
             await bucket.put_object(
-                Body=object_bytes, Key=f'{folder}/{imageId}.{suffix}', ContentType=f'image/{suffix}')
+                Body=object_bytes, Key=f'{folder}/{file_name}.{suffix}', ContentType=content_type)
 
-            return f's3://{s3_bucket}/{folder}/{imageId}.{suffix}'
+            return f's3://{s3_bucket}/{folder}/{file_name}.{suffix}'
+    except Exception as e:
+        raise e
+
+
+async def async_publish_message(content):
+    try:
+        async with ab3_session.resource("sns") as sns:
+            topic = await sns.Topic(sns_topic_arn)
+            response = await topic.publish(Message=content)
+            return response['MessageId']
     except Exception as e:
         raise e
 
