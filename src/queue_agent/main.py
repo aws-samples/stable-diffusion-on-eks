@@ -11,6 +11,7 @@ import logging
 import traceback
 import uuid
 import aioboto3
+import difflib
 from aiohttp_client_cache import CachedSession, CacheBackend
 from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
@@ -28,9 +29,11 @@ sns_topic_arn = os.getenv("SNS_TOPIC_ARN")
 s3_bucket = os.getenv("S3_BUCKET")
 dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 
+current_model_name = ''
 sqsRes = boto3.resource('sqs')
 ab3_session = aioboto3.Session()
 
+apiBaseUrl = "http://localhost:8080/sdapi/v1/"
 apiClient = requests.Session()
 retries = Retry(
     total=3,
@@ -57,12 +60,7 @@ def main():
     queue = sqsRes.Queue(sqs_queue_url)
     SQS_WAIT_TIME_SECONDS = 20
 
-    taskTransMap = {'text-to-image': 'txt2img', 'image-to-image': 'img2img',
-                    'extras-single-image': 'extra-single-image', 'extras-batch-images': 'extra-batch-images', 'interrogate': 'interrogate'}
-
-    apiBaseUrl = "http://localhost:8080/sdapi/v1/"
-
-    check_readiness(apiBaseUrl+"memory")
+    check_readiness()
 
     # main loop
     # todo: Implement scale-in hook signal
@@ -93,12 +91,18 @@ def main():
                     folder = get_prefix(payload['s3_output_path'])
                     print(
                         f"Start process {taskType} task with ID: {taskHeader['id_task']}")
-                    apiFullPath = apiBaseUrl + taskTransMap[taskType]
+
+                    if dynamic_sd_model == 'true' and taskHeader['sd_model_checkpoint']:
+                        switch_model(taskHeader['sd_model_checkpoint'])
+                        print(f'Current model is: {current_model_name}.')
 
                     if taskType == 'text-to-image':
-                        r = invoke_txt2img(apiFullPath, payload, taskHeader)
+                        r = invoke_txt2img(payload, taskHeader)
                     elif taskType == 'image-to-image':
-                        r = invoke_img2img(apiFullPath, payload, taskHeader)
+                        r = invoke_img2img(payload, taskHeader)
+                    else:
+                        raise RuntimeError(
+                            f'Unsupported task type: {taskType}')
 
                     imgOutputs = post_invocations(folder, r, 80)
 
@@ -122,17 +126,19 @@ def print_env():
     print(f'DYNAMIC_SD_MODEL={dynamic_sd_model}')
 
 
-def check_readiness(url):
+def check_readiness():
     while True:
         try:
             print('Checking service readiness...')
-            r = apiClient.get(url, timeout=(1.0, 1.0))
-            if r.status_code == 200:
-                print('Service is ready.')
-                break
-            else:
-                r.raise_for_status()
+            opts = invoke_get_options()
+            print('Service is ready.')
+            if ("sd_model_checkpoint" in opts):
+                global current_model_name
+                current_model_name = opts['sd_model_checkpoint']
+                print(f'Init model is: {current_model_name}.')
+            break
         except Exception as e:
+            print(repr(e))
             time.sleep(1)
 
 
@@ -142,7 +148,8 @@ def get_time(f):
         s_time = time.time()
         res = f(*arg, **kwarg)
         e_time = time.time()
-        print('Used: {} seconds.'.format(e_time - s_time))
+        print('Used: {:.4f} seconds on api: {}.'.format(
+            e_time - s_time, arg[0]))
         return res
     return inner
 
@@ -213,6 +220,10 @@ def get_prefix(path):
     return path[pos + 1:]
 
 
+def str_simularity(a, b):
+    return difflib.SequenceMatcher(None, a, b).ratio()
+
+
 def encode_to_base64(buffer):
     return str(base64.b64encode(buffer))[2:-1]
 
@@ -244,13 +255,64 @@ def export_pil_to_bytes(image, quality):
 
 
 @xray_recorder.capture('text-to-image')
-def invoke_txt2img(url, body, header):
-    return do_invocations(url, prepare_payload(body, header))
+def invoke_txt2img(body, header):
+    return do_invocations(apiBaseUrl+"txt2img", prepare_payload(body, header))
 
 
 @xray_recorder.capture('image-to-image')
-def invoke_img2img(url, body, header):
-    return do_invocations(url, prepare_payload(body, header))
+def invoke_img2img(body, header):
+    return do_invocations(apiBaseUrl+"img2img", prepare_payload(body, header))
+
+
+def invoke_set_options(options):
+    return do_invocations(apiBaseUrl+"options", options)
+
+
+def invoke_get_options():
+    return do_invocations(apiBaseUrl+"options")
+
+
+def invoke_get_model_names():
+    return sorted([x["title"] for x in do_invocations(apiBaseUrl+"sd-models")])
+
+
+def switch_model(name, find_closest=True):
+    global current_model_name
+    # check current model
+    if find_closest:
+        name = name.lower()
+        current = current_model_name.lower()
+
+    if name in current:
+        return current_model_name
+
+    # check from model list
+    models = invoke_get_model_names()
+    found_model = None
+
+    # exact matching
+    if name in models:
+        found_model = name
+    # find closest
+    elif find_closest:
+        max_sim = 0.0
+        max_model = None
+        for model in models:
+            sim = str_simularity(name, model.lower())
+            if sim > max_sim:
+                max_sim = sim
+                max_model = model
+        found_model = max_model
+
+    if not found_model:
+        raise RuntimeError(f'Model not found: {name}')
+    elif found_model != current_model_name:
+        options = {}
+        options["sd_model_checkpoint"] = found_model
+        invoke_set_options(options)
+        current_model_name = found_model
+
+    return current_model_name
 
 
 def succeed(images, response, header):
@@ -289,11 +351,13 @@ def failed(header, message):
 
 
 @get_time
-def do_invocations(url, body):
-    response = apiClient.post(
-        url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
-    if response.status_code != 200:
-        response.raise_for_status()
+def do_invocations(url, body=None):
+    if body is None:
+        response = apiClient.get(url=url, timeout=(1.0, 3.0))
+    else:
+        response = apiClient.post(
+            url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
+    response.raise_for_status()
     return response.json()
 
 
