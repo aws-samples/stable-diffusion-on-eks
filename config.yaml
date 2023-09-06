@@ -25,6 +25,9 @@ modelsRuntime:
         image:
           repository: 600413481647.dkr.ecr.ap-southeast-1.amazonaws.com/sd-on-eks/queue-agent
           tag: latest
+      persistence:
+        enabled: true
+        existingClaim: "efs-model-storage-pvc"
 dynamicModelRuntime:
   enabled: false
   namespace: "default"

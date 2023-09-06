@@ -92,7 +92,11 @@ spec:
       - name: models
       {{- if .Values.sdWebuiInferenceApi.persistence.enabled }}
         persistentVolumeClaim:
+          {{- if .Values.sdWebuiInferenceApi.persistence.existingClaim }}
+          claimName: {{ .Values.sdWebuiInferenceApi.persistence.existingClaim }}
+          {{- else }}
           claimName: {{ include "sdchart.fullname" . }}-model-claim
+          {{- end }}
       {{- else }}
         emptyDir: {}
       {{- end }}

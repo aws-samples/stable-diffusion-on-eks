@@ -73,7 +73,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
 
     api.node.addDependency(lambdaFunction);
 
-    const sc = cluster.addManifest("efs-model-storage-sc", {
+/*     const sc = cluster.addManifest("efs-model-storage-sc", {
       "kind": "StorageClass",
       "apiVersion": "storage.k8s.io/v1",
       "metadata": {
@@ -87,7 +87,60 @@ export class SharedComponentAddOn implements ClusterAddOn {
         "subPathPattern": ".",
         "ensureUniqueDirectory": "false"
       }
+    }) */
+
+    const sc = cluster.addManifest("efs-model-storage-sc", {
+      "apiVersion": "storage.k8s.io/v1",
+      "kind": "StorageClass",
+      "metadata": {
+        "name": "efs-sc"
+      },
+      "provisioner": "efs.csi.aws.com"
     })
+
+    const pv = cluster.addManifest("efs-model-storage-pv", {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "metadata": {
+        "name": "efs-model-storage-pv"
+      },
+      "spec": {
+        "capacity": {
+          "storage": "2Ti"
+        },
+        "volumeMode": "Filesystem",
+        "accessModes": [
+          "ReadWriteMany"
+        ],
+        "storageClassName": "efs-sc",
+        "persistentVolumeReclaimPolicy": "Retain",
+        "csi": {
+          "driver": "efs.csi.aws.com",
+          "volumeHandle": this.options.modelstorageEfs.fileSystemId
+        }
+      }
+    })
+    //pv.node.addDependency("efs-model-storage-sc")
+
+    const pvc = cluster.addManifest("efs-model-storage-pvc", {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "name": "efs-model-storage-pvc"
+      },
+      "spec": {
+        "resources": {
+          "requests": {
+            "storage": "2Ti"
+          }
+        },
+        "accessModes": [
+          "ReadWriteMany"
+        ],
+        "storageClassName": "efs-sc"
+      }
+    })
+    //pvc.node.addDependency("efs-model-storage-pv")
 
     new xray.CfnResourcePolicy(cluster.stack, 'XRayAccessPolicyForSNS', {
       policyName: 'XRayAccessPolicyForSNS',
