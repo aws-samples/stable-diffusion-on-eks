@@ -1,0 +1,20 @@
+modelBucketArn: ''
+modelsRuntime:
+- name: "sdruntime"
+  namespace: "default"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
+  extraValues:
+    karpenter:
+      nodeTemplate:
+        amiFamily: Bottlerocket
+        dataVolume:
+          volumeSize: 80Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 4000
+          throughput: 1000
+          snapshotID: snap-0123456789
+
+dynamicModelRuntime:
+  enabled: false
+  namespace: "default"

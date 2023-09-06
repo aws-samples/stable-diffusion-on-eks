@@ -14,10 +14,11 @@ metadata:
   {{ toYaml .Values.sdWebuiInferenceApi.annotations | nindent 4 }}
   {{- end }}
 data:
-  AWS_REGION: {{ quote .Values.global.awsRegion }}
+  AWS_DEFAULT_REGION: {{ quote .Values.global.awsRegion }}
   SQS_QUEUE_URL: {{ quote .Values.sdWebuiInferenceApi.queueAgent.sqsQueueUrl }}
   S3_BUCKET: {{ quote .Values.sdWebuiInferenceApi.queueAgent.s3Bucket }}
   SNS_TOPIC_ARN: {{ quote .Values.sdWebuiInferenceApi.queueAgent.snsTopicArn }}
+  SD_MODEL_CHECKPOINT: {{ quote .Values.sdWebuiInferenceApi.inferenceApi.modelFilename }}
   {{- if .Values.sdWebuiInferenceApi.queueAgent.dynamicModel }}
   DYNAMIC_SD_MODEL: "true"
   {{- end }}

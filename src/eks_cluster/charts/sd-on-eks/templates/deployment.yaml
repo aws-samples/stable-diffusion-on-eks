@@ -28,10 +28,13 @@ spec:
     spec:
       containers:
       - name: sd-webui-inference-api
-        image: {{ .Values.global.repository }}/{{ .Values.sdWebuiInferenceApi.inferenceApi.image.name }}:{{  .Values.sdWebuiInferenceApi.inferenceApi.image.tag }}
+        image: {{ .Values.sdWebuiInferenceApi.inferenceApi.image.repository }}:{{  .Values.sdWebuiInferenceApi.inferenceApi.image.tag }}
         env:
         - name: SD_MODEL_CHECKPOINT
-          value: {{ quote .Values.sdWebuiInferenceApi.inferenceApi.SD_MODEL_CHECKPOINT }}
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "sdchart.fullname" . }}-sd-webui-config
+              key: SD_MODEL_CHECKPOINT
         {{- if .Values.sdWebuiInferenceApi.inferenceApi.extraEnv }}
         {{- toYaml .Values.sdWebuiInferenceApi.inferenceApi.extraEnv | nindent 10 }}
         {{- end }}
@@ -61,7 +64,7 @@ spec:
         - name: AWS_XRAY_CONTEXT_MISSING
           value: IGNORE_ERROR
         {{- end }}
-        image: {{ .Values.global.repository }}/{{ .Values.sdWebuiInferenceApi.queueAgent.image.name }}:{{  .Values.sdWebuiInferenceApi.queueAgent.image.tag }}
+        image: {{ .Values.sdWebuiInferenceApi.queueAgent.image.repository }}:{{ .Values.sdWebuiInferenceApi.queueAgent.image.tag }}
         name: sd-webui-queue-agent
         imagePullPolicy: IfNotPresent
         volumeMounts:

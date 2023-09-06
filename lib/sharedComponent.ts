@@ -84,7 +84,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
         "provisioningMode": "efs-ap",
         "fileSystemId": this.options.modelstorageEfs.fileSystemId,
         "directoryPerms": "777",
-        "subPathPattern": "",
+        "subPathPattern": ".",
         "ensureUniqueDirectory": "false"
       }
     })
