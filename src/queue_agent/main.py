@@ -11,6 +11,7 @@ import logging
 import traceback
 import uuid
 import aioboto3
+import difflib
 from aiohttp_client_cache import CachedSession, CacheBackend
 from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
@@ -28,10 +29,11 @@ sns_topic_arn = os.getenv("SNS_TOPIC_ARN")
 s3_bucket = os.getenv("S3_BUCKET")
 dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 
+current_model_name = ''
 sqsRes = boto3.resource('sqs')
-snsRes = boto3.resource('sns')
-as3Session = aioboto3.Session()
+ab3_session = aioboto3.Session()
 
+apiBaseUrl = "http://localhost:8080/sdapi/v1/"
 apiClient = requests.Session()
 retries = Retry(
     total=3,
@@ -58,14 +60,7 @@ def main():
     queue = sqsRes.Queue(sqs_queue_url)
     SQS_WAIT_TIME_SECONDS = 20
 
-    topic = snsRes.Topic(sns_topic_arn)
-
-    taskTransMap = {'text-to-image': 'txt2img', 'image-to-image': 'img2img',
-                    'extras-single-image': 'extra-single-image', 'extras-batch-images': 'extra-batch-images', 'interrogate': 'interrogate'}
-
-    apiBaseUrl = "http://localhost:8080/sdapi/v1/"
-
-    check_readiness(apiBaseUrl+"memory")
+    check_readiness()
 
     # main loop
     # todo: Implement scale-in hook signal
@@ -93,27 +88,31 @@ def main():
                     payload = json.loads(snsPayload['Message'])
                     taskHeader = payload.pop('alwayson_scripts', None)
                     taskType = taskHeader['task']
+                    folder = get_prefix(payload['s3_output_path'])
                     print(
                         f"Start process {taskType} task with ID: {taskHeader['id_task']}")
-                    apiFullPath = apiBaseUrl + taskTransMap[taskType]
+
+                    if dynamic_sd_model == 'true' and taskHeader['sd_model_checkpoint']:
+                        switch_model(taskHeader['sd_model_checkpoint'])
+                        print(f'Current model is: {current_model_name}.')
 
                     if taskType == 'text-to-image':
-                        r = invoke_txt2img(apiFullPath, payload, taskHeader)
-                        imgOutputs = post_invocations(
-                            get_prefix(payload['s3_output_path']), r, 80)
+                        r = invoke_txt2img(payload, taskHeader)
                     elif taskType == 'image-to-image':
-                        r = invoke_img2img(apiFullPath, payload, taskHeader)
-                        imgOutputs = post_invocations(
-                            get_prefix(payload['s3_output_path']), r, 80)
+                        r = invoke_img2img(payload, taskHeader)
+                    else:
+                        raise RuntimeError(
+                            f'Unsupported task type: {taskType}')
+
+                    imgOutputs = post_invocations(folder, r, 80)
 
                 except Exception as e:
-                    publish_message(topic, json.dumps(
-                        failed(taskHeader, repr(e))))
+                    content = json.dumps(failed(taskHeader, repr(e)))
                     traceback.print_exc()
                 else:
-                    publish_message(topic, json.dumps(
-                        succeed(imgOutputs, r, taskHeader)))
+                    content = json.dumps(succeed(imgOutputs, r, taskHeader))
                 finally:
+                    handle_outputs(content, folder)
                     delete_message(message)
                     print(
                         f"End process {taskType} task with ID: {taskHeader['id_task']}")
@@ -127,17 +126,19 @@ def print_env():
     print(f'DYNAMIC_SD_MODEL={dynamic_sd_model}')
 
 
-def check_readiness(url):
+def check_readiness():
     while True:
         try:
             print('Checking service readiness...')
-            r = apiClient.get(url, timeout=(1.0, 1.0))
-            if r.status_code == 200:
-                print('Service is ready.')
-                break
-            else:
-                r.raise_for_status()
+            opts = invoke_get_options()
+            print('Service is ready.')
+            if ("sd_model_checkpoint" in opts):
+                global current_model_name
+                current_model_name = opts['sd_model_checkpoint']
+                print(f'Init model is: {current_model_name}.')
+            break
         except Exception as e:
+            print(repr(e))
             time.sleep(1)
 
 
@@ -147,7 +148,8 @@ def get_time(f):
         s_time = time.time()
         res = f(*arg, **kwarg)
         e_time = time.time()
-        print('Used: {} seconds.'.format(e_time - s_time))
+        print('Used: {:.4f} seconds on api: {}.'.format(
+            e_time - s_time, arg[0]))
         return res
     return inner
 
@@ -218,6 +220,10 @@ def get_prefix(path):
     return path[pos + 1:]
 
 
+def str_simularity(a, b):
+    return difflib.SequenceMatcher(None, a, b).ratio()
+
+
 def encode_to_base64(buffer):
     return str(base64.b64encode(buffer))[2:-1]
 
@@ -249,13 +255,64 @@ def export_pil_to_bytes(image, quality):
 
 
 @xray_recorder.capture('text-to-image')
-def invoke_txt2img(url, body, header):
-    return do_invocations(url, prepare_payload(body, header))
+def invoke_txt2img(body, header):
+    return do_invocations(apiBaseUrl+"txt2img", prepare_payload(body, header))
 
 
 @xray_recorder.capture('image-to-image')
-def invoke_img2img(url, body, header):
-    return do_invocations(url, prepare_payload(body, header))
+def invoke_img2img(body, header):
+    return do_invocations(apiBaseUrl+"img2img", prepare_payload(body, header))
+
+
+def invoke_set_options(options):
+    return do_invocations(apiBaseUrl+"options", options)
+
+
+def invoke_get_options():
+    return do_invocations(apiBaseUrl+"options")
+
+
+def invoke_get_model_names():
+    return sorted([x["title"] for x in do_invocations(apiBaseUrl+"sd-models")])
+
+
+def switch_model(name, find_closest=True):
+    global current_model_name
+    # check current model
+    if find_closest:
+        name = name.lower()
+        current = current_model_name.lower()
+
+    if name in current:
+        return current_model_name
+
+    # check from model list
+    models = invoke_get_model_names()
+    found_model = None
+
+    # exact matching
+    if name in models:
+        found_model = name
+    # find closest
+    elif find_closest:
+        max_sim = 0.0
+        max_model = None
+        for model in models:
+            sim = str_simularity(name, model.lower())
+            if sim > max_sim:
+                max_sim = sim
+                max_model = model
+        found_model = max_model
+
+    if not found_model:
+        raise RuntimeError(f'Model not found: {name}')
+    elif found_model != current_model_name:
+        options = {}
+        options["sd_model_checkpoint"] = found_model
+        invoke_set_options(options)
+        current_model_name = found_model
+
+    return current_model_name
 
 
 def succeed(images, response, header):
@@ -294,11 +351,13 @@ def failed(header, message):
 
 
 @get_time
-def do_invocations(url, body):
-    response = apiClient.post(
-        url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
-    if response.status_code != 200:
-        response.raise_for_status()
+def do_invocations(url, body=None):
+    if body is None:
+        response = apiClient.get(url=url, timeout=(1.0, 3.0))
+    else:
+        response = apiClient.post(
+            url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
+    response.raise_for_status()
     return response.json()
 
 
@@ -323,6 +382,13 @@ def post_invocations(folder, response, quality):
     return results
 
 
+def handle_outputs(content, folder):
+    loop = asyncio.get_event_loop()
+    tasks = [async_upload(content, folder, None, suffix='out'),
+             async_publish_message(content)]
+    loop.run_until_complete(asyncio.wait(tasks))
+
+
 async def async_get(url):
     try:
         if url.startswith("http://") or url.startswith("https://"):
@@ -335,7 +401,7 @@ async def async_get(url):
                     return await res.read()
         elif url.startswith("s3://"):
             bucket, key = get_bucket_and_key(url)
-            async with as3Session.resource("s3") as s3:
+            async with ab3_session.resource("s3") as s3:
                 obj = await s3.Object(bucket, key)
                 res = await obj.get()
                 return await res['Body'].read()
@@ -343,17 +409,35 @@ async def async_get(url):
         raise e
 
 
-async def async_upload(object_bytes, folder):
+async def async_upload(object_bytes, folder, file_name=None, suffix=None):
     try:
-        async with as3Session.resource("s3") as s3:
-            imageId = datetime.datetime.now().strftime(
-                f"%Y%m%d%H%M%S-{uuid.uuid4()}")
-            suffix = 'png'
+        async with ab3_session.resource("s3") as s3:
+            if suffix == 'out':
+                content_type = f'application/json'
+                if file_name is None:
+                    file_name = 'response'
+            else:
+                suffix = 'png'
+                content_type = f'image/{suffix}'
+                if file_name is None:
+                    file_name = datetime.datetime.now().strftime(
+                        f"%Y%m%d%H%M%S-{uuid.uuid4()}")
+
             bucket = await s3.Bucket(s3_bucket)
             await bucket.put_object(
-                Body=object_bytes, Key=f'{folder}/{imageId}.{suffix}', ContentType=f'image/{suffix}')
+                Body=object_bytes, Key=f'{folder}/{file_name}.{suffix}', ContentType=content_type)
 
-            return f's3://{s3_bucket}/{folder}/{imageId}.{suffix}'
+            return f's3://{s3_bucket}/{folder}/{file_name}.{suffix}'
+    except Exception as e:
+        raise e
+
+
+async def async_publish_message(content):
+    try:
+        async with ab3_session.resource("sns") as sns:
+            topic = await sns.Topic(sns_topic_arn)
+            response = await topic.publish(Message=content)
+            return response['MessageId']
     except Exception as e:
         raise e
 
