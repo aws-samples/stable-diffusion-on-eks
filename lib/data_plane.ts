@@ -14,10 +14,19 @@ export interface dataPlaneProps {
   modelBucketArn: string;
   modelsRuntime: {
     name: string,
+    namespace: string,
     modelFilename: string,
+    chartRepository?: string,
+    chartVersion?: string,
     extraValues?: {}
   }[];
-  generateDynamic: boolean
+  dynamicModelRuntime: {
+    enabled: boolean,
+    namespace?: string,
+    chartRepository?: string,
+    chartVersion?: string,
+    extraValues?: {}
+  }
 }
 
 export default class DataPlaneStack {
@@ -106,7 +115,10 @@ export default class DataPlaneStack {
         inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
         outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
         sdModelCheckpoint: val.modelFilename,
+        chartRepository: val.chartRepository,
+        chartVersion: val.chartVersion,
         extraValues: val.extraValues,
+        targetNamespace: val.namespace,
         dynamicModel: false
       };
       addOns.push(new SDRuntimeAddon(sdRuntimeParams, val.name))
@@ -114,7 +126,7 @@ export default class DataPlaneStack {
     });
 
     // Generate SD Runtime Addon for dynamic runtime
-    if (dataplaneProps.generateDynamic) {
+    if (dataplaneProps.dynamicModelRuntime.enabled) {
       const sdRuntimeParams: SDRuntimeAddOnProps = {
         ModelBucketArn: dataplaneProps.modelBucketArn,
         outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
@@ -122,6 +134,10 @@ export default class DataPlaneStack {
         outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
         sdModelCheckpoint: "v1-5-pruned-emaonly.safetensors",
         dynamicModel: true,
+        targetNamespace: dataplaneProps.dynamicModelRuntime.namespace,
+        chartRepository: dataplaneProps.dynamicModelRuntime.chartRepository,
+        chartVersion: dataplaneProps.dynamicModelRuntime.chartVersion,
+        extraValues: dataplaneProps.dynamicModelRuntime.extraValues,
         allModels: models
       };
       addOns.push(new SDRuntimeAddon(sdRuntimeParams, "dynamicSDRuntime"))

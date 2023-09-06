@@ -2,7 +2,7 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 IMAGE_TAG=$(git rev-parse --short HEAD)
-REPO=public.ecr.aws/bingjiao
+REPO=public.ecr.aws/bingjiao/sd-on-eks
 AGENT_IMAGE_NAME=queue-agent
 SDWEBUI_IMAGE_NAME=inference-api
 

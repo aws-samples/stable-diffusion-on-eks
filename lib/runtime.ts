@@ -9,6 +9,7 @@ import { aws_sns_subscriptions } from "aws-cdk-lib";
 import * as lodash from "lodash";
 
 export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProps {
+  targetNamespace?: string,
   ModelBucketArn?: string,
   outputSns?: sns.ITopic,
   inputSns?: sns.ITopic,
@@ -16,6 +17,8 @@ export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProp
   sdModelCheckpoint: string,
   dynamicModel: boolean,
   allModels?: string[],
+  chartRepository?: string,
+  chartVersion?: string,
   extraValues?: {}
 }
 
@@ -29,26 +32,10 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   values: {
     global: {
       awsRegion: cdk.Aws.REGION,
-      repository: "057313215210.dkr.ecr.us-west-2.amazonaws.com/stable-diffusion-webui",
       stackName: cdk.Aws.STACK_NAME,
-    },
-    sdWebuiInferenceApi: {
-      inferenceApi: {
-        image: {
-          name: "inference-api",
-          tag: "0.1.0"
-        },
-
-      },
-      queueAgent: {
-        image: {
-          name: "queue-agent",
-          tag: "latest"
-        },
-      }
     }
   },
-  sdModelCheckpoint: "v1-5-pruned-emaonly.safetensors",
+  sdModelCheckpoint: "",
   dynamicModel: false
 }
 
@@ -75,13 +62,26 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     const cluster = clusterInfo.cluster
 
     this.props.name = this.id + 'Addon'
-    this.props.namespace = this.id
     this.props.release = this.id
+
+    if (typeof (this.options.targetNamespace) !== 'undefined') {
+      this.props.namespace = this.options.targetNamespace.toLowerCase()
+    } else {
+      this.props.namespace = "default"
+    }
 
     const ns = blueprints.utils.createNamespace(this.props.namespace, cluster, true)
 
     const webUISA = cluster.addServiceAccount('WebUISA' + this.id, { namespace: this.props.namespace });
     webUISA.node.addDependency(ns)
+
+    if (typeof (this.options.chartRepository) !== 'undefined') {
+      this.props.repository = this.options.chartRepository
+    }
+
+    if (typeof (this.options.chartVersion) !== 'undefined') {
+      this.props.version = this.options.chartVersion
+    }
 
     const modelBucket = s3.Bucket.fromBucketAttributes(cluster.stack, 'ModelBucket' + this.id, {
       bucketArn: this.options.ModelBucketArn!
@@ -91,7 +91,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
     const inputQueue = new sqs.Queue(cluster.stack, 'InputQueue' + this.id);
     inputQueue.grantConsumeMessages(webUISA);
-    
+
 
     this.options.outputBucket!.grantWrite(webUISA);
     this.options.outputBucket!.grantPutAcl(webUISA);

@@ -1,0 +1,30 @@
+modelBucketArn: 'arn:aws:s3:::sd-on-eks-pdx'
+modelsRuntime:
+- name: "sdruntime"
+  namespace: "default"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
+  chartRepository: "oci://public.ecr.aws/bingjiao/charts/sd-on-eks"
+  chartVersion: "0.2.0"
+  extraValues:
+    karpenter:
+      nodeTemplate:
+        amiFamily: Bottlerocket
+        dataVolume:
+          volumeSize: 80Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 4000
+          throughput: 1000
+          snapshotID: snap-0500ed8161fbb3da5
+    sdWebuiInferenceApi:
+      inferenceApi:
+        image:
+          repository: 600413481647.dkr.ecr.ap-southeast-1.amazonaws.com/sd-on-eks/inference-api
+          tag: latest
+      queueAgent:
+        image:
+          repository: 600413481647.dkr.ecr.ap-southeast-1.amazonaws.com/sd-on-eks/queue-agent
+          tag: latest
+dynamicModelRuntime:
+  enabled: false
+  namespace: "default"

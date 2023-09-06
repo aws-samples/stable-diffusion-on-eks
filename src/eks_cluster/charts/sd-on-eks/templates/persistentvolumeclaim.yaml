@@ -10,6 +10,9 @@ metadata:
   {{- end }}
   labels:
   {{- include "sdchart.labels" . | nindent 4 }}
+  {{- if .Values.sdWebuiInferenceApi.labels }}
+  {{- toYaml .Values.sdWebuiInferenceApi.labels | nindent 4 }}
+  {{- end }}
   {{- if .Values.sdWebuiInferenceApi.persistence.labels }}
   {{ toYaml .Values.sdWebuiInferenceApi.persistence.labels | indent 4 }}
   {{- end }}

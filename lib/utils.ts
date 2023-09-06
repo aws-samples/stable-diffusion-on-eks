@@ -41,7 +41,6 @@ export default class nvidiaDevicePluginAddon extends blueprints.addons.HelmAddOn
 
   deploy(clusterInfo: blueprints.ClusterInfo): Promise<Construct> {
     const chart = this.addHelmChart(clusterInfo, {
-      values: {
         nodeSelector: {
           "karpenter.k8s.aws/instance-gpu-manufacturer": "nvidia"
         },
@@ -58,9 +57,8 @@ export default class nvidiaDevicePluginAddon extends blueprints.addons.HelmAddOn
           },
         ]
       },
-      wait: true,
-      createNamespace: true
-    });
+      true, true
+    );
 
     return Promise.resolve(chart);
   }

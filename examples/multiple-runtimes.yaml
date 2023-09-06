@@ -1,0 +1,11 @@
+modelBucketArn: ''
+modelsRuntime:
+- name: "sdruntime1"
+  namespace: "sdruntime1"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
+- name: "sdruntime2"
+  namespace: "sdruntime2"
+  modelFilename: "v2-1_768-ema-pruned.safetensors"
+dynamicModelRuntime:
+  enabled: false
+  namespace: "default"
