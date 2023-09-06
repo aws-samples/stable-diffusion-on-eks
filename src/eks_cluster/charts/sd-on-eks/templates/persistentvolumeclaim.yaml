@@ -1,4 +1,4 @@
-{{- if .Values.sdWebuiInferenceApi.persistence.enabled }}
+{{- if and (.Values.sdWebuiInferenceApi.persistence.enabled) (not (.Values.sdWebuiInferenceApi.persistence.existingClaim)) }}
 
 apiVersion: v1
 kind: PersistentVolumeClaim
