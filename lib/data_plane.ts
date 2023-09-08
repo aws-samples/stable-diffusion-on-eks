@@ -6,8 +6,9 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as efs from 'aws-cdk-lib/aws-efs';
 import SDRuntimeAddon, { SDRuntimeAddOnProps } from './runtime';
-import { SharedComponentAddOn, SharedComponentAddOnProps } from './sharedComponent';
+import { SharedComponentAddOn, SharedComponentAddOnProps, EbsThroughputModifyAddOn, EbsThroughputModifyAddOnProps } from './sharedComponent';
 import nvidiaDevicePluginAddon, { SNSResourceProvider } from './utils'
 
 export interface dataPlaneProps {
@@ -42,7 +43,8 @@ export default class DataPlaneStack {
     const efsParams: blueprints.CreateEfsFileSystemProps = {
       name: "efs-model-storage",
       efsProps: {
-        removalPolicy: cdk.RemovalPolicy.DESTROY
+        removalPolicy: cdk.RemovalPolicy.DESTROY,
+        throughputMode: efs.ThroughputMode.ELASTIC
       }
     }
 
@@ -71,6 +73,12 @@ export default class DataPlaneStack {
       outputBucket: blueprints.getNamedResource("outputS3Bucket")
     };
 
+    const EbsThroughputModifyAddOnParams: EbsThroughputModifyAddOnProps = {
+      duration: 300,
+      throughput: 125,
+      iops: 3000
+    };
+
     const addOns: Array<blueprints.ClusterAddOn> = [
       new blueprints.addons.VpcCniAddOn(),
       new blueprints.addons.CoreDnsAddOn(),
@@ -86,7 +94,7 @@ export default class DataPlaneStack {
         namespace: "amazon-cloudwatch",
         values: {
           cloudWatchLogs: {
-            region: "us-west-2",
+            region: cdk.Aws.REGION,
           },
           tolerations: [{
             "key": "nvidia.com/gpu",
@@ -102,7 +110,8 @@ export default class DataPlaneStack {
         createNamespace: true
       }),
       new nvidiaDevicePluginAddon({}),
-      new SharedComponentAddOn(SharedComponentAddOnParams)
+      new SharedComponentAddOn(SharedComponentAddOnParams),
+      new EbsThroughputModifyAddOn(EbsThroughputModifyAddOnParams)
     ];
 
     let models: string[] = [];
@@ -119,7 +128,8 @@ export default class DataPlaneStack {
         chartVersion: val.chartVersion,
         extraValues: val.extraValues,
         targetNamespace: val.namespace,
-        dynamicModel: false
+        dynamicModel: false,
+        efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
       };
       addOns.push(new SDRuntimeAddon(sdRuntimeParams, val.name))
       models.push(val.modelFilename)
@@ -138,7 +148,8 @@ export default class DataPlaneStack {
         chartRepository: dataplaneProps.dynamicModelRuntime.chartRepository,
         chartVersion: dataplaneProps.dynamicModelRuntime.chartVersion,
         extraValues: dataplaneProps.dynamicModelRuntime.extraValues,
-        allModels: models
+        allModels: models,
+        efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
       };
       addOns.push(new SDRuntimeAddon(sdRuntimeParams, "dynamicSDRuntime"))
     }
@@ -151,7 +162,11 @@ export default class DataPlaneStack {
       version: eks.KubernetesVersion.V1_27,
       instanceTypes: [new ec2.InstanceType('m5.large')],
       amiType: eks.NodegroupAmiType.AL2_X86_64,
-      enableSsmPermissions: true
+      enableSsmPermissions: true,
+      nodeGroupTags: {
+        "Name": cdk.Aws.STACK_NAME + "-ClusterComponents",
+        "stack": cdk.Aws.STACK_NAME
+      }
     }
 
     // Deploy EKS cluster with all add-ons
