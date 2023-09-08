@@ -11,6 +11,7 @@ import SDRuntimeAddon, { SDRuntimeAddOnProps } from './runtime';
 import { SharedComponentAddOn, SharedComponentAddOnProps, EbsThroughputModifyAddOn, EbsThroughputModifyAddOnProps } from './sharedComponent';
 import nvidiaDevicePluginAddon, { SNSResourceProvider } from './utils'
 
+
 export interface dataPlaneProps {
   modelBucketArn: string;
   modelsRuntime: {
