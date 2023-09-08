@@ -136,7 +136,7 @@ The following table lists the configurable parameters of CDK template and the de
 | `modelsRuntime` | Define Stable diffusion runtime. At least one runtime should be defined. | Yes | `- name: "sdruntime"  modelFilename: "v1-5-pruned-emaonly.ckpt"`
 | `modelsRuntime.name` | Name of individual Stable diffusion runtime. | Yes | `sdruntime` |
 | `modelsRuntime.namespace` | Namespace of individual Stable diffusion runtime. | Yes | `default` |
-| `modelsRuntime.chartRepository` | Override default helm chart repository. (Default: `oci://public.ecr.aws/bingjiao/charts/sd-on-eks`) | No | N/A |
+| `modelsRuntime.chartRepository` | Override default helm chart repository. Protocol (`oci://` or `https://`)should be added as a prefix of repository. (Default: `oci://public.ecr.aws/bingjiao/charts/sd-on-eks`) | No | N/A |
 | `modelsRuntime.chartVersion` | Override version of helm chart. (Default: 0.1.0) | No | N/A |
 | `modelsRuntime.modelFilename` | File of model using in the runtime. Filename should be in `.ckpt` or `.safetensors` format. Filename should be quoted if contains number only. | Yes | `v1-5-pruned-emaonly.safetensors` |
 | `modelsRuntime.extraValues` | Extra parameter passed to the runtime. See [values definition](#application-helm-chart) for detail. | No | N/A |
@@ -264,12 +264,12 @@ See `dynamic-runtime.yaml` for more reference.
 
 You can optimize launch speed by pre-caching your image as an EBS snapshot. When a new instance is launched, the data volume of the instance is pre-populated with image. When using image caching, you don't need to pull image from registry. You need to use `BottleRocket` as OS of worker node to use image caching.
 
-EBS snapshot should be built before deploy infrastructure. Image should be pushed to a registry (Amazon ECR) before being cached. We provided a script for building EBS snapshot. Run the following command to build:
+EBS snapshot should be built before deploy infrastructure. Image should be pushed to a registry (Amazon ECR) before being cached. We provided a script for building EBS snapshot. Run the following command to build. Replace `us-east-1` to your region and `123456789012` to your AWS account 12-digit ID:
 
 ```bash
 git submodule update --init --recursive
 cd utils/bottlerocket-images-cache
-./snapshot.sh <comma seperated container images list>
+./snapshot.sh 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/inference-api:latest,123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
 ```
 
 This script will launch an instance, pull image from registry, and capture a snapshot with pulled image. After snapshot is built, put snapshot ID into `config.yaml`:

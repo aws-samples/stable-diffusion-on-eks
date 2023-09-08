@@ -4,9 +4,11 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as efs from 'aws-cdk-lib/aws-efs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { aws_sns_subscriptions } from "aws-cdk-lib";
 import * as lodash from "lodash";
+import * as utils from "./utils"
 
 export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProps {
   targetNamespace?: string,
@@ -19,7 +21,8 @@ export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProp
   allModels?: string[],
   chartRepository?: string,
   chartVersion?: string,
-  extraValues?: {}
+  extraValues?: {},
+  efsFilesystem?: efs.IFileSystem
 }
 
 export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProps = {
@@ -70,7 +73,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       this.props.namespace = "default"
     }
 
-    const ns = blueprints.utils.createNamespace(this.props.namespace, cluster, true)
+    const ns = utils.createNamespace(this.id+"-"+this.props.namespace+"-namespace-struct", this.props.namespace, cluster, true)
 
     const webUISA = cluster.addServiceAccount('WebUISA' + this.id, { namespace: this.props.namespace });
     webUISA.node.addDependency(ns)
@@ -102,17 +105,67 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         'AWSXRayDaemonWriteAccess',
       ))
 
+    // Static provisioning resource
+    const pv = cluster.addManifest(this.id+"EfsModelStoragePv", {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "metadata": {
+        "name": this.id+"-efs-model-storage-pv"
+      },
+      "spec": {
+        "capacity": {
+          "storage": "2Ti"
+        },
+        "volumeMode": "Filesystem",
+        "accessModes": [
+          "ReadWriteMany"
+        ],
+        "storageClassName": "efs-sc",
+        "persistentVolumeReclaimPolicy": "Retain",
+        "csi": {
+          "driver": "efs.csi.aws.com",
+          "volumeHandle": this.options.efsFilesystem!.fileSystemId
+        }
+      }
+    })
+    pv.node.addDependency(ns)
+
+    const pvc = cluster.addManifest(this.id+"EfsModelStoragePvc", {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "name": this.id+"-efs-model-storage-pvc",
+        "namespace": this.props.namespace
+      },
+      "spec": {
+        "resources": {
+          "requests": {
+            "storage": "2Ti"
+          }
+        },
+        "accessModes": [
+          "ReadWriteMany"
+        ],
+        "storageClassName": "efs-sc"
+      }
+    })
+    pvc.node.addDependency(ns)
+
     var generatedValues = {
       sdWebuiInferenceApi: {
         serviceAccountName: webUISA.serviceAccountName,
         inferenceApi: {
-          SD_MODEL_CHECKPOINT: this.options.sdModelCheckpoint
+          modelFilename: this.options.sdModelCheckpoint
         },
         queueAgent: {
           s3Bucket: this.options.outputBucket!.bucketName,
           snsTopicArn: this.options.outputSns!.topicArn,
           sqsQueueUrl: inputQueue.queueUrl,
-          dynamicModel: false
+          dynamicModel: this.options.dynamicModel
+        },
+        // Temp add static provisioning values here
+        persistence: {
+          existingClaim: this.id+"-efs-model-storage-pvc"
         }
       }
     }
