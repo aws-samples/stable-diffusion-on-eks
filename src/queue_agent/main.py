@@ -50,11 +50,10 @@ cache = CacheBackend(
 
 
 def main():
-    # initialization:
-    # 1. Prepare environments;
+    # Initialization:
+    # 1. Environment parameters;
     # 2. AWS services resources(sqs/sns/s3);
-    # 3. Parameter map;
-    # 4. SD api base url and http session client;
+    # 3. SD API readiness check, current checkpoint cached;
     print_env()
 
     queue = sqsRes.Queue(sqs_queue_url)
@@ -66,10 +65,11 @@ def main():
     # todo: Implement scale-in hook signal
     # 1. Pull msg from sqs;
     # 2. Translate parameteres;
-    # 3. (opt)Download and encode;
-    # 4. Call SD API;
-    # 5. Decode, upload and notify;
-    # 6. Delete msg;
+    # 3. (opt)Switch model;
+    # 4. (opt)Prepare inputs for image downloading and encoding;
+    # 5. Call SD API;
+    # 6. Prepare outputs for decoding, uploading and notifying;
+    # 7. Delete msg;
     while True:
         received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
 
@@ -130,6 +130,7 @@ def check_readiness():
     while True:
         try:
             print('Checking service readiness...')
+            # checking with options "sd_model_checkpoint" also for caching current model
             opts = invoke_get_options()
             print('Service is ready.')
             if ("sd_model_checkpoint" in opts):
@@ -276,6 +277,10 @@ def invoke_get_model_names():
     return sorted([x["title"] for x in do_invocations(apiBaseUrl+"sd-models")])
 
 
+def invoke_refresh_checkpoints():
+    return do_invocations(apiBaseUrl+"refresh-checkpoints", {})
+
+
 def switch_model(name, find_closest=True):
     global current_model_name
     # check current model
@@ -286,7 +291,8 @@ def switch_model(name, find_closest=True):
     if name in current:
         return current_model_name
 
-    # check from model list
+    # refresh then check from model list
+    invoke_refresh_checkpoints()
     models = invoke_get_model_names()
     found_model = None
 
@@ -467,8 +473,8 @@ def prepare_payload(body, header):
             if 'controlnet' in header:
                 for x in header['controlnet']['args']:
                     if 'image_link' in x:
-                        l = results[offset:]
-                        x['input_image'] = encode_to_base64(l.pop(0))
+                        x['input_image'] = encode_to_base64(results[offset])
+                        offset += 1
                 body.update(
                     {'alwayson_scripts': {'controlnet': header['controlnet']}})
     except Exception as e:
