@@ -8,7 +8,7 @@ Implementing a fast scaling and low cost Stable Diffusion inference solution wit
 
 ## Features
 
-- Asyncronous API Endpoints and scalable Event-Driven Architecture
+- Asyncronous API and serverless Event-Driven Architecture
 - Image Generation with Stable Diffusion Web UI on Amazon EKS
 - Automatic queue length based scaling with KEDA
 - Automatic provisioning ec2 instances with Karpenter
