@@ -42,6 +42,12 @@ sdWebuiInferenceApi:
   scaling:
     enabled: true
     queueLength: 10
+    cooldownPeriod: 60
+    maxReplicaCount: 20
+    minReplicaCount: 0
+    pollingInterval: 1
+    scaleOnInFlight: false
+    extraHPAConfig: {}
   inferenceApi:
     image:
       repository: public.ecr.aws/bingjiao/sd-on-eks/inference-api

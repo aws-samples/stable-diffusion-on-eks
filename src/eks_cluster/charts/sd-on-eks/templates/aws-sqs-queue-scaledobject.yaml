@@ -10,20 +10,26 @@ metadata:
   {{- toYaml .Values.sdWebuiInferenceApi.labels | nindent 4 }}
   {{- end }}
 spec:
-  cooldownPeriod: 60
-  maxReplicaCount: 20
-  minReplicaCount: 1
-  pollingInterval: 1
-  scaleOnInFlight: false
+  cooldownPeriod: {{ .Values.sdWebuiInferenceApi.scaling.cooldownPeriod }}
+  maxReplicaCount: {{ .Values.sdWebuiInferenceApi.scaling.maxReplicaCount }}
+  minReplicaCount: {{ .Values.sdWebuiInferenceApi.scaling.minReplicaCount }}
+  pollingInterval: {{ .Values.sdWebuiInferenceApi.scaling.pollingInterval }}
+  scaleOnInFlight: {{ .Values.sdWebuiInferenceApi.scaling.scaleOnInFlight }}
+  {{- if .Values.sdWebuiInferenceApi.scaling.extraHPAConfig }}
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+      {{- toYaml .Values.sdWebuiInferenceApi.extraHPAConfig | nindent 8 }}
+  {{- end }}
   scaleTargetRef:
     name: {{ include "sdchart.fullname" . }}-sd-webui-inference-api
   triggers:
   - authenticationRef:
       name: {{ include "sdchart.fullname" . }}-keda-trigger-auth-aws-credentials
     metadata:
-      awsRegion: {{ quote .Values.global.awsRegion }}
+      awsRegion: {{ .Values.global.awsRegion }}
       identityOwner: operator
       queueLength: {{ quote .Values.sdWebuiInferenceApi.scaling.queueLength }}
-      queueURL: {{ quote .Values.sdWebuiInferenceApi.queueAgent.sqsQueueUrl }}
+      queueURL: {{ .Values.sdWebuiInferenceApi.queueAgent.sqsQueueUrl }}
     type: aws-sqs-queue
 {{- end }}

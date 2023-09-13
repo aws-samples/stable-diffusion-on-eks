@@ -13,6 +13,7 @@ import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as crypto from "crypto";
 
 export interface SharedComponentAddOnProps {
   modelstorageEfs: efs.IFileSystem;
@@ -44,15 +45,6 @@ export class SharedComponentAddOn implements ClusterAddOn {
 
     this.options.inputSns.grantPublish(lambdaFunction);
 
-    //Create IAM role for API GW logging
-
-    const roleforAPIGWLogging = new iam.Role(cluster.stack, 'APIGatewayLoggingRole', {
-      assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName("service-role/AmazonAPIGatewayPushToCloudWatchLogs")
-      ]
-    })
-
     const api = new apigw.LambdaRestApi(cluster.stack, 'FrontApi', {
       handler: lambdaFunction,
       proxy: true,
@@ -64,18 +56,34 @@ export class SharedComponentAddOn implements ClusterAddOn {
         metricsEnabled: true,
       }
     });
+    api.node.addDependency(lambdaFunction);
+
+    const key = crypto.randomBytes(10).toString('hex')
+
+    const apiKey = new apigw.ApiKey(cluster.stack, `defaultAPIKey`, {
+      apiKeyName: "Default",
+      description: `Default API Key`,
+      enabled: true,
+      value: key
+    })
 
     const plan = api.addUsagePlan('UsagePlan', {
-      name: 'Easy',
+      name: 'Default',
+      apiStages: [{
+        stage: api.deploymentStage
+      }],
       throttle: {
         rateLimit: 10,
         burstLimit: 2
       }
     });
-    const key = api.addApiKey('myId');
-    plan.addApiKey(key);
 
-    api.node.addDependency(lambdaFunction);
+    plan.addApiKey(apiKey)
+
+    new cdk.CfnOutput(cluster.stack, 'APIKey', {
+      value: key,
+      description: 'API Key for request'
+    });
 
 /*     const sc = cluster.addManifest("efs-model-storage-sc", {
       "kind": "StorageClass",
