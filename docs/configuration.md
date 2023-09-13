@@ -57,6 +57,12 @@ The following table lists the configurable parameters of helm chart and the defa
 | `sdWebuiInferenceApi.replicas` | Replica count of runtime. | `1` |
 | `sdWebuiInferenceApi.scaling.enabled` | Enable auto scaling by SQS length.  | `true` |
 | `sdWebuiInferenceApi.scaling.queueLength` | Target value for queue length. KEDA will scale pod to `ApproximateNumberOfMessage / queueLength` replicas.  | `10` |
+| `sdWebuiInferenceApi.scaling.cooldownPeriod` | The period (in seconds) to wait after the last trigger reported active before scaling the resource back to `minReplicaCount`.  | `60` |
+| `sdWebuiInferenceApi.scaling.maxReplicaCount` | This setting is passed to the HPA definition that KEDA will create for a given resource and holds the maximum number of replicas of the target resource. | `20` |
+| `sdWebuiInferenceApi.scaling.minReplicaCount` | Minimum number of replicas KEDA will scale the resource down to.  | `0` |
+| `sdWebuiInferenceApi.scaling.pollingInterval` | Interval (in seconds) to check each trigger on.  | `1` |
+| `sdWebuiInferenceApi.scaling.scaleOnInFlight` | When set to `true`, not visible (in-flight) messages will be counted in `ApproximateNumberOfMessage` | `false` |
+| `sdWebuiInferenceApi.scaling.extraHPAConfig` | KEDA would feed values from this section directly to the HPA’s `behavior` field. Follow [Kubernetes documentation](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior) for details. | `{}` |
 | **Stable Diffusion Web UI** | | |
 | `sdWebuiInferenceApi.inferenceApi.image.repository` | Image Repository of SD Web UI.  | `public.ecr.aws/bingjiao/sd-on-eks/inference-api` |
 | `sdWebuiInferenceApi.inferenceApi.image.tag` | Image tag of SD Web UI.  | `latest` |
