@@ -3,7 +3,7 @@
 ### Requirement
 
 * Kubernetes cluster 1.22+
-* Helm v3
+* [Helm](https://helm.sh/docs/intro/install/) CLI
 * Node.js 16+
 * [AWS CDK CLI](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
 * An [AWS](https://aws.amazon.com/) Account
@@ -14,10 +14,10 @@
 
 Models should be stored in S3 bucket. Stable diffusion runtime will fetch model from S3 bucket at launch.
 
-Create S3 bucket by running the following command:
+Create S3 bucket by running the following command. Replace `<bucket name>` to your desired bucket name. 
 
 ```bash
-aws s3api create-bucket --bucket model-store --region us-east-1
+aws s3api create-bucket --bucket <bucket name> --region us-east-1
 ```
 
 You can upload model to newly created S3 bucket by running the following command:
@@ -89,4 +89,4 @@ modelsRuntime:
           snapshotID: snap-0123456789 # Change to actual snapshot ID
 ```
 
-See `ebs-snapshot.yaml` for more reference.
+See `example/ebs-snapshot.yaml` for more reference.

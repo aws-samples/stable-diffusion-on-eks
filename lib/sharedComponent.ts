@@ -32,7 +32,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
   deploy(clusterInfo: ClusterInfo): Promise<Construct> {
     const cluster = clusterInfo.cluster;
 
-    const lambdaFunction = new lambda.Function(cluster.stack, 'InputLambda', {
+    const lambdaFunction = new lambda.Function(cluster.stack, cdk.Aws.STACK_NAME+'InputLambda', {
       code: lambda.Code.fromAsset(path.join(__dirname, '../src/lambda')),
       handler: 'app.lambda_handler',
       runtime: lambda.Runtime.PYTHON_3_9,
@@ -45,7 +45,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
 
     this.options.inputSns.grantPublish(lambdaFunction);
 
-    const api = new apigw.LambdaRestApi(cluster.stack, 'FrontApi', {
+    const api = new apigw.LambdaRestApi(cluster.stack, cdk.Aws.STACK_NAME+'FrontApi', {
       handler: lambdaFunction,
       proxy: true,
       deploy: true,
@@ -60,13 +60,13 @@ export class SharedComponentAddOn implements ClusterAddOn {
 
     const key = crypto.randomBytes(10).toString('hex')
 
-    const apiKey = new apigw.ApiKey(cluster.stack, `defaultAPIKey`, {
+    const apiKey = new apigw.ApiKey(cluster.stack, cdk.Aws.STACK_NAME+`defaultAPIKey`, {
       description: `Default API Key`,
       enabled: true,
       value: key
     })
 
-    const plan = api.addUsagePlan('UsagePlan', {
+    const plan = api.addUsagePlan(cdk.Aws.STACK_NAME+'UsagePlan', {
       name: 'Default',
       apiStages: [{
         stage: api.deploymentStage
