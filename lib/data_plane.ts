@@ -157,9 +157,9 @@ export default class DataPlaneStack {
 
     // Define initial managed node group for cluster components
     const MngProps: blueprints.MngClusterProviderProps = {
-      minSize: 3,
-      maxSize: 3,
-      desiredSize: 3,
+      minSize: 2,
+      maxSize: 2,
+      desiredSize: 2,
       version: eks.KubernetesVersion.V1_27,
       instanceTypes: [new ec2.InstanceType('m5.large')],
       amiType: eks.NodegroupAmiType.AL2_X86_64,
