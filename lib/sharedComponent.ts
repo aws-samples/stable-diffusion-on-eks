@@ -61,7 +61,6 @@ export class SharedComponentAddOn implements ClusterAddOn {
     const key = crypto.randomBytes(10).toString('hex')
 
     const apiKey = new apigw.ApiKey(cluster.stack, `defaultAPIKey`, {
-      apiKeyName: "Default",
       description: `Default API Key`,
       enabled: true,
       value: key
