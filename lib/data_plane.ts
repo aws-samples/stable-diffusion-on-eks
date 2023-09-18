@@ -8,7 +8,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as efs from 'aws-cdk-lib/aws-efs';
 import SDRuntimeAddon, { SDRuntimeAddOnProps } from './runtime';
-import { SharedComponentAddOn, SharedComponentAddOnProps, EbsThroughputModifyAddOn, EbsThroughputModifyAddOnProps } from './sharedComponent';
+import { SharedComponentAddOn, SharedComponentAddOnProps, EbsThroughputModifyAddOn, EbsThroughputModifyAddOnProps, S3SyncEFSAddOnProps, S3SyncEFSAddOn } from './sharedComponent';
 import nvidiaDevicePluginAddon, { SNSResourceProvider } from './utils'
 
 
@@ -67,6 +67,26 @@ export default class DataPlaneStack {
       resources: ["*"],
     })
 
+    const awsForFluentBitParams: blueprints.AwsForFluentBitAddOnProps = {
+      iamPolicies: [CloudWatchLogsWritePolicy],
+      namespace: "amazon-cloudwatch",
+      values: {
+        cloudWatchLogs: {
+          region: cdk.Aws.REGION,
+        },
+        tolerations: [{
+          "key": "nvidia.com/gpu",
+          "operator": "Exists",
+          "effect": "NoSchedule"
+        }, {
+          "key": "runtime",
+          "operator": "Exists",
+          "effect": "NoSchedule"
+        }]
+      },
+      createNamespace: true
+    }
+
     const SharedComponentAddOnParams: SharedComponentAddOnProps = {
       modelstorageEfs: blueprints.getNamedResource("efs-model-storage"),
       inputSns: blueprints.getNamedResource("inputSNSTopic"),
@@ -80,6 +100,11 @@ export default class DataPlaneStack {
       iops: 3000
     };
 
+    const s3SyncEFSAddOnParams: S3SyncEFSAddOnProps = {
+      bucketArn: dataplaneProps.modelBucketArn,
+      efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
+    }
+
     const addOns: Array<blueprints.ClusterAddOn> = [
       new blueprints.addons.VpcCniAddOn(),
       new blueprints.addons.CoreDnsAddOn(),
@@ -90,100 +115,82 @@ export default class DataPlaneStack {
       new blueprints.addons.KarpenterAddOn({ interruptionHandling: true }),
       new blueprints.addons.KedaAddOn(kedaParams),
       new blueprints.addons.ContainerInsightsAddOn(),
-      new blueprints.addons.AwsForFluentBitAddOn({
-        iamPolicies: [CloudWatchLogsWritePolicy],
-        namespace: "amazon-cloudwatch",
-        values: {
-          cloudWatchLogs: {
-            region: cdk.Aws.REGION,
-          },
-          tolerations: [{
-            "key": "nvidia.com/gpu",
-            "operator": "Exists",
-            "effect": "NoSchedule"
-          }, {
-            "key": "runtime",
-            "operator": "Exists",
-            "effect": "NoSchedule"
-          }
-          ]
-        },
-        createNamespace: true
-      }),
+      new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
       new nvidiaDevicePluginAddon({}),
       new SharedComponentAddOn(SharedComponentAddOnParams),
-      new EbsThroughputModifyAddOn(EbsThroughputModifyAddOnParams)
+      new EbsThroughputModifyAddOn(EbsThroughputModifyAddOnParams),
+      new S3SyncEFSAddOn(s3SyncEFSAddOnParams)
     ];
 
-    let models: string[] = [];
+let models: string[] = [];
 
-    // Generate SD Runtime Addon for static runtime
-    dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
-      const sdRuntimeParams: SDRuntimeAddOnProps = {
-        ModelBucketArn: dataplaneProps.modelBucketArn,
-        outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
-        inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
-        outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
-        sdModelCheckpoint: val.modelFilename,
-        chartRepository: val.chartRepository,
-        chartVersion: val.chartVersion,
-        extraValues: val.extraValues,
-        targetNamespace: val.namespace,
-        dynamicModel: false,
-        efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
-      };
-      addOns.push(new SDRuntimeAddon(sdRuntimeParams, val.name))
-      models.push(val.modelFilename)
-    });
+// Generate SD Runtime Addon for static runtime
+dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
+  const sdRuntimeParams: SDRuntimeAddOnProps = {
+    ModelBucketArn: dataplaneProps.modelBucketArn,
+    outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
+    inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
+    outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
+    sdModelCheckpoint: val.modelFilename,
+    chartRepository: val.chartRepository,
+    chartVersion: val.chartVersion,
+    extraValues: val.extraValues,
+    targetNamespace: val.namespace,
+    dynamicModel: false,
+    efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
+  };
+  addOns.push(new SDRuntimeAddon(sdRuntimeParams, val.name))
+  models.push(val.modelFilename)
+});
 
-    // Generate SD Runtime Addon for dynamic runtime
-    if (dataplaneProps.dynamicModelRuntime.enabled) {
-      const sdRuntimeParams: SDRuntimeAddOnProps = {
-        ModelBucketArn: dataplaneProps.modelBucketArn,
-        outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
-        inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
-        outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
-        sdModelCheckpoint: "v1-5-pruned-emaonly.safetensors",
-        dynamicModel: true,
-        targetNamespace: dataplaneProps.dynamicModelRuntime.namespace,
-        chartRepository: dataplaneProps.dynamicModelRuntime.chartRepository,
-        chartVersion: dataplaneProps.dynamicModelRuntime.chartVersion,
-        extraValues: dataplaneProps.dynamicModelRuntime.extraValues,
-        allModels: models,
-        efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
-      };
-      addOns.push(new SDRuntimeAddon(sdRuntimeParams, "dynamicSDRuntime"))
-    }
+// Generate SD Runtime Addon for dynamic runtime
+if (dataplaneProps.dynamicModelRuntime.enabled) {
+  const sdRuntimeParams: SDRuntimeAddOnProps = {
+    ModelBucketArn: dataplaneProps.modelBucketArn,
+    outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
+    inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
+    outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
+    sdModelCheckpoint: "v1-5-pruned-emaonly.safetensors",
+    dynamicModel: true,
+    targetNamespace: dataplaneProps.dynamicModelRuntime.namespace,
+    chartRepository: dataplaneProps.dynamicModelRuntime.chartRepository,
+    chartVersion: dataplaneProps.dynamicModelRuntime.chartVersion,
+    extraValues: dataplaneProps.dynamicModelRuntime.extraValues,
+    allModels: models,
+    efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
+  };
+  addOns.push(new SDRuntimeAddon(sdRuntimeParams, "dynamicSDRuntime"))
+}
 
-    // Define initial managed node group for cluster components
-    const MngProps: blueprints.MngClusterProviderProps = {
-      minSize: 2,
-      maxSize: 2,
-      desiredSize: 2,
-      version: eks.KubernetesVersion.V1_27,
-      instanceTypes: [new ec2.InstanceType('m5.large')],
-      amiType: eks.NodegroupAmiType.AL2_X86_64,
-      enableSsmPermissions: true,
-      nodeGroupTags: {
-        "Name": cdk.Aws.STACK_NAME + "-ClusterComponents",
-        "stack": cdk.Aws.STACK_NAME
-      }
-    }
+// Define initial managed node group for cluster components
+const MngProps: blueprints.MngClusterProviderProps = {
+  minSize: 2,
+  maxSize: 2,
+  desiredSize: 2,
+  version: eks.KubernetesVersion.V1_27,
+  instanceTypes: [new ec2.InstanceType('m5.large')],
+  amiType: eks.NodegroupAmiType.AL2_X86_64,
+  enableSsmPermissions: true,
+  nodeGroupTags: {
+    "Name": cdk.Aws.STACK_NAME + "-ClusterComponents",
+    "stack": cdk.Aws.STACK_NAME
+  }
+}
 
-    // Deploy EKS cluster with all add-ons
-    const blueprint = blueprints.EksBlueprint.builder()
-      .version(eks.KubernetesVersion.V1_27)
-      .addOns(...addOns)
-      .resourceProvider(
-        blueprints.GlobalResources.Vpc,
-        new blueprints.VpcProvider())
-      .resourceProvider("inputSNSTopic", new SNSResourceProvider("sdNotificationLambda"))
-      .resourceProvider("outputSNSTopic", new SNSResourceProvider("sdNotificationOutput"))
-      .resourceProvider("outputS3Bucket", new blueprints.CreateS3BucketProvider({
-        id: 'outputS3Bucket'
-      }))
-      .resourceProvider("efs-model-storage", new blueprints.CreateEfsFileSystemProvider(efsParams))
-      .clusterProvider(new blueprints.MngClusterProvider(MngProps))
-      .build(scope, id + 'Stack');
+// Deploy EKS cluster with all add-ons
+const blueprint = blueprints.EksBlueprint.builder()
+  .version(eks.KubernetesVersion.V1_27)
+  .addOns(...addOns)
+  .resourceProvider(
+    blueprints.GlobalResources.Vpc,
+    new blueprints.VpcProvider())
+  .resourceProvider("inputSNSTopic", new SNSResourceProvider("sdNotificationLambda"))
+  .resourceProvider("outputSNSTopic", new SNSResourceProvider("sdNotificationOutput"))
+  .resourceProvider("outputS3Bucket", new blueprints.CreateS3BucketProvider({
+    id: 'outputS3Bucket'
+  }))
+  .resourceProvider("efs-model-storage", new blueprints.CreateEfsFileSystemProvider(efsParams))
+  .clusterProvider(new blueprints.MngClusterProvider(MngProps))
+  .build(scope, id + 'Stack');
   }
 }
