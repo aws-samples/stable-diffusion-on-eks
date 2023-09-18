@@ -8,7 +8,7 @@ import * as efs from 'aws-cdk-lib/aws-efs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { aws_sns_subscriptions } from "aws-cdk-lib";
 import * as lodash from "lodash";
-import * as utils from "./utils"
+import { createNamespace }  from "../utils/namespace"
 
 export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProps {
   targetNamespace?: string,
@@ -73,7 +73,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       this.props.namespace = "default"
     }
 
-    const ns = utils.createNamespace(this.id+"-"+this.props.namespace+"-namespace-struct", this.props.namespace, cluster, true)
+    const ns = createNamespace(this.id+"-"+this.props.namespace+"-namespace-struct", this.props.namespace, cluster, true)
 
     const webUISA = cluster.addServiceAccount('WebUISA' + this.id, { namespace: this.props.namespace });
     webUISA.node.addDependency(ns)

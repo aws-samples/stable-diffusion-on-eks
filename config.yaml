@@ -1,8 +1,9 @@
+stackName: "SdOnEks"
 modelBucketArn: ''
 modelsRuntime:
 - name: "sdruntime"
   namespace: "default"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
 dynamicModelRuntime:
-  enabled: false
+  enabled: true
   namespace: "default"
