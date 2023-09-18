@@ -141,7 +141,7 @@ export class EbsThroughputModifyAddOn implements ClusterAddOn {
     const lambdaFunction = new lambda.Function(cluster.stack, 'EbsThroughputModifyLambda', {
       code: lambda.Code.fromAsset(path.join(__dirname, '../src/ebs_throughput_modify')),
       handler: 'app.lambda_handler',
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_11,
       timeout: cdk.Duration.seconds(lambdaTimeout),
       environment: {
         "TARGET_EC2_TAG_KEY": "stack",
