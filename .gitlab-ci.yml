@@ -6,7 +6,7 @@ lint_cdk:
     - npm install -g aws-cdk
     - npm install
     # Prepare a valid config file
-    - "sed -i \"1cmodelBucketArn: 'arn:aws:s3:::dummy-bucket'\" config.yaml"
+    - "sed -i \"2cmodelBucketArn: 'arn:aws:s3:::dummy-bucket'\" config.yaml"
 
   script:
     # Check if CDK passes linting
@@ -18,7 +18,7 @@ lint_helm_chart:
 
   script:
     # Check helm chart
-    - helm lint src/eks_cluster/charts/sd-on-eks
+    - helm lint src/charts/sd-on-eks
 
 mirror:
   before_script:

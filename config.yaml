@@ -1,5 +1,5 @@
 stackName: "SdOnEks"
-modelBucketArn: 'arn:aws:s3:::dummy-bucket'
+modelBucketArn: ''
 modelsRuntime:
 - name: "sdruntime"
   namespace: "default"
