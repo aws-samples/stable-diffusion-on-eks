@@ -1,18 +1,18 @@
 image: node:alpine
 
-lint_cdk: 
+lint_cdk:
   before_script:
     - apk add --no-cache aws-cli
     - npm install -g aws-cdk
     - npm install
     # Prepare a valid config file
-    - "sed -i \"1cmodelBucketArn: 'arn:aws:s3:::dummy-bucket'\" config.yaml" 
+    - "sed -i \"1cmodelBucketArn: 'arn:aws:s3:::dummy-bucket'\" config.yaml"
 
   script:
-    # Check if CDK passes linting 
-    - npx cdk synth
+    # Check if CDK passes linting
+    - npx cdk synth -q
 
-lint_helm_chart: 
+lint_helm_chart:
   before_script:
     - apk add --no-cache helm
 

@@ -1,8 +1,9 @@
-modelBucketArn: ''
+stackName: "SdOnEks"
+modelBucketArn: 'arn:aws:s3:::dummy-bucket'
 modelsRuntime:
 - name: "sdruntime"
   namespace: "default"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
 dynamicModelRuntime:
-  enabled: false
+  enabled: true
   namespace: "default"

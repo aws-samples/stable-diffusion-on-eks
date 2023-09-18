@@ -8,6 +8,7 @@ The following table lists the configurable parameters of CDK template and the de
 
 | Parameter | Description | Required | Default |
 | --- | --- | --- | --- |
+| `stackName` | Name of the stack. The name will be added as a prefix of all resource name.  | Yes | `SdOnEKS` |
 | `modelBucketArn` | S3 bucket for model storage. Models file should be manual populated into the bucket. This parameter applies to all runtimes. | Yes | `""` |
 | `modelsRuntime` | Define Stable diffusion runtime. At least one runtime should be defined. | Yes | `- name: "sdruntime"  modelFilename: "v1-5-pruned-emaonly.ckpt"`
 | `modelsRuntime.name` | Name of individual Stable diffusion runtime. | Yes | `sdruntime` |
