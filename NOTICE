@@ -14,6 +14,10 @@ Karpenter
 Apache-2.0 license
 https://github.com/aws/karpenter/blob/main/LICENSE
 
-Stable Diffusion web UI
-AGPL-3.0 license 
-https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/LICENSE.txt 
+AWS CDK
+Apache-2.0 license
+https://github.com/aws/aws-cdk/blob/main/LICENSE
+
+Amazon EKS Blueprints for CDK
+Apache-2.0 license
+https://github.com/aws-quickstart/cdk-eks-blueprints/blob/main/LICENSE
