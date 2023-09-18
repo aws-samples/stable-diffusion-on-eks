@@ -1,3 +1,4 @@
+import * as blueprints from '@aws-quickstart/eks-blueprints';
 import { ClusterAddOn, ClusterInfo } from '@aws-quickstart/eks-blueprints';
 import { Construct } from "constructs";
 import * as cdk from 'aws-cdk-lib';
@@ -13,7 +14,7 @@ import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
-import * as crypto from "crypto";
+import * as datasync from 'aws-cdk-lib/aws-datasync';
 
 export interface SharedComponentAddOnProps {
   modelstorageEfs: efs.IFileSystem;
@@ -58,16 +59,13 @@ export class SharedComponentAddOn implements ClusterAddOn {
     });
     api.node.addDependency(lambdaFunction);
 
-    const key = crypto.randomBytes(10).toString('hex')
-
     const apiKey = new apigw.ApiKey(cluster.stack, `defaultAPIKey`, {
       description: `Default API Key`,
-      enabled: true,
-      value: key
+      enabled: true
     })
 
     const plan = api.addUsagePlan('UsagePlan', {
-      name: 'Default',
+      name: cluster.stack.stackId + '-Default',
       apiStages: [{
         stage: api.deploymentStage
       }],
@@ -79,26 +77,26 @@ export class SharedComponentAddOn implements ClusterAddOn {
 
     plan.addApiKey(apiKey)
 
-    new cdk.CfnOutput(cluster.stack, 'APIKey', {
-      value: key,
-      description: 'API Key for request'
+    new cdk.CfnOutput(cluster.stack, 'GetAPIKeyCommand', {
+      value: "aws apigateway get-api-keys --name=" + apiKey.keyId + " --include-values --query \"items[0].value\" --output text",
+      description: 'Command to get API Key'
     });
 
-/*     const sc = cluster.addManifest("efs-model-storage-sc", {
-      "kind": "StorageClass",
-      "apiVersion": "storage.k8s.io/v1",
-      "metadata": {
-        "name": "efs-model-storage-sc"
-      },
-      "provisioner": "efs.csi.aws.com",
-      "parameters": {
-        "provisioningMode": "efs-ap",
-        "fileSystemId": this.options.modelstorageEfs.fileSystemId,
-        "directoryPerms": "777",
-        "subPathPattern": ".",
-        "ensureUniqueDirectory": "false"
-      }
-    }) */
+    /*     const sc = cluster.addManifest("efs-model-storage-sc", {
+          "kind": "StorageClass",
+          "apiVersion": "storage.k8s.io/v1",
+          "metadata": {
+            "name": "efs-model-storage-sc"
+          },
+          "provisioner": "efs.csi.aws.com",
+          "parameters": {
+            "provisioningMode": "efs-ap",
+            "fileSystemId": this.options.modelstorageEfs.fileSystemId,
+            "directoryPerms": "777",
+            "subPathPattern": ".",
+            "ensureUniqueDirectory": "false"
+          }
+        }) */
 
     // Static provisioning EFS filesystem
     const sc = cluster.addManifest("efs-model-storage-sc", {
@@ -113,7 +111,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
     //Xray Access Policy
     new xray.CfnResourcePolicy(cluster.stack, 'XRayAccessPolicyForSNS', {
       policyName: 'XRayAccessPolicyForSNS',
-      policyDocument: '{"Version":"2012-10-17","Statement":[{"Sid":"SNSAccess","Effect":"Allow","Principal":{"Service":"sns.amazonaws.com"},"Action":["xray:PutTraceSegments","xray:GetSamplingRules","xray:GetSamplingTargets"],"Resource":"*","Condition":{"StringEquals":{"aws:SourceAccount":"'+cluster.stack.account+'"},"StringLike":{"aws:SourceArn":"' + cluster.stack.formatArn({service: "sns", resource: '*'}) + '"}}}]}'
+      policyDocument: '{"Version":"2012-10-17","Statement":[{"Sid":"SNSAccess","Effect":"Allow","Principal":{"Service":"sns.amazonaws.com"},"Action":["xray:PutTraceSegments","xray:GetSamplingRules","xray:GetSamplingTargets"],"Resource":"*","Condition":{"StringEquals":{"aws:SourceAccount":"' + cluster.stack.account + '"},"StringLike":{"aws:SourceArn":"' + cluster.stack.formatArn({ service: "sns", resource: '*' }) + '"}}}]}'
     })
 
     return Promise.resolve(plan);
@@ -156,14 +154,14 @@ export class EbsThroughputModifyAddOn implements ClusterAddOn {
     const functionRole = lambdaFunction.role!.addManagedPolicy(
       iam.ManagedPolicy.fromAwsManagedPolicyName(
         'AmazonEC2FullAccess',
-    ))
+      ))
 
     // Step Functions definition
     const waitTask = new sfn.Wait(cluster.stack, 'Wait time', {
       time: sfn.WaitTime.duration(cdk.Duration.seconds(this.options.duration)),
     });
 
-    const triggerTask =  new tasks.LambdaInvoke(cluster.stack, 'Change throughput', {
+    const triggerTask = new tasks.LambdaInvoke(cluster.stack, 'Change throughput', {
       lambdaFunction: lambdaFunction
     }).addRetry({
       backoffRate: 2,
@@ -194,5 +192,124 @@ export class EbsThroughputModifyAddOn implements ClusterAddOn {
     rule.addTarget(new targets.SfnStateMachine(stateMachine))
 
     return Promise.resolve(rule);
+  }
+}
+
+
+export interface S3SyncEFSAddOnProps {
+  bucketArn: string,
+  efsFilesystem: efs.IFileSystem
+}
+
+export class S3SyncEFSAddOn implements ClusterAddOn {
+
+  readonly options: S3SyncEFSAddOnProps;
+
+  constructor(props: S3SyncEFSAddOnProps) {
+    this.options = props
+  }
+
+  @blueprints.utils.dependable("SharedComponentAddOn")
+
+  deploy(clusterInfo: ClusterInfo): Promise<Construct> {
+    const cluster = clusterInfo.cluster;
+
+    const srcBucket = s3.Bucket.fromBucketArn(cluster.stack, "SrcBucket", this.options.bucketArn)
+
+    const s3Role = new iam.Role(cluster.stack, "DataSyncS3Role", {
+      assumedBy: new iam.ServicePrincipal("datasync.amazonaws.com")
+    })
+
+    srcBucket.grantReadWrite(s3Role)
+
+    const srcLocation = new datasync.CfnLocationS3(cluster.stack, "SrcLocationS3", {
+      s3Config: {
+        bucketAccessRoleArn: s3Role.roleArn
+      },
+      s3StorageClass: "STANDARD",
+      s3BucketArn: this.options.bucketArn
+    })
+
+    srcLocation.node.addDependency(s3Role)
+    srcLocation.node.addDependency(srcBucket)
+
+    const efsSubnetArn = cdk.Arn.format({
+      partition: cdk.Aws.PARTITION,
+      service: "ec2",
+      region: cdk.Aws.REGION,
+      account: cdk.Aws.ACCOUNT_ID,
+      resource: "subnet",
+      resourceName: cluster.vpc.privateSubnets[0].subnetId
+    })
+
+    //TODO: Find EFS Security Group Name
+    const efsSgArn = cdk.Arn.format({
+      partition: cdk.Aws.PARTITION,
+      service: "ec2",
+      region: cdk.Aws.REGION,
+      account: cdk.Aws.ACCOUNT_ID,
+      resource: "security-group",
+      resourceName: this.options.efsFilesystem.connections.securityGroups[0].securityGroupId
+    })
+
+    const dstLocation = new datasync.CfnLocationEFS(cluster.stack, "DstLocationEFS", {
+      ec2Config: {
+        securityGroupArns: [efsSgArn],
+        subnetArn: efsSubnetArn
+      },
+      efsFilesystemArn: this.options.efsFilesystem.fileSystemArn
+    })
+
+    dstLocation.node.addDependency(this.options.efsFilesystem.mountTargetsAvailable)
+
+    const dataSyncTask = new datasync.CfnTask(cluster.stack, "DataSyncTask", {
+      sourceLocationArn: srcLocation.attrLocationArn,
+      destinationLocationArn: dstLocation.attrLocationArn,
+      options: {
+        atime: "BEST_EFFORT",
+        bytesPerSecond: -1,
+        gid: "INT_VALUE",
+        logLevel: "OFF",
+        mtime: "PRESERVE",
+        overwriteMode: "ALWAYS",
+        posixPermissions: "PRESERVE",
+        preserveDeletedFiles: "REMOVE",
+        preserveDevices: "NONE",
+        taskQueueing: "ENABLED",
+        transferMode: "CHANGED",
+        uid: "INT_VALUE",
+        verifyMode: "ONLY_FILES_TRANSFERRED"
+      }
+    })
+
+    const schedulerRole = new iam.Role(cluster.stack, "SchedulerRole", {
+      assumedBy: new iam.ServicePrincipal("scheduler.amazonaws.com"),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName("AWSDataSyncFullAccess")
+      ]
+    })
+
+    const dataSyncScheduler = new cdk.CfnResource(cluster.stack, "dataSyncScheduler", {
+      type: "AWS::Scheduler::Schedule",
+      properties: {
+        Name: "dataSyncScheduler",
+        Description: "",
+        State: "ENABLED",
+        GroupName: "default",
+        ScheduleExpression: "rate(1 minutes)",
+        FlexibleTimeWindow: {
+          Mode: "OFF"
+        },
+        Target: {
+          Arn: "arn:aws:scheduler:::aws-sdk:datasync:startTaskExecution",
+          Input: JSON.stringify({
+            TaskArn: dataSyncTask.attrTaskArn
+          }),
+          RoleArn: schedulerRole.roleArn
+        }
+      }
+    })
+
+    return Promise.resolve(dataSyncScheduler);
   }
 }
