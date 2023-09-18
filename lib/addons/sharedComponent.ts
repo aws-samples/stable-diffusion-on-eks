@@ -27,7 +27,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
     const cluster = clusterInfo.cluster;
 
     const lambdaFunction = new lambda.Function(cluster.stack, 'InputLambda', {
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/functions/inputLambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function')),
       handler: 'app.lambda_handler',
       runtime: lambda.Runtime.PYTHON_3_11,
       environment: {
