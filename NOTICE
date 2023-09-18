@@ -1,2 +1,19 @@
-Stable Diffusion on EKS Solution. 
-Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved. 
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+**********************
+THIRD PARTY COMPONENTS
+**********************
+
+This software includes third party software subject to the following licenses.
+
+KEDA
+Apache-2.0 license  
+https://github.com/kedacore/keda/blob/main/LICENSE
+
+Karpenter
+Apache-2.0 license
+https://github.com/aws/karpenter/blob/main/LICENSE
+
+Stable Diffusion web UI
+AGPL-3.0 license 
+https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/LICENSE.txt 
