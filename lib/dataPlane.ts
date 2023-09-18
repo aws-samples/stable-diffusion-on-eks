@@ -35,9 +35,6 @@ export interface dataPlaneProps {
 
 export default class DataPlaneStack {
   cluster: eks.ICluster;
-  outputSns: sns.Topic
-  inputSns: sns.Topic
-  outputBucket: s3.Bucket
 
   constructor(scope: Construct, id: string,
     dataplaneProps: dataPlaneProps,
