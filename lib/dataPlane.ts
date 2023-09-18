@@ -8,7 +8,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as efs from 'aws-cdk-lib/aws-efs';
 import SDRuntimeAddon, { SDRuntimeAddOnProps } from './runtime/sdRuntime';
-import { EbsThroughputModifyAddOn, EbsThroughputModifyAddOnProps } from './addons/ebsThroughputModify'
+import { EbsThroughputTunerAddOn, EbsThroughputTunerAddOnProps } from './addons/ebsThroughputTuner'
 import nvidiaDevicePluginAddon from './addons/nvidiaDevicePlugin'
 import { S3SyncEFSAddOnProps, S3SyncEFSAddOn } from './addons/s3SyncEFS'
 import { SharedComponentAddOn, SharedComponentAddOnProps } from './addons/sharedComponent';
@@ -96,7 +96,7 @@ export default class DataPlaneStack {
       outputBucket: blueprints.getNamedResource("outputS3Bucket")
     };
 
-    const EbsThroughputModifyAddOnParams: EbsThroughputModifyAddOnProps = {
+    const EbsThroughputModifyAddOnParams: EbsThroughputTunerAddOnProps = {
       duration: 300,
       throughput: 125,
       iops: 3000
@@ -120,7 +120,7 @@ export default class DataPlaneStack {
       new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
       new nvidiaDevicePluginAddon({}),
       new SharedComponentAddOn(SharedComponentAddOnParams),
-      new EbsThroughputModifyAddOn(EbsThroughputModifyAddOnParams),
+      new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams),
       new S3SyncEFSAddOn(s3SyncEFSAddOnParams)
     ];
 

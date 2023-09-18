@@ -9,17 +9,17 @@ import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
 
-export interface EbsThroughputModifyAddOnProps {
+export interface EbsThroughputTunerAddOnProps {
   duration: number;
   throughput: number;
   iops: number;
 }
 
-export class EbsThroughputModifyAddOn implements ClusterAddOn {
+export class EbsThroughputTunerAddOn implements ClusterAddOn {
 
-  readonly options: EbsThroughputModifyAddOnProps;
+  readonly options: EbsThroughputTunerAddOnProps;
 
-  constructor(props: EbsThroughputModifyAddOnProps) {
+  constructor(props: EbsThroughputTunerAddOnProps) {
     this.options = props
   }
 
@@ -29,8 +29,8 @@ export class EbsThroughputModifyAddOn implements ClusterAddOn {
     const lambdaTimeout: number = 300
 
     //EBS Throughput Modify lambda function
-    const lambdaFunction = new lambda.Function(cluster.stack, 'EbsThroughputModifyLambda', {
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/functions/ebsThroughputModify')),
+    const lambdaFunction = new lambda.Function(cluster.stack, 'EbsThroughputTunerLambda', {
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/tools/ebs_throughput_tuner')),
       handler: 'app.lambda_handler',
       runtime: lambda.Runtime.PYTHON_3_11,
       timeout: cdk.Duration.seconds(lambdaTimeout),
@@ -63,14 +63,14 @@ export class EbsThroughputModifyAddOn implements ClusterAddOn {
     const stateDefinition = waitTask
       .next(triggerTask)
 
-    const stateMachine = new sfn.StateMachine(cluster.stack, 'EbsThroughputModifyStateMachine', {
+    const stateMachine = new sfn.StateMachine(cluster.stack, 'EbsThroughputTunerStateMachine', {
       definitionBody: sfn.DefinitionBody.fromChainable(stateDefinition),
       timeout: cdk.Duration.seconds(this.options.duration + lambdaTimeout + 30),
     });
 
     lambdaFunction.grantInvoke(stateMachine)
 
-    const rule = new events.Rule(cluster.stack, 'EbsThroughputModifyRule', {
+    const rule = new events.Rule(cluster.stack, 'EbsThroughputTunerRule', {
       eventPattern: {
         detail: {
           'state': events.Match.equalsIgnoreCase("running")

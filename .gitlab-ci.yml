@@ -18,7 +18,7 @@ lint_helm_chart:
 
   script:
     # Check helm chart
-    - helm lint src/charts/sd-on-eks
+    - helm lint src/charts/sd_on_eks
 
 mirror:
   before_script:
