@@ -54,6 +54,7 @@ sdWebuiInferenceApi:
       tag: latest
     modelFilename: v1-5-pruned-emaonly.safetensors
     extraEnv: {}
+    imagePullPolicy: IfNotPresent
     resources:
       limits:
         nvidia.com/gpu: "1"
@@ -67,6 +68,7 @@ sdWebuiInferenceApi:
       tag: latest
     extraEnv: {}
     dynamicModel: false
+    imagePullPolicy: IfNotPresent
     s3Bucket: ""
     snsTopicArn: ""
     sqsQueueUrl: ""
