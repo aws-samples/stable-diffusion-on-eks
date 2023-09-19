@@ -1,0 +1,47 @@
+  50  kubectl logs sdruntime2-sd-on-eks-sd-webui-inference-api-5568c7556-sj5x4 -c sd-webui-inference-api -n sdruntime2
+   51  kubectl logs sdruntime1-sd-on-eks-sd-webui-inference-api-cb57f64fd-gt48p -c sd-webui-inference-api -n sdruntime1
+   52  history
+   53  kubectl logs sdruntime1-sd-on-eks-sd-webui-inference-api-cb57f64fd-gt48p -c sd-webui-queue-agent -n sdruntime2
+   54  kubectl logs sdruntime1-sd-on-eks-sd-webui-inference-api-cb57f64fd-gt48p -c sd-webui-queue-agent -n sdruntime1
+   55  kubectl logs sdruntime2-sd-on-eks-sd-webui-inference-api-5568c7556-sj5x4 -c sd-webui-queue-agent -n sdruntime2
+   56  kubectl scale deployment sdruntime2-sd-on-eks-sd-webui-inference-api --replicas=0 -n sdruntime2
+   57  kubectl logs sdruntime1-sd-on-eks-sd-webui-inference-api-cb57f64fd-gt48p -c sd-webui-queue-agent -n sdruntime1
+   58  kubectl logs sdruntime1-sd-on-eks-sd-webui-inference-api-cb57f64fd-gt48p -c sd-webui-inference-api -n sdruntime1
+   59  ls
+   60  kubectl -it  sdruntime1-sd-on-eks-sd-webui-inference-api-cb57f64fd-gt48p -c sd-webui-queue-agent -n sdruntime1 /bin/bash
+   61  kubectl exec -it  sdruntime1-sd-on-eks-sd-webui-inference-api-cb57f64fd-gt48p -c sd-webui-queue-agent -n sdruntime1 /bin/bash
+   62  kubectl exec -it  sdruntime2-sd-on-eks-sd-webui-inference-api-5bcf69d9cf-5kqcx -c sd-webui-inference-api -n sdruntime2 /bin/bash
+   
+   kubectl set image deployment/sdruntime1-sd-on-eks-sd-webui-inference-api sd-webui-queue-agent=public.ecr.aws/bingjiao/inference-api:1b2ee3b -n sdruntime1
+   
+   kubectl delete pod    sdruntime1-sd-on-eks-sd-webui-inference-api-896444769-p9vhv   -n sdruntime1
+   
+   kubectl logs sdruntime1-sd-on-eks-sd-webui-inference-api-f75d8c7dc-j2l9n -c sd-webui-queue-agent  -n sdruntime1
+   
+   sdruntime1-sd-on-eks-sd-webui-inference-api-896444769-l44f7
+   
+   
+   
+   ----
+   
+   
+   curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh
+   
+   aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-east-1.amazonaws.com
+   
+   docker tag inference-api:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/inference-api:latest
+docker push 544592066775.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/inference-api:latest
+
+docker tag queue-agent:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
+docker push 544592066775.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
+
+
+
+helm push sd-on-eks-0.2.0.tgz oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/
+
+
+kubectl scale deployment keda-admission-webhooks --replicas=0 -n keda
+kubectl scale deployment keda-operator --replicas=0 -n keda
+kubectl scale deployment keda-operator-metrics-apiserver --replicas=0 -n keda
