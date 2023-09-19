@@ -133,7 +133,7 @@ def check_readiness():
             # checking with options "sd_model_checkpoint" also for caching current model
             opts = invoke_get_options()
             print('Service is ready.')
-            if ("sd_model_checkpoint" in opts):
+            if "sd_model_checkpoint" in opts:
                 global current_model_name
                 current_model_name = opts['sd_model_checkpoint']
                 print(f'Init model is: {current_model_name}.')
@@ -421,7 +421,7 @@ async def async_upload(object_bytes, folder, file_name=None, suffix=None):
             if suffix == 'out':
                 content_type = f'application/json'
                 if file_name is None:
-                    file_name = 'response'
+                    file_name = f"response-{uuid.uuid4()}"
             else:
                 suffix = 'png'
                 content_type = f'image/{suffix}'
