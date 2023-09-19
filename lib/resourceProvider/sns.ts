@@ -12,6 +12,10 @@ export class SNSResourceProvider implements blueprints.ResourceProvider<sns.ITop
       tracingConfig: 'Active'
     });
 
+    new cdk.CfnOutput(context.scope, this.topicName + 'Output', {
+      value: cfnTopic.attrTopicArn
+    });
+
     return sns.Topic.fromTopicArn(context.scope, this.topicName, cfnTopic.attrTopicArn)
   }
 }
