@@ -1,10 +1,10 @@
-stackName: "sd-on-eks-ee"
-modelBucketArn: 'arn:aws:s3:::sd-models-uw2'
+stackName: "SdOnEks"
+modelBucketArn: 'arn:aws:s3:::sd-models-XXX'
 modelsRuntime:
 - name: "sdruntime1"
   namespace: "sdruntime1"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
-  chartRepository: "oci://341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
+  chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
   chartVersion: "0.1.0"
   extraValues:
     karpenter: 
@@ -28,11 +28,11 @@ modelsRuntime:
         maxReplicaCount: 2
       inferenceApi:
         image:
-          repository: 341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
           tag: latest
       queueAgent:
         image:
-          repository: 341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
           tag: latest
       persistence:
         enabled: true
@@ -40,7 +40,7 @@ modelsRuntime:
 - name: "sdruntime2"
   namespace: "sdruntime2"
   modelFilename: "revAnimated_v122.safetensors"
-  chartRepository: "oci://341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
+  chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
   chartVersion: "0.1.0"
   extraValues:
     karpenter:
@@ -58,18 +58,18 @@ modelsRuntime:
         maxReplicaCount: 2
       inferenceApi:
         image:
-          repository: 341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
           tag: latest
       queueAgent:
         image:
-          repository: 341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
           tag: latest
       persistence:
         enabled: true
         existingClaim: "efs-model-storage-pvc"
 dynamicModelRuntime:
   enabled: true
-  chartRepository: "oci://341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
+  chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
   chartVersion: "0.1.0"
   extraValues:
     karpenter:
@@ -88,11 +88,11 @@ dynamicModelRuntime:
         minReplicaCount: 1
       inferenceApi:
         image:
-          repository: 341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
-          tag: abcd1
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
+          tag: latest
       queueAgent:
         image:
-          repository: 341227513845.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
           tag: latest
       persistence:
         enabled: true

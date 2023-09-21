@@ -44,7 +44,7 @@ aws ecr set-repository-policy \
 # Build the docker image locally with the image name and then push it to ECR
 # with the full name.
 
-docker build -t ${inference_image}:latest ../stable-diffusion-on-eks/src/backend/sd_webui_api/
+docker build -t ${inference_image}:latest ../../src/backend/sd_webui_api/
 
 docker tag ${inference_image} ${inference_fullname}
 
@@ -72,7 +72,7 @@ aws ecr set-repository-policy \
 # Build the docker image locally with the image name and then push it to ECR
 # with the full name.
 
-docker build -t ${queue_image}:latest ../stable-diffusion-on-eks/src/backend/queue_agent/
+docker build -t ${queue_image}:latest ../../src/backend/queue_agent/
 
 docker tag ${queue_image} ${queue_fullname}
 
@@ -101,5 +101,5 @@ aws ecr set-repository-policy \
 # Build the docker image locally with the image name and then push it to ECR
 # with the full name.
 
-helm package ../stable-diffusion-on-eks/src/charts/sd_on_eks
+helm package ../../src/charts/sd_on_eks
 helm push sd-on-eks-0.1.0.tgz oci://$account.dkr.ecr.$region.amazonaws.com/sd-on-eks/charts/
