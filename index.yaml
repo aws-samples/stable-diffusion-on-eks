@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  sd-on-eks:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-09-21T20:47:36.140456984+08:00"
+    description: Stable Diffusion on EKS
+    digest: 4cf69395bd8cd896288b1d5a47fd05bea7085c874620c1107a67c3acde942c27
+    name: sd-on-eks
+    type: application
+    urls:
+    - sd-on-eks-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-09-21T20:47:36.139927682+08:00"
