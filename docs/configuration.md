@@ -1,6 +1,6 @@
-## Configuration
+# Configuration
 
-### Infrastructure
+## Infrastructure
 
 We use config file to customize infrastructure and runtime. By default, the config file name is `config.yaml`. You can use alternative config file by changing environment variable `CDK_CONFIG_PATH`.
 
@@ -13,13 +13,13 @@ The following table lists the configurable parameters of CDK template and the de
 | `modelsRuntime` | Define Stable diffusion runtime. At least one runtime should be defined. | Yes | `- name: "sdruntime"  modelFilename: "v1-5-pruned-emaonly.ckpt"`
 | `modelsRuntime.name` | Name of individual Stable diffusion runtime. | Yes | `sdruntime` |
 | `modelsRuntime.namespace` | Namespace of individual Stable diffusion runtime. | Yes | `default` |
-| `modelsRuntime.chartRepository` | Override default helm chart repository. Protocol (`oci://` or `https://`)should be added as a prefix of repository. (Default: `oci://public.ecr.aws/bingjiao/charts/sd-on-eks`) | No | N/A |
+| `modelsRuntime.chartRepository` | Override default helm chart repository. Protocol (`oci://` or `https://`)should be added as a prefix of repository. (Default: `https://aws-samples.github.io/stable-diffusion-on-eks`) | No | N/A |
 | `modelsRuntime.chartVersion` | Override version of helm chart. (Default: 0.1.0) | No | N/A |
 | `modelsRuntime.modelFilename` | File of model using in the runtime. Filename should be in `.ckpt` or `.safetensors` format. Filename should be quoted if contains number only. | Yes | `v1-5-pruned-emaonly.safetensors` |
 | `modelsRuntime.extraValues` | Extra parameter passed to the runtime. See [values definition](#application-helm-chart) for detail. | No | N/A |
 | `dynamicModelRuntime.enabled` | Generate a runtime which allows models be switched by request. See multi model support for detail. | Yes | `false` |
 | `dynamicModelRuntime.namespace` | Namespace of dynamic model runtime. Required if `dynamicModelRuntime.enabled` is `true`. | No | `default` |
-| `dynamicModelRuntime.chartRepository` | Override default helm chart repository. (Default: `oci://public.ecr.aws/bingjiao/charts/sd-on-eks`) | No | N/A |
+| `dynamicModelRuntime.chartRepository` | Override default helm chart repository. (Default: `https://aws-samples.github.io/stable-diffusion-on-eks`) | No | N/A |
 | `dynamicModelRuntime.chartVersion` | Override version of helm chart. (Default: 0.1.0) | No | N/A |
 | `dynamicModelRuntime.extraValues` | Extra parameter passed to the runtime. See [values definition](#application-helm-chart) for detail. | No | N/A |
 
@@ -64,14 +64,14 @@ The following table lists the configurable parameters of helm chart and the defa
 | `sdWebuiInferenceApi.scaling.pollingInterval` | Interval (in seconds) to check each trigger on.  | `1` |
 | `sdWebuiInferenceApi.scaling.scaleOnInFlight` | When set to `true`, not visible (in-flight) messages will be counted in `ApproximateNumberOfMessage` | `false` |
 | `sdWebuiInferenceApi.scaling.extraHPAConfig` | KEDA would feed values from this section directly to the HPA’s `behavior` field. Follow [Kubernetes documentation](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior) for details. | `{}` |
-| **Stable Diffusion Web UI** | | |
-| `sdWebuiInferenceApi.inferenceApi.image.repository` | Image Repository of SD Web UI.  | `public.ecr.aws/bingjiao/sd-on-eks/inference-api` |
-| `sdWebuiInferenceApi.inferenceApi.image.tag` | Image tag of SD Web UI.  | `latest` |
-| `sdWebuiInferenceApi.inferenceApi.modelFilename` | Model filename of SD Web UI. Not changable. | Populated by CDK |
-| `sdWebuiInferenceApi.inferenceApi.extraEnv` | Extra environment variable for SD Web UI. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
-| `sdWebuiInferenceApi.inferenceApi.resources` | Resource request and limit for SD Web UI. |  |
+| **Stable Diffusion Runtime** | | |
+| `sdWebuiInferenceApi.inferenceApi.image.repository` | Image Repository of Runtime.  | `sdoneks/inference-api` |
+| `sdWebuiInferenceApi.inferenceApi.image.tag` | Image tag of Runtime.  | `latest` |
+| `sdWebuiInferenceApi.inferenceApi.modelFilename` | Model filename of Runtime. Not changable. | Populated by CDK |
+| `sdWebuiInferenceApi.inferenceApi.extraEnv` | Extra environment variable for Runtime. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
+| `sdWebuiInferenceApi.inferenceApi.resources` | Resource request and limit for Runtime. |  |
 | **Queue Agent** | | |
-| `sdWebuiInferenceApi.queueAgent.image.repository` | Image Repository of queue agent.  | `public.ecr.aws/bingjiao/sd-on-eks/queue-agent` |
+| `sdWebuiInferenceApi.queueAgent.image.repository` | Image Repository of queue agent.  | `sdoneks/queue-agent` |
 | `sdWebuiInferenceApi.queueAgent.image.tag` | Image tag of queue agent.  | `latest` |
 | `sdWebuiInferenceApi.queueAgent.extraEnv` | Extra environment variable for queue agent. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
 | `sdWebuiInferenceApi.queueAgent.dynamicModel` | Enable model switch by request. Not changable. | Populated by CDK |
@@ -91,29 +91,6 @@ The following table lists the configurable parameters of helm chart and the defa
 ## Deployment Examples
 
 We provided example config file for your reference. These config files are located in `/examples`.
-
-### Single Runtime with custom image
-
-You can override default image repository or tag by passing values in `extraValues`. See the following example:
-
-```yaml
-modelsRuntime:
-- name: "sdruntime"
-  namespace: "default"
-  modelFilename: "v1-5-pruned-emaonly.safetensors"
-  extraValues:
-    sdWebuiInferenceApi:
-      inferenceApi:
-        image:
-          repository: public.ecr.aws/bingjiao/sd-on-eks/inference-api # Change image repository here
-          tag: latest # Change image tag here
-    queueAgent:
-      image:
-        repository: public.ecr.aws/bingjiao/sd-on-eks/queue-agent # Change image repository here
-        tag: latest # Change image tag here
-```
-
-See `custom-image.yaml` for more reference.
 
 ### Multiple Runtimes
 

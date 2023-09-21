@@ -41,7 +41,7 @@ spec:
         resources:
           {{- toYaml .Values.sdWebuiInferenceApi.inferenceApi.resources | nindent 10 }}
         volumeMounts:
-        - mountPath: /tmp/models
+        - mountPath: {{ .Values.sdWebuiInferenceApi.inferenceApi.modelMountPath }}
           name: models
         imagePullPolicy: {{ .Values.sdWebuiInferenceApi.inferenceApi.imagePullPolicy }}
         startupProbe:
