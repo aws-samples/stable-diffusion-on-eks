@@ -12,6 +12,7 @@ import traceback
 import uuid
 import aioboto3
 import difflib
+import signal
 from aiohttp_client_cache import CachedSession, CacheBackend
 from botocore.exceptions import ClientError
 from PIL import PngImagePlugin, Image
@@ -48,6 +49,8 @@ cache = CacheBackend(
     expire_after=600
 )
 
+shutdown = False
+
 
 def main():
     # Initialization:
@@ -71,6 +74,10 @@ def main():
     # 6. Prepare outputs for decoding, uploading and notifying;
     # 7. Delete msg;
     while True:
+        if shutdown:
+            print('Received SIGTERM, shutting down...')
+            break
+
         received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
 
         for message in received_messages:
@@ -87,8 +94,9 @@ def main():
                     snsPayload = json.loads(message.body)
                     payload = json.loads(snsPayload['Message'])
                     taskHeader = payload.pop('alwayson_scripts', None)
-                    taskType = taskHeader['task']
-                    folder = get_prefix(payload['s3_output_path'])
+                    taskType = taskHeader['task'] if 'task' in taskHeader else None
+                    folder = get_prefix(
+                        payload['s3_output_path']) if 's3_output_path' in payload else None
                     print(
                         f"Start process {taskType} task with ID: {taskHeader['id_task']}")
 
@@ -141,6 +149,11 @@ def check_readiness():
         except Exception as e:
             print(repr(e))
             time.sleep(1)
+
+
+def signalHandler(signum, frame):
+    global shutdown
+    shutdown = True
 
 
 def get_time(f):
@@ -389,6 +402,9 @@ def post_invocations(folder, response, quality):
 
 
 def handle_outputs(content, folder):
+    defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
+    if not folder:
+        folder = defaultFolder
     loop = asyncio.get_event_loop()
     tasks = [async_upload(content, folder, None, suffix='out'),
              async_publish_message(content)]
@@ -484,4 +500,6 @@ def prepare_payload(body, header):
 
 
 if __name__ == '__main__':
+    for sig in [signal.SIGINT, signal.SIGHUP, signal.SIGTERM]:
+        signal.signal(sig, signalHandler)
     main()
