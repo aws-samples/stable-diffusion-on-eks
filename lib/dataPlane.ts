@@ -15,10 +15,12 @@ import { SharedComponentAddOn, SharedComponentAddOnProps } from './addons/shared
 import { SNSResourceProvider } from './resourceProvider/sns'
 
 export interface dataPlaneProps {
+  stackName: string,
   modelBucketArn: string;
   modelsRuntime: {
     name: string,
     namespace: string,
+    type: string,
     modelFilename: string,
     chartRepository?: string,
     chartVersion?: string,

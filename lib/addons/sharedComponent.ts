@@ -44,6 +44,9 @@ export class SharedComponentAddOn implements ClusterAddOn {
       proxy: true,
       deploy: true,
       cloudWatchRole: true,
+      defaultMethodOptions: {
+        apiKeyRequired: true
+      },
       deployOptions: {
         stageName: "prod",
         tracingEnabled: true,
@@ -71,7 +74,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
     plan.addApiKey(apiKey)
 
     new cdk.CfnOutput(cluster.stack, 'GetAPIKeyCommand', {
-      value: "aws apigateway get-api-keys --name=" + apiKey.keyId + " --include-values --query \"items[0].value\" --output text",
+      value: "aws apigateway get-api-keys --query 'items[?id==`" + apiKey.keyId + "`].value' --include-values --output text",
       description: 'Command to get API Key'
     });
 

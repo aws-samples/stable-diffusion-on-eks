@@ -50,9 +50,10 @@ sdWebuiInferenceApi:
     extraHPAConfig: {}
   inferenceApi:
     image:
-      repository: public.ecr.aws/bingjiao/sd-on-eks/inference-api
+      repository: sdoneks/inference-api
       tag: latest
     modelFilename: v1-5-pruned-emaonly.safetensors
+    modelMountPath: /tmp/models
     extraEnv: {}
     imagePullPolicy: IfNotPresent
     resources:
@@ -64,7 +65,7 @@ sdWebuiInferenceApi:
         memory: 8Gi
   queueAgent:
     image:
-      repository: public.ecr.aws/bingjiao/sd-on-eks/queue-agent
+      repository: sdoneks/queue-agent
       tag: latest
     extraEnv: {}
     dynamicModel: false
