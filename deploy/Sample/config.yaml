@@ -1,0 +1,100 @@
+stackName: "SdOnEks"
+modelBucketArn: 'arn:aws:s3:::sd-models-XXX'
+modelsRuntime:
+- name: "sdruntime1"
+  namespace: "sdruntime1"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
+  chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
+  chartVersion: "0.1.0"
+  extraValues:
+    karpenter: 
+      provisioner:
+        instanceType:
+        - "g5.xlarge"
+        - "g5.2xlarge"
+        - "g4dn.xlarge"
+        - "g4dn.2xlarge"
+      nodeTemplate:
+        amiFamily: Bottlerocket
+        dataVolume:
+          volumeSize: 80Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 4000
+          throughput: 1000
+          snapshotID: snap-0c31434acc0a8a558
+    sdWebuiInferenceApi:
+      scaling:
+        maxReplicaCount: 2
+      inferenceApi:
+        image:
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
+          tag: latest
+      queueAgent:
+        image:
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
+          tag: latest
+      persistence:
+        enabled: true
+        existingClaim: "efs-model-storage-pvc"
+- name: "sdruntime2"
+  namespace: "sdruntime2"
+  modelFilename: "revAnimated_v122.safetensors"
+  chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
+  chartVersion: "0.1.0"
+  extraValues:
+    karpenter:
+      nodeTemplate:
+        amiFamily: Bottlerocket
+        dataVolume:
+          volumeSize: 80Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 4000
+          throughput: 1000
+          snapshotID: snap-0c31434acc0a8a558
+    sdWebuiInferenceApi:
+      scaling:
+        maxReplicaCount: 2
+      inferenceApi:
+        image:
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
+          tag: latest
+      queueAgent:
+        image:
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
+          tag: latest
+      persistence:
+        enabled: true
+        existingClaim: "efs-model-storage-pvc"
+dynamicModelRuntime:
+  enabled: true
+  chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
+  chartVersion: "0.1.0"
+  extraValues:
+    karpenter:
+      nodeTemplate:
+        amiFamily: Bottlerocket
+        dataVolume:
+          volumeSize: 80Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 4000
+          throughput: 1000
+          snapshotID: snap-0c31434acc0a8a558
+    sdWebuiInferenceApi:
+      scaling:
+        maxReplicaCount: 2
+        minReplicaCount: 1
+      inferenceApi:
+        image:
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/inference-api
+          tag: latest
+      queueAgent:
+        image:
+          repository: 123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/queue-agent
+          tag: latest
+      persistence:
+        enabled: true
+        existingClaim: "efs-model-storage-pvc"
+  namespace: "default"
