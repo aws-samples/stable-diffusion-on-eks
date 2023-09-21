@@ -22,7 +22,7 @@ Parameters:
     Type: String
   GithubRepo:
     Type: String
-    Default: "https://github.com/brilliantwf/stable-diffusion-on-eks.git"
+    Default: "https://github.com/aws-samples/stable-diffusion-on-eks.git"
     Description: Github Repository
   EBSSize: 
     Type: Number
