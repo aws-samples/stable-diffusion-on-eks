@@ -22,8 +22,8 @@ then
     exit 255
 fi
 
-inference_image=inference-api
-inference_fullname=${account}.dkr.ecr.${region}.amazonaws.com/sd-on-eks/${inference_image}:latest
+inference_image=sd-on-eks/inference-api
+inference_fullname=${account}.dkr.ecr.${region}.amazonaws.com/${inference_image}:latest
 
 # If the repository doesn't exist in ECR, create it.
 aws ecr describe-repositories --repository-names "${inference_image}" --region ${region} || aws ecr create-repository --repository-name "${inference_image}" --region ${region}
@@ -50,8 +50,8 @@ docker tag ${inference_image} ${inference_fullname}
 
 docker push ${inference_fullname}
 
-queue_image=queue-agent
-queue_fullname=${account}.dkr.ecr.${region}.amazonaws.com/sd-on-eks/${queue_image}:latest
+queue_image=sd-on-eks/queue-agent
+queue_fullname=${account}.dkr.ecr.${region}.amazonaws.com/${queue_image}:latest
 
 # If the repository doesn't exist in ECR, create it.
 aws ecr describe-repositories --repository-names "${queue_image}" --region ${region} || aws ecr create-repository --repository-name "${queue_image}" --region ${region}
