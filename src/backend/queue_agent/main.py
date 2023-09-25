@@ -398,7 +398,7 @@ def post_invocations(folder, response, quality):
 
     if len(images) > 0:
         loop = asyncio.get_event_loop()
-        tasks = [async_upload(i, folder) for i in images]
+        tasks = [loop.create_task(async_upload(i, folder)) for i in images]
         results = loop.run_until_complete(asyncio.gather(*tasks))
 
     return results
@@ -409,8 +409,8 @@ def handle_outputs(content, folder):
     if not folder:
         folder = defaultFolder
     loop = asyncio.get_event_loop()
-    tasks = [async_upload(content, folder, None, suffix='out'),
-             async_publish_message(content)]
+    tasks = [loop.create_task(async_upload(content, folder, None, suffix='out')),
+             loop.create_task(async_publish_message(content))]
     loop.run_until_complete(asyncio.wait(tasks))
 
 
@@ -483,7 +483,7 @@ def prepare_payload(body, header):
         # Generate payload including ControlNet units
         if len(urls) > 0:
             loop = asyncio.get_event_loop()
-            tasks = [async_get(u) for u in urls]
+            tasks = [loop.create_task(async_get(u)) for u in urls]
             results = loop.run_until_complete(asyncio.gather(*tasks))
             if offset > 0:
                 init_images = [encode_to_base64(x) for x in results[:offset]]
