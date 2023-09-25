@@ -193,5 +193,23 @@ const blueprint = blueprints.EksBlueprint.builder()
   .resourceProvider("efs-model-storage", new blueprints.CreateEfsFileSystemProvider(efsParams))
   .clusterProvider(new blueprints.MngClusterProvider(MngProps))
   .build(scope, id + 'Stack');
+
+  // Workaround for permission denied when creating cluster
+    const handler = blueprint.node.tryFindChild('@aws-cdk--aws-eks.KubectlProvider')!
+      .node.tryFindChild('Handler')! as cdk.aws_lambda.Function
+
+    (
+      blueprint.node.tryFindChild('@aws-cdk--aws-eks.KubectlProvider')!
+        .node.tryFindChild('Provider')!
+        .node.tryFindChild('framework-onEvent')!
+        .node.tryFindChild('ServiceRole')!
+        .node.tryFindChild('DefaultPolicy') as cdk.aws_iam.Policy
+    )
+      .addStatements(new cdk.aws_iam.PolicyStatement({
+        effect: cdk.aws_iam.Effect.ALLOW,
+        actions: ["lambda:GetFunctionConfiguration"],
+        resources: [handler.functionArn]
+      }))
+
   }
 }
