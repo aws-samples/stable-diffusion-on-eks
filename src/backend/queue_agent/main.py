@@ -35,6 +35,7 @@ dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 
 current_model_name = ''
 sqsRes = boto3.resource('sqs')
+snsRes = boto3.resource('sns')
 ab3_session = aioboto3.Session()
 
 apiBaseUrl = "http://localhost:8080/sdapi/v1/"
@@ -64,6 +65,7 @@ def main():
 
     queue = sqsRes.Queue(sqs_queue_url)
     SQS_WAIT_TIME_SECONDS = 20
+    topic = snsRes.Topic(sns_topic_arn)
 
     check_readiness()
 
@@ -124,6 +126,7 @@ def main():
                     content = json.dumps(succeed(imgOutputs, r, taskHeader))
                 finally:
                     handle_outputs(content, folder)
+                    publish_message(topic, content)
                     delete_message(message)
                     print(
                         f"End process {taskType} task with ID: {taskHeader['id_task']}")
@@ -409,8 +412,7 @@ def handle_outputs(content, folder):
     if not folder:
         folder = defaultFolder
     loop = asyncio.get_event_loop()
-    tasks = [loop.create_task(async_upload(content, folder, None, suffix='out')),
-             loop.create_task(async_publish_message(content))]
+    tasks = [loop.create_task(async_upload(content, folder, None, suffix='out'))]
     loop.run_until_complete(asyncio.wait(tasks))
 
 
