@@ -96,7 +96,11 @@ def main():
                 try:
                     snsPayload = json.loads(message.body)
                     payload = json.loads(snsPayload['Message'])
-                    taskHeader = payload.pop('alwayson_scripts', None)
+                    taskHeader = copy.deepcopy(payload).get('alwayson_scripts', None)
+                    alwayson_scripts = {k: v for k, v in taskHeader.items() if
+                                        k not in ["task", "sd_model_checkpoint", "id_task", "uid", "save_dir"]}
+                    payload["alwayson_scripts"] = alwayson_scripts
+
                     taskType = taskHeader['task'] if 'task' in taskHeader else None
                     folder = get_prefix(
                         payload['s3_output_path']) if 's3_output_path' in payload else None
