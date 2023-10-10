@@ -46,7 +46,7 @@ retries = Retry(
     backoff_factor=0.1,
     allowed_methods=["GET", "POST"])
 apiClient.mount('http://', HTTPAdapter(max_retries=retries))
-REQUESTS_TIMEOUT_SECONDS = 30
+REQUESTS_TIMEOUT_SECONDS = 60
 
 cache = CacheBackend(
     cache_name='memory-cache',
@@ -378,7 +378,8 @@ def failed(header, message):
 @get_time
 def do_invocations(url, body=None):
     if body is None:
-        response = apiClient.get(url=url, timeout=(1.0, 3.0))
+        response = apiClient.get(
+            url=url, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
     else:
         response = apiClient.post(
             url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
@@ -412,7 +413,8 @@ def handle_outputs(content, folder):
     if not folder:
         folder = defaultFolder
     loop = asyncio.get_event_loop()
-    tasks = [loop.create_task(async_upload(content, folder, None, suffix='out'))]
+    tasks = [loop.create_task(async_upload(
+        content, folder, None, suffix='out'))]
     loop.run_until_complete(asyncio.wait(tasks))
 
 
