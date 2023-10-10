@@ -1,0 +1,74 @@
+site_name: Stable Diffusion on EKS
+site_url: https://yubingjiaocn.github.io/stable-diffusion-on-eks/
+repo_url: https://github.com/aws-samples/stable-diffusion-on-eks/
+repo_name: aws-samples/stable-diffusion-on-eks
+docs_dir: .
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+  favicon: images/aws-solutions.png
+  logo: images/aws-solutions.png
+  icon:
+      repo: fontawesome/brands/github
+  language: en
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  generator: false
+  copyright: Copyright &copy; 2023 Amazon Web Services
+
+plugins:
+  - search
+  - include-markdown
+  - macros
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+nav:
+  - 实施指南:
+      - 解决方案概览:
+          - 概览: index.md
+          - 特性和收益: implementation-guide/solution-overview/features.md
+          - 应用场景: implementation-guide/solution-overview/use-cases.md
+      - 架构概览:
+          - 架构图: implementation-guide/architecture.md
+          - AWS Well-Architected 支柱: implementation-guide/architecture-overview/well-architected-pillars.md
+      - 架构细节:
+          - 解决方案组件: implementation-guide/architecture-details/solution-components.md
+          - AWS 服务: implementation-guide/architecture-details/services-in-this-solution.md
+      - 计划部署:
+          - 价格: implementation-guide/plan-deployment/cost.md
+          - 安全: implementation-guide/plan-deployment/security.md
+          - 支持的区域: implementation-guide/plan-deployment/considerations.md
+      - 开始部署:
+          - 概览: implementation-guide/deployment/index.md
+          - 镜像构建: implementation-guide/deployment/image-building.md
+          - EBS 缓存构建: implementation-guide/deployment/ebs-snapshot.md
+          - 配置项: implementation-guide/deployment/configuration.md
+      - 使用指南:
+          - 文生图: implementation-guide/usage/text-to-image.md
+          - 图生图: implementation-guide/usage/image-to-image.md
+          - 使用ControlNet: implementation-guide/usage/controlnet.md
+          - 使用LoRA: implementation-guide/usage/lora.md
+          - API 接口定义: implementation-guide/usage/api-spec.md
+      - 可观测性:
+          - 查看监控: implementation-guide/observabiliy/monitoring.md
+          - 查看日志: implementation-guide/observabiliy/logging.md
+      - 常见问题: implementation-guide/faq.md
+      - 故障排查: implementation-guide/trouble-shooting.md
+      - 卸载解决方案: implementation-guide/uninstall.md
+      - 开发者资源: implementation-guide/source.md
+      - 更新记录: implementation-guide/release-notes.md
+  - 路线图: "https://github.com/orgs/aws-solutions/projects/17/"
+  - 动手实验: "https://catalog.workshops.aws/centralized-logging-with-opensearch/"
