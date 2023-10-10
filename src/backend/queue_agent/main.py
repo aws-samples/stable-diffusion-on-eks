@@ -36,6 +36,7 @@ dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 current_model_name = ''
 sqsRes = boto3.resource('sqs')
 snsRes = boto3.resource('sns')
+s3Res = boto3.resource('s3')
 ab3_session = aioboto3.Session()
 
 apiBaseUrl = "http://localhost:8080/sdapi/v1/"
@@ -73,7 +74,6 @@ def main():
     check_readiness()
 
     # main loop
-    # todo: Implement scale-in hook signal
     # 1. Pull msg from sqs;
     # 2. Translate parameteres;
     # 3. (opt)Switch model;
@@ -101,7 +101,6 @@ def main():
                 try:
                     snsPayload = json.loads(message.body)
                     payload = json.loads(snsPayload['Message'])
-                    # taskHeader = payload.pop('alwayson_scripts', None)
                     taskHeader = payload['alwayson_scripts']
                     taskType = taskHeader['task'] if 'task' in taskHeader else None
                     taskId = taskHeader['id_task'] if 'id_task' in taskHeader else None
@@ -130,7 +129,7 @@ def main():
                 else:
                     content = json.dumps(succeed(imgOutputs, r, taskHeader))
                 finally:
-                    handle_outputs(content, folder)
+                    upload_outputs(content, folder)
                     publish_message(topic, content)
                     delete_message(message)
                     print(
@@ -413,14 +412,21 @@ def post_invocations(folder, response, quality):
     return results
 
 
-def handle_outputs(content, folder):
-    defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
-    if not folder:
-        folder = defaultFolder
-    loop = asyncio.get_event_loop()
-    tasks = [loop.create_task(async_upload(
-        content, folder, None, suffix='out'))]
-    loop.run_until_complete(asyncio.wait(tasks))
+def upload_outputs(content, folder):
+    try:
+        defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
+        if not folder:
+            folder = defaultFolder
+        suffix = 'out'
+        content_type = f'application/json'
+        file_name = f"response-{uuid.uuid4()}"
+
+        bucket = s3Res.Bucket(s3_bucket)
+        bucket.put_object(
+            Body=content, Key=f'{folder}/{file_name}.{suffix}', ContentType=content_type)
+    except Exception as error:
+        traceback.print_exc()
+        raise error
 
 
 async def async_get(url):
@@ -522,7 +528,8 @@ def prepare_payload(body, header):
                 body.update({'override_settings': override_settings})
 
         # dbt compatible for alwayson_scripts
-        body.update({'alwayson_scripts': exclude_keys(header, ALWAYSON_SCRIPTS_EXCLUDE_KEYS)})
+        body.update({'alwayson_scripts': exclude_keys(
+            header, ALWAYSON_SCRIPTS_EXCLUDE_KEYS)})
     except Exception as e:
         raise e
 
