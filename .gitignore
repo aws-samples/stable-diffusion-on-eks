@@ -195,3 +195,6 @@ Temporary Items
 # IPython
 profile_default/
 ipython_config.py
+
+# mkdocs
+site/

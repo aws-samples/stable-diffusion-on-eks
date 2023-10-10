@@ -3,7 +3,7 @@ site_url: https://yubingjiaocn.github.io/stable-diffusion-on-eks/
 repo_url: https://github.com/aws-samples/stable-diffusion-on-eks/
 repo_name: aws-samples/stable-diffusion-on-eks
 docs_dir: .
-
+site_dir: ../site/
 theme:
   name: material
   features:
@@ -63,8 +63,8 @@ nav:
           - 使用LoRA: implementation-guide/usage/lora.md
           - API 接口定义: implementation-guide/usage/api-spec.md
       - 可观测性:
-          - 查看监控: implementation-guide/observabiliy/monitoring.md
-          - 查看日志: implementation-guide/observabiliy/logging.md
+          - 查看监控: implementation-guide/observability/monitoring.md
+          - 查看日志: implementation-guide/observability/logging.md
       - 常见问题: implementation-guide/faq.md
       - 故障排查: implementation-guide/trouble-shooting.md
       - 卸载解决方案: implementation-guide/uninstall.md
