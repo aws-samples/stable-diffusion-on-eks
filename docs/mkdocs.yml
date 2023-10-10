@@ -1,4 +1,4 @@
-site_name: Stable Diffusion on EKS
+site_name: Stable Diffusion on Amazon EKS
 site_url: https://yubingjiaocn.github.io/stable-diffusion-on-eks/
 repo_url: https://github.com/aws-samples/stable-diffusion-on-eks/
 repo_name: aws-samples/stable-diffusion-on-eks
@@ -8,8 +8,6 @@ theme:
   name: material
   features:
     - navigation.tabs
-  favicon: images/aws-solutions.png
-  logo: images/aws-solutions.png
   icon:
       repo: fontawesome/brands/github
   language: en
