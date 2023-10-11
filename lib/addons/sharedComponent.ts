@@ -55,6 +55,10 @@ export class SharedComponentAddOn implements ClusterAddOn {
     });
     api.node.addDependency(lambdaFunction);
 
+    //Force override name of generated output to provide a static name
+    const urlCfnOutput = api.node.findChild('Endpoint') as cdk.CfnOutput;
+    urlCfnOutput.overrideLogicalId('FrontApiEndpoint')
+
     const apiKey = new apigw.ApiKey(cluster.stack, `defaultAPIKey`, {
       description: `Default API Key`,
       enabled: true
@@ -89,10 +93,17 @@ export class SharedComponentAddOn implements ClusterAddOn {
     })
 
     //Xray Access Policy
-    new xray.CfnResourcePolicy(cluster.stack, 'XRayAccessPolicyForSNS', {
-      policyName: 'XRayAccessPolicyForSNS',
+    new xray.CfnResourcePolicy(cluster.stack, cluster.stack.stackName+'XRayAccessPolicyForSNS', {
+      policyName: cluster.stack.stackName+'XRayAccessPolicyForSNS',
       policyDocument: '{"Version":"2012-10-17","Statement":[{"Sid":"SNSAccess","Effect":"Allow","Principal":{"Service":"sns.amazonaws.com"},"Action":["xray:PutTraceSegments","xray:GetSamplingRules","xray:GetSamplingTargets"],"Resource":"*","Condition":{"StringEquals":{"aws:SourceAccount":"' + cluster.stack.account + '"},"StringLike":{"aws:SourceArn":"' + cluster.stack.formatArn({ service: "sns", resource: '*' }) + '"}}}]}'
     })
+
+    // Output S3 bucket ARN
+
+    new cdk.CfnOutput(cluster.stack, 'OutputS3Bucket', {
+      value: this.options.outputBucket.bucketArn,
+      description: 'S3 bucket for generated images'
+    });
 
     return Promise.resolve(plan);
   }

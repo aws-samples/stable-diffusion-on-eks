@@ -211,5 +211,15 @@ const blueprint = blueprints.EksBlueprint.builder()
         resources: [handler.functionArn]
       }))
 
+  // Provide static output name for cluster
+    const cluster = blueprint.getClusterInfo().cluster
+    const clusterNameCfnOutput = cluster.node.findChild('ClusterName') as cdk.CfnOutput;
+    clusterNameCfnOutput.overrideLogicalId('ClusterName')
+
+    const configCommandCfnOutput = cluster.node.findChild('ConfigCommand') as cdk.CfnOutput;
+    configCommandCfnOutput.overrideLogicalId('ConfigCommand')
+
+    const getTokenCommandCfnOutput = cluster.node.findChild('GetTokenCommand') as cdk.CfnOutput;
+    getTokenCommandCfnOutput.overrideLogicalId('GetTokenCommand')
   }
 }
