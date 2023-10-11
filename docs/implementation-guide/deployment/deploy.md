@@ -1,40 +1,5 @@
 # Quick start
 
-## Requirement
-
-* Kubernetes cluster 1.22+
-* [Helm](https://helm.sh/docs/intro/install/) CLI
-* Node.js 16+
-* [AWS CDK CLI](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
-* An [AWS](https://aws.amazon.com/) Account
-* Administrator or equivalent privilege
-
-## Supported Region
-
-The solution is verified on the following regions:
-
-* US East (N. Virginia) `us-east-1`
-* US West (Oregon) `us-west-2`
-
-You can deploy the solutions on any region where `g5` instances are available. If you need to deploy the solutions on a region where doesn't have `g5` instances, you need to specify a different instance type on `karpenter.provisioner.instanceType` of each runtime. (See [Configuration](./configuration.md#configuration) for detail. )
-
-
-## Choose your Stable Diffusion Runtime
-
-You need runtimes to deploy Stable Diffusion model and provide API access. There are several community Stable Diffusion runtimes available, and you can build your own runtime. You need to package runtime as a container image to run the runtime on EKS.
-
-Here are some examples:
-
-* [AUTOMATIC1111's Stable Diffusion Web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
-* [InvokeAI](https://github.com/invoke-ai/InvokeAI)
-* [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
-
-For you convenience, you can use this [sample Dockerfile](https://github.com/antman2008/stable-diffusion-webui-dockerfile) to build a container image of *AUTOMATIC1111's Stable Diffusion Web UI*.
-
-## Build image
-
-Please refer to [Development Guide](./development.md) to build image from source.
-
 ## Provision infrastructure and runtime
 
 Required infrastructure and application is deployed via AWS CDK. We provide default configuration and image for quick start.
@@ -99,7 +64,7 @@ After deployment completes, you can get endpoint and key of API on CDK output:
 Outputs:
 SdOnEksDataPlaneStack.APIKey = 1234567890abcdefghij
 SdOnEksDataPlaneStack.EfsFileSystemId = fs-1234567890abcdefg
-SdOnEksDataPlaneStack.FrontApiEndpointD7DCAA3A = https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/
+SdOnEksDataPlaneStack.FrontApiEndpoint = https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/
 ...
 ```
 
