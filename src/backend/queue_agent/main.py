@@ -36,6 +36,7 @@ dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 current_model_name = ''
 sqsRes = boto3.resource('sqs')
 snsRes = boto3.resource('sns')
+s3Res = boto3.resource('s3')
 ab3_session = aioboto3.Session()
 
 apiBaseUrl = "http://localhost:8080/sdapi/v1/"
@@ -46,12 +47,15 @@ retries = Retry(
     backoff_factor=0.1,
     allowed_methods=["GET", "POST"])
 apiClient.mount('http://', HTTPAdapter(max_retries=retries))
-REQUESTS_TIMEOUT_SECONDS = 30
+REQUESTS_TIMEOUT_SECONDS = 60
 
 cache = CacheBackend(
     cache_name='memory-cache',
     expire_after=600
 )
+
+ALWAYSON_SCRIPTS_EXCLUDE_KEYS = ['task', 'id_task', 'uid',
+                                 'sd_model_checkpoint', 'image_link', 'save_dir', 'sd_vae', 'override_settings']
 
 shutdown = False
 
@@ -70,7 +74,6 @@ def main():
     check_readiness()
 
     # main loop
-    # todo: Implement scale-in hook signal
     # 1. Pull msg from sqs;
     # 2. Translate parameteres;
     # 3. (opt)Switch model;
@@ -98,12 +101,13 @@ def main():
                 try:
                     snsPayload = json.loads(message.body)
                     payload = json.loads(snsPayload['Message'])
-                    taskHeader = payload.pop('alwayson_scripts', None)
+                    taskHeader = payload['alwayson_scripts']
                     taskType = taskHeader['task'] if 'task' in taskHeader else None
+                    taskId = taskHeader['id_task'] if 'id_task' in taskHeader else None
                     folder = get_prefix(
                         payload['s3_output_path']) if 's3_output_path' in payload else None
                     print(
-                        f"Start process {taskType} task with ID: {taskHeader['id_task']}")
+                        f"Start process {taskType} task with ID: {taskId}")
 
                     if dynamic_sd_model == 'true' and taskHeader['sd_model_checkpoint']:
                         switch_model(taskHeader['sd_model_checkpoint'])
@@ -125,11 +129,11 @@ def main():
                 else:
                     content = json.dumps(succeed(imgOutputs, r, taskHeader))
                 finally:
-                    handle_outputs(content, folder)
+                    upload_outputs(content, folder)
                     publish_message(topic, content)
                     delete_message(message)
                     print(
-                        f"End process {taskType} task with ID: {taskHeader['id_task']}")
+                        f"End process {taskType} task with ID: {taskId}")
 
 
 def print_env():
@@ -378,7 +382,8 @@ def failed(header, message):
 @get_time
 def do_invocations(url, body=None):
     if body is None:
-        response = apiClient.get(url=url, timeout=(1.0, 3.0))
+        response = apiClient.get(
+            url=url, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
     else:
         response = apiClient.post(
             url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
@@ -407,13 +412,21 @@ def post_invocations(folder, response, quality):
     return results
 
 
-def handle_outputs(content, folder):
-    defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
-    if not folder:
-        folder = defaultFolder
-    loop = asyncio.get_event_loop()
-    tasks = [loop.create_task(async_upload(content, folder, None, suffix='out'))]
-    loop.run_until_complete(asyncio.wait(tasks))
+def upload_outputs(content, folder):
+    try:
+        defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
+        if not folder:
+            folder = defaultFolder
+        suffix = 'out'
+        content_type = f'application/json'
+        file_name = f"response-{uuid.uuid4()}"
+
+        bucket = s3Res.Bucket(s3_bucket)
+        bucket.put_object(
+            Body=content, Key=f'{folder}/{file_name}.{suffix}', ContentType=content_type)
+    except Exception as error:
+        traceback.print_exc()
+        raise error
 
 
 async def async_get(url):
@@ -469,6 +482,11 @@ async def async_publish_message(content):
         raise e
 
 
+def exclude_keys(dictionary, keys):
+    key_set = set(dictionary.keys()) - set(keys)
+    return {key: dictionary[key] for key in key_set}
+
+
 def prepare_payload(body, header):
     try:
         urls = []
@@ -496,8 +514,22 @@ def prepare_payload(body, header):
                     if 'image_link' in x:
                         x['input_image'] = encode_to_base64(results[offset])
                         offset += 1
-                body.update(
-                    {'alwayson_scripts': {'controlnet': header['controlnet']}})
+
+        # dbt compatible for override_settings
+        override_settings = {}
+        if 'sd_vae' in header:
+            override_settings.update({'sd_vae': header['sd_vae']})
+        if 'override_settings' in header:
+            override_settings.update(header['override_settings'])
+        if override_settings:
+            if 'override_settings' in body:
+                body['override_settings'].update(override_settings)
+            else:
+                body.update({'override_settings': override_settings})
+
+        # dbt compatible for alwayson_scripts
+        body.update({'alwayson_scripts': exclude_keys(
+            header, ALWAYSON_SCRIPTS_EXCLUDE_KEYS)})
     except Exception as e:
         raise e
 
