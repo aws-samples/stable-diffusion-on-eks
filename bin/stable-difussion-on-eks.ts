@@ -22,4 +22,4 @@ if ("CDK_CONFIG_PATH" in process.env) {
 const file = fs.readFileSync(filename, 'utf8')
 const props = parse(file)
 
-const dataPlaneStack = new DataPlaneStack(app, props.stackName + 'Stack', props, { env: env });
+const dataPlaneStack = new DataPlaneStack(app, props.stackName, props, { env: env });
