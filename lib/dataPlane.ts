@@ -100,7 +100,11 @@ export default class DataPlaneStack {
               "key": "runtime",
               "operator": "Exists",
               "effect": "NoSchedule"
-            }]
+            }],
+            cwreceivers: {
+              preferFullPodName: "true",
+              addFullPodNameMetricLabel: "true"
+            }
           }
         }
       }
