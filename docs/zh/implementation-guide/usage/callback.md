@@ -19,7 +19,7 @@ Stable Diffusion on Amazon EKS方案采用异步推理模式，当图片生成�
     运行以下命令以获取 SNS 主题 ARN：
 
     ```bash
-    getkey="$(aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`sdNotificationOutputArn`].OutputValue')"
+    aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`sdNotificationOutputArn`].OutputValue'
     ```
 
 如需接收消息，您需要将您的消息接收端（如Amazon SQS队列，HTTP 终端节点等）作为**订阅**添加到该SNS主题中。

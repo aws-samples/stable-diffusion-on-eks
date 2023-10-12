@@ -19,7 +19,7 @@
     运行以下命令以获取 API端点：
 
     ```bash
-    getkey="$(aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue')"
+    $(aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue')
     ```
 
 该端点仅接收JSON格式的POST请求，需要包含`Content-Type: application/json`请求头。
