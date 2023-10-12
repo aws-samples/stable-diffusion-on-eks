@@ -19,10 +19,10 @@ extra:
   copyright: Copyright &copy; 2023 Amazon Web Services
   alternate:
     - name: English
-      link: /en/
+      link: /stable-diffusion-on-eks/en/
       lang: en
     - name: 简体中文
-      link: /zh/
+      link: /stable-diffusion-on-eks/zh/
       lang: zh
 
 plugins:
