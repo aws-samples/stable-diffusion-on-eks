@@ -5,6 +5,7 @@
 ## 安装必要组件
 
 请在部署前安装以下运行时：
+
 * [Node.js](https://nodejs.org/en) 18及以上版本
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * [AWS CDK 工具包](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
@@ -139,41 +140,5 @@ SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --reg
 
 您可以：
 
-* 发送API请求以使用Stable Diffusion生成图像
-* 登录到Kubernetes集群中以进行运维操作
-
-
-You can try it out by making API call with prompt. Your request should follow API Spec of corresponding runtime. For Stable Diffusion Web UI, save the following content as a JSON file:
-
-```json
-{
-    "alwayson_scripts": {
-        "task": "text-to-image",
-        "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
-        "id_task": "123",
-        "uid": "123",
-        "save_dir": "outputs"
-    },
-    "prompt": "A dog",
-    "steps": 16,
-    "width": 512,
-    "height": 512
-}
-```
-
-Now you can use `curl` to test the solutions. Copy the following cURL command and paste it into the terminal window, replacing `1234567890abcdefghij` with content of `SdOnEksDataPlaneStack.APIKey`, `https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/` with the content of `SdOnEksDataPlaneStack.FrontApiEndpoint`, and `test.json` of filename you just created.
-
-```bash
-curl -X POST https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/ \
-    -H 'Content-Type: application/json' \
-    -H 'x-api-key: 1234567890abcdefghij' \
-    -d @test.json
-```
-
-You should get a successful response with a payload similar to the following:
-
-```json
-{"id_task": "123", "task": "text-to-image", "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors", "output_location": "s3://sdoneksdataplanestack-outputs3bucket/123"}
-```
-
-You may need to wait for several minutes for instance launching and container starting without EBS snapshot. Once container launched and task is proceed, you can find generated image on `output_location`.
+* [发送API请求](../usage/index.md)以使用Stable Diffusion生成图像
+* [登录到Kubernetes集群](../operation/kubernetes-cluster.md)中以进行运维操作

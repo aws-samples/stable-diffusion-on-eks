@@ -23,11 +23,14 @@ nav:
       - 步骤4：开始部署: implementation-guide/deployment/deploy.md
       - 配置项: implementation-guide/deployment/configuration.md
     - 使用指南:
+      - API 调用规则: implementation-guide/usage/index.md
       - 文生图: implementation-guide/usage/text-to-image.md
       - 图生图: implementation-guide/usage/image-to-image.md
       - 使用ControlNet: implementation-guide/usage/controlnet.md
       - 使用LoRA: implementation-guide/usage/lora.md
       - 通知和回调: implementation-guide/usage/callback.md
+    - 运维指南:
+      - Kubernetes 集群管理: implementation-guide/operation/kubernetes-cluster.md
     - 可观测性:
       - 查看监控: implementation-guide/observability/monitoring.md
       - 查看日志: implementation-guide/observability/logging.md
