@@ -17,7 +17,7 @@
     * 选择 **Create Bucket**（创建桶）
 
 === "AWS CLI"
-    * 运行以下命令以创建存储桶。将`<bucket name>`替换为您希望的存储桶名称，`us-east-1`替换成您准备部署解决方案的 AWS 区域：
+    运行以下命令以创建存储桶。将`<bucket name>`替换为您希望的存储桶名称，`us-east-1`替换成您准备部署解决方案的 AWS 区域：
     ```bash
     aws s3api create-bucket --bucket <bucket name> --region us-east-1
     ```
@@ -44,17 +44,17 @@
     * 在左侧导航窗格中，选择 **Buckets**（桶）。
     * 选择上一步创建的存储桶，并进入所需的文件夹。
     * 如果是首次上传：
-      * 选择 **Create Folder**（创建文件夹）
-      * 在 **Folder Name**（文件夹名称）中，输入 *models*
-      * 选择 **Create folder**（创建文件夹）
-      * 重复以上操作，直到文件夹符合以上目录结构。
+        * 选择 **Create Folder**（创建文件夹）
+        * 在 **Folder Name**（文件夹名称）中，输入 *models*
+        * 选择 **Create folder**（创建文件夹）
+        * 重复以上操作，直到文件夹符合以上目录结构。
     * 选择 **Upload**（上传）
     * 选择 **Add files** （添加文件），选择待上传的模型文件。
     * 选择 **Upload**。在上传过程中请不要关闭浏览器。
 
 
 === "AWS CLI"
-    * 运行以下命令以将模型文件上传至存储桶。将`<model name>`替换成为您的模型文件名，`<bucket name>`替换为您希望的存储桶名称：
+    运行以下命令以将模型文件上传至存储桶。将`<model name>`替换成为您的模型文件名，`<bucket name>`替换为您希望的存储桶名称：
     ```bash
     aws s3 cp <model name> s3://<bucket name>/models/stable-diffusion/
     ```

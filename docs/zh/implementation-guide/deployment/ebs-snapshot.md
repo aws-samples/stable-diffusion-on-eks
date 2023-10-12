@@ -1,45 +1,25 @@
-# Building EBS Snapshot
+# 镜像缓存构建
 
-You can optimize launch speed by pre-caching your image as an EBS snapshot. When a new instance is launched, the data volume of the instance is pre-populated with image. When using image caching, you don't need to pull image from registry. You need to use `BottleRocket` as OS of worker node to use image caching.
+通过将容器镜像预缓存为 EBS 快照，可以优化计算实例的启动速度。启动新实例时，实例的数据卷自带容器镜像缓存，从而无需从镜像仓库中再行拉取。
 
-EBS snapshot should be built before deploy infrastructure. Image should be pushed to a registry (Amazon ECR) before being cached. We provided a script for building EBS snapshot.
+应在部署解决方案前创建 EBS 快照。我们提供了用于构建 EBS 快照的脚本。
 
-Run the following command to build if you have built your own image. Replace `us-east-1` to your region and `123456789012` to your AWS account 12-digit ID:
+===  "使用自定义镜像"
+    如您在[步骤2](./image-building.md)自行构建镜像并推送到Amazon ECR，则运行下列命令。将 `us-east-1`替换成解决方案所在区域，将 `123456789012` 替换为您的12位AWS账号:
 
-```bash
-git submodule update --init --recursive
-cd utils/bottlerocket-images-cache
-./snapshot.sh 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/inference-api:latest,123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
-```
+    ```bash
+    cd utils/bottlerocket-images-cache
+    ./snapshot.sh 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/inference-api:latest,123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
+    ```
 
-Run the following command to build if you want to use pre-built image from Dockerhub:
+=== "使用预构建镜像"
+    如您使用解决方案自带的镜像，则运行下列命令：
 
-```bash
-git submodule update --init --recursive
-cd utils/bottlerocket-images-cache
-./snapshot.sh sdoneks/inference-api:latest,sdoneks/queue-agent:latest
-```
+    ```bash
+    cd utils/bottlerocket-images-cache
+    ./snapshot.sh sdoneks/inference-api:latest,sdoneks/queue-agent:latest
+    ```
 
-This script will launch an instance, pull image from registry, and capture a snapshot with pulled image.
+脚本运行完成后，会输出EBS快照ID（格式类似于`snap-0123456789`）。您可以在[配置运行时](./deploy.md#设置基于-ebs-快照的镜像缓存可选)中应用该快照。
 
-After snapshot is built, put snapshot ID into `config.yaml`:
-
-```yaml
-modelsRuntime:
-- name: "sdruntime"
-  namespace: "default"
-  modelFilename: "v1-5-pruned-emaonly.safetensors"
-  extraValues:
-    karpenter:
-      nodeTemplate:
-        amiFamily: Bottlerocket
-        dataVolume:
-          volumeSize: 80Gi
-          volumeType: gp3
-          deleteOnTermination: true
-          iops: 4000
-          throughput: 1000
-          snapshotID: snap-0123456789 # Change to actual snapshot ID
-```
-
-See [`example/ebs-snapshot.yaml`](../examples/ebs-snapshot.yaml) for more reference.
+有关该脚本的详细信息，请参考[GitHub仓库](https://github.com/aws-samples/bottlerocket-images-cache)

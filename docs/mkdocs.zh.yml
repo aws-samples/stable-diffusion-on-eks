@@ -19,7 +19,7 @@ nav:
       - 计划部署: implementation-guide/deployment/considerations.md
       - 步骤1：模型存储: implementation-guide/deployment/models.md
       - 步骤2：镜像构建: implementation-guide/deployment/image-building.md
-      - 步骤3：EBS 缓存构建: implementation-guide/deployment/ebs-snapshot.md
+      - 步骤3：镜像缓存构建: implementation-guide/deployment/ebs-snapshot.md
       - 步骤4：开始部署: implementation-guide/deployment/deploy.md
       - 配置项: implementation-guide/deployment/configuration.md
     - 使用指南:

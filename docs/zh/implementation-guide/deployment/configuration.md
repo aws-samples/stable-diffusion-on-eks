@@ -1,10 +1,10 @@
-# Configuration
+# 配置项
 
-## Infrastructure
+## 解决方案配置
 
-We use config file to customize infrastructure and runtime. By default, the config file name is `config.yaml`. You can use alternative config file by changing environment variable `CDK_CONFIG_PATH`.
+该解决方案可通过`config.yaml`进行配置。如您希望使用不同名称或路径的配置文件，请指定`CDK_CONFIG_PATH`环境变量。
 
-The following table lists the configurable parameters of CDK template and the default values.
+下表列出了CDK模板的配置项及其默认值：
 
 | Parameter | Description | Required | Default |
 | --- | --- | --- | --- |
@@ -13,7 +13,8 @@ The following table lists the configurable parameters of CDK template and the de
 | `modelsRuntime` | Define Stable diffusion runtime. At least one runtime should be defined. | Yes | `- name: "sdruntime"  modelFilename: "v1-5-pruned-emaonly.ckpt"`
 | `modelsRuntime.name` | Name of individual Stable diffusion runtime. | Yes | `sdruntime` |
 | `modelsRuntime.namespace` | Namespace of individual Stable diffusion runtime. | Yes | `default` |
-| `modelsRuntime.chartRepository` | Override default helm chart repository. Protocol (`oci://` or `https://`)should be added as a prefix of repository. (Default: `https://aws-samples.github.io/stable-diffusion-on-eks`) | No | N/A |
+| `modelsRuntime.type` | Type of individual Stable diffusion runtime. Currently only "SdWebUI" or "others" are supported. | Yes | `SdWebUI` |
+| `modelsRuntime.chartRepository` | Override default helm chart repository. Protocol (`oci://` or `https://`)should be added as a prefix of repository. (Default: `https://aws-samples.github.io/stable-diffusion-on-eks/charts/`) | No | N/A |
 | `modelsRuntime.chartVersion` | Override version of helm chart. (Default: 0.1.0) | No | N/A |
 | `modelsRuntime.modelFilename` | File of model using in the runtime. Filename should be in `.ckpt` or `.safetensors` format. Filename should be quoted if contains number only. | Yes | `v1-5-pruned-emaonly.safetensors` |
 | `modelsRuntime.extraValues` | Extra parameter passed to the runtime. See [values definition](#application-helm-chart) for detail. | No | N/A |
@@ -23,11 +24,11 @@ The following table lists the configurable parameters of CDK template and the de
 | `dynamicModelRuntime.chartVersion` | Override version of helm chart. (Default: 0.1.0) | No | N/A |
 | `dynamicModelRuntime.extraValues` | Extra parameter passed to the runtime. See [values definition](#application-helm-chart) for detail. | No | N/A |
 
-### Application (Helm Chart)
+### 运行时配置
 
-Stable diffusion runtime are deployed via helm chart. You can customize individual stable diffusion runtime by passing values via `modelsRuntime.extraValues`.
+Stable diffusion 运行时通过Helm Chart进行部署。您可以通过 `modelsRuntime.extraValues` 配置个别运行时的参数。
 
-The following table lists the configurable parameters of helm chart and the default values. All values are not mandatory. Please some value will be populated by CDK, and not changeable by user.
+请注意，有些标明`Populated by CDK`的参数无法更改，因为他们的值是由CDK自动生成的，手工设置的值会被覆盖。
 
 | Parameter | Description | Default |
 | --- | --- | --- |
@@ -87,35 +88,3 @@ The following table lists the configurable parameters of helm chart and the defa
 | `sdWebuiInferenceApi.persistence.storageClass` | Storage class for model storage | `efs-model-storage-sc` |
 | `sdWebuiInferenceApi.persistence.size` | Size of persistence volume. | `2Ti` |
 | `sdWebuiInferenceApi.persistence.accessModes` | Access mode of persistence volume. | `ReadWriteMany` |
-
-## Deployment Examples
-
-We provided example config file for your reference. These config files are located in `/examples`.
-
-### Multiple Runtimes
-
-You can add multiple runtimes with different models by adding entries in `modelsRuntime` array. Each runtime should have different `modelFilename`. We recommand deploying runtimes in their own namespace.
-
-```yaml
-modelsRuntime:
-- name: "sdruntime1" # First runtime
-  namespace: "sdruntime1"
-  modelFilename: "v1-5-pruned-emaonly.safetensors"
-- name: "sdruntime2" # Second runtime
-  namespace: "sdruntime2"
-  modelFilename: "v2-1_768-ema-pruned.safetensors"
-```
-
-See `multiple-runtimes.yaml` for more reference.
-
-### Dynamic Model Runtime
-
-By default, models are pre-loaded to runtime. Each runtime only accept request with its model filename. You can create dynamic model runtime as a catch-all option. By enabling dynamic model runtime, a new runtime with default model `v1-5-pruned-emaonly.safetensors` is created. This runtime will accept all requests without a matching runtime. Then, the runtime will load model by request. Models should be stored in S3 bucket before sending a request with this model.
-
-```yaml
-dynamicModelRuntime:
-  enabled: true # Enable dynamic model runtime by change the value to "true"
-  namespace: "default"
-```
-
-See `dynamic-runtime.yaml` for more reference.
