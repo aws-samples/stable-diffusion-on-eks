@@ -88,6 +88,28 @@ export default class DataPlaneStack {
       createNamespace: true
     }
 
+    const containerInsightsParams: blueprints.ContainerInsightAddonProps = {
+      values: {
+        adotCollector: {
+          daemonSet: {
+            tolerations: [{
+              "key": "nvidia.com/gpu",
+              "operator": "Exists",
+              "effect": "NoSchedule"
+            }, {
+              "key": "runtime",
+              "operator": "Exists",
+              "effect": "NoSchedule"
+            }],
+            cwreceivers: {
+              preferFullPodName: "true",
+              addFullPodNameMetricLabel: "true"
+            }
+          }
+        }
+      }
+    }
+
     const SharedComponentAddOnParams: SharedComponentAddOnProps = {
       modelstorageEfs: blueprints.getNamedResource("efs-model-storage"),
       inputSns: blueprints.getNamedResource("inputSNSTopic"),
@@ -115,7 +137,7 @@ export default class DataPlaneStack {
       new blueprints.addons.EfsCsiDriverAddOn(),
       new blueprints.addons.KarpenterAddOn({ interruptionHandling: true }),
       new blueprints.addons.KedaAddOn(kedaParams),
-      new blueprints.addons.ContainerInsightsAddOn(),
+      new blueprints.addons.ContainerInsightsAddOn(containerInsightsParams),
       new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
       new nvidiaDevicePluginAddon({}),
       new SharedComponentAddOn(SharedComponentAddOnParams),
