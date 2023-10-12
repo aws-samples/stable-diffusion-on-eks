@@ -1,7 +1,7 @@
 # 考虑因素
 
 ## 可部署区域
-此解决方案使用的服务，或EC2实例类型目前可能并非在所有 AWS 区域都可用。请在提供所需服务的 AWS 区域中启动此解决方案。
+此解决方案使用的服务，或 Amazon EC2 实例类型目前可能并非在所有 AWS 区域都可用。请在提供所需服务的 AWS 区域中启动此解决方案。
 
 **已验证可部署的区域**
 
@@ -14,24 +14,39 @@
 
 * 在不支持g5实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
 * 在部分区域部署时， EFS 的性能可能会受到影响，请参见 [Amazon EFS文档](https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput) 以了解在不同区域的EFS读取性能。
+* 目前该解决方案无法在亚马逊云科技中国区域（含北京和宁夏）部署。
 
 ## IAM 权限
 
 部署该解决方案需要管理员或与之相当的权限。
 
-## Choose your Stable Diffusion Runtime
+## 服务配额
 
-You need runtimes to deploy Stable Diffusion model and provide API access. There are several community Stable Diffusion runtimes available, and you can build your own runtime. You need to package runtime as a container image to run the runtime on EKS.
+每个AWS区域的每个AWS账户都有关于可以创建的资源数量的配额，您可以在AWS控制台中使用 [Service Quota](https://console.aws.amazon.com/servicequotas/home/) 工具了解服务配额。如该服务配额可提升，您可以通过该工具并自助式开立工单提升服务配额。
 
-Here are some examples:
+与该解决方案相关的主要服务配额为：
 
-* [AUTOMATIC1111's Stable Diffusion Web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
-* [InvokeAI](https://github.com/invoke-ai/InvokeAI)
-* [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
-
-For you convenience, you can use this [sample Dockerfile](https://github.com/antman2008/stable-diffusion-webui-dockerfile) to build a container image of *AUTOMATIC1111's Stable Diffusion Web UI*.
+| AWS 服务 | 配额条目 | 预估使用量 | 是否可调整 |
+|---------|---------|-----------|-----------|
+| Amazon EC2  | [Running On-Demand G and VT instances](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-DB2E81BA) | 按最大并发GPU实例数量 | :material-check-bold:{ .icon_check }  |
 
 
-## 重要提示
+## 选择 Stable Diffusion 运行时
+
+您需要运行时来部署Stable Diffusion模型并提供API访问。
+
+目前有多个社区Stable Diffusion运行时可用:
+
+| 运行时名称           | 链接 |  验证  |
+|----------------|-----------------|----------------------|
+| Stable Diffusion Web UI  | [GitHub](https://github.com/AUTOMATIC1111/stable-diffusion-webui) | :material-check-bold:{ .icon_check }  |
+| InvokeAI     | [GitHub](https://github.com/invoke-ai/InvokeAI) |   |
+| ComfyUI     | [GitHub](https://github.com/comfyanonymous/ComfyUI) |   |
+
+您也可以选择其他运行时，或构建自己的运行时。您需要将运行时打包为容器镜像，以便在 EKS 上运行。
+
+您需要充分了解您所使用的 Stable Diffusion 运行时的许可证条款。
+
+## 其他重要提示
 
 - 一个区域中只能有一个活动的Stable Diffusion on Amazon EKS解决方案堆栈。如果您的部署失败，请确保在重试部署之前已删除失败的堆栈。
