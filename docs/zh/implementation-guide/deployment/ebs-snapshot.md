@@ -17,7 +17,7 @@
 
     ```bash
     cd utils/bottlerocket-images-cache
-    ./snapshot.sh sdoneks/inference-api:latest,sdoneks/queue-agent:latest
+    ./snapshot.sh docker.io/sdoneks/inference-api:latest,docker.io/sdoneks/queue-agent:latest
     ```
 
 脚本运行完成后，会输出EBS快照ID（格式类似于`snap-0123456789`）。您可以在[配置运行时](./deploy.md#设置基于-ebs-快照的镜像缓存可选)中应用该快照。

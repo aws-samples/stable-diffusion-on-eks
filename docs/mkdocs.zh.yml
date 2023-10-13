@@ -31,14 +31,14 @@ nav:
       - 通知和回调: implementation-guide/usage/callback.md
     - 运维指南:
       - Kubernetes 集群管理: implementation-guide/operation/kubernetes-cluster.md
-      - 配置更新: implementation-guide/operation/update-config.md
+#      - 配置更新: implementation-guide/operation/update-config.md
     - 可观测性:
       - 查看监控: implementation-guide/observability/monitoring.md
       - 查看日志: implementation-guide/observability/logging.md
       - 查看跟踪: implementation-guide/observability/tracing.md
     - 常见问题: implementation-guide/faq.md
 #    - 故障排查: implementation-guide/troubleshooting.md
-    - 卸载解决方案: implementation-guide/uninstall.md
+    - 删除解决方案: implementation-guide/uninstall.md
     - 开发者资源:
       - 源代码: implementation-guide/developer/source.md
       - API 定义: implementation-guide/developer/api-spec.md
