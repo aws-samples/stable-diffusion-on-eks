@@ -31,7 +31,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   namespace: 'sdruntime',
   release: 'sdruntime',
   version: '0.1.0',
-  repository: 'https://aws-samples.github.io/stable-diffusion-on-eks',
+  repository: 'https://aws-samples.github.io/stable-diffusion-on-eks/charts',
   values: {
     global: {
       awsRegion: cdk.Aws.REGION,
