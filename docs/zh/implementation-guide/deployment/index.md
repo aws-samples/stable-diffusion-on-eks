@@ -15,3 +15,12 @@
 4. [部署并启动解决方案堆栈](./deploy.md)
 
 总部署时间约为 30 分钟。
+
+## 获取源代码
+
+运行以下命令以获取源代码和部署脚本：
+
+```bash
+git clone --recursive https://github.com/aws-samples/stable-diffusion-on-eks
+cd stable-diffusion-on-eks
+```

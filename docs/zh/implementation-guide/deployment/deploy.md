@@ -11,15 +11,6 @@
 * [AWS CDK 工具包](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
 * [git](https://git-scm.com/downloads)
 
-## 获取源代码
-
-运行以下命令以获取源代码和部署脚本：
-
-```bash
-git clone --recursive https://github.com/aws-samples/stable-diffusion-on-eks
-cd stable-diffusion-on-eks
-```
-
 ## 编辑配置文件
 
 本解决方案的配置存储在`config.yaml`文件中，我们提供了配置文件模板，您可以根据您的实际需求对解决方案进行自定义。

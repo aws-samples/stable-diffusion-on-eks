@@ -19,7 +19,7 @@
     运行以下命令以获取 API端点：
 
     ```bash
-    $(aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue')
+    aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue'
     ```
 
 该端点仅接收JSON格式的POST请求，需要包含`Content-Type: application/json`请求头。
@@ -40,12 +40,12 @@
     运行以下命令以获取API Key：
 
     ```bash
-    getkey="$(aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`GetAPIKeyCommand`].OutputValue')"
+    echo $(aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`GetAPIKeyCommand`].OutputValue')
     ```
 
 在发送请求时，需包含`x-api-key`请求头，其值为上方获取的API Key。
 
-!!! failure
+!!! danger "未验证的请求"
     未包含API Key的请求将会直接返回`401`错误。
 
 ## 限流规则

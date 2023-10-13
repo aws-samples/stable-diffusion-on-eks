@@ -36,4 +36,4 @@ Stable Diffusion on Amazon EKS方案采用异步推理模式，当图片生成�
 
 === "AWS CLI"
 
-    请参考[Use Amazon SNS with the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-sns.html#cli-subscribe-sns-topic)
+    请参考[Use Amazon SNS with the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-sns.html#cli-subscribe-sns-topic) 添加对该主题的订阅。

@@ -1,24 +1,40 @@
 # 镜像构建
 
-## Build Image
+您可以从源代码自行构建镜像，并存储在您的镜像仓库中。
 
-You can build queue agent container image on your environment from source. `queue-agent` is for fetching message from queue and convert message to API request to Stable Diffusion Runtime.
+!!! danger "运行时选择"
+    您需要自行提供Stable Diffusion运行时镜像。您可以从[计划部署](./considerations.md#选择-stable-diffusion-运行时)获取支持的Stable Diffusion运行时。
 
-To build `queue-agent` image, run the following command:
+!!! note "预构建镜像"
+    在评估和测试阶段，您可以使用我们预构建的镜像：
+    ```
+    docker.io/sdoneks/queue-agent:latest
+    docker.io/sdoneks/inference-api:latest
+    ```
+    但由于[DockerHub的限流政策](https://docs.docker.com/docker-hub/download-rate-limit/)，我们建议您将镜像转移至您的ECR镜像仓库中。
+
+## 构建镜像
+
+运行下方命令以构建`queue-agent`镜像：
 
 ```bash
 docker build -t queue-agent:latest src/backend/queue_agent/
 ```
 
-## Push image to Amazon ECR
+### 将镜像推送至Amazon ECR
 
-Before pushing image, create reposirory in Amazon ECR by running the following command:
+!!! note "镜像仓库选择"
+    我们推荐使用Amazon ECR作为镜像仓库，但您也可以选择其他支持[OCI标准](https://www.opencontainers.org/)的镜像仓库（如Harbor）。
 
-```bash
-aws ecr create-repository --repository-name sd-on-eks/queue-agent
-```
+!!! tip "首次推送"
+    Amazon ECR需要在推送前预先创建镜像仓库。
+    === "AWS CLI"
+        运行下列命令以创建：
+        ```bash
+        aws ecr create-repository --repository-name sd-on-eks/queue-agent
+        ```
 
-You can push image to Amazon ECR by running the following command. Replace `us-east-1` to your region and `123456789012` to your AWS account 12-digit ID:
+运行下列命令以登录到镜像仓库，并推送镜像。请将 `us-east-1` 替换成您的AWS区域，将 `123456789012` 替换为您的 AWS 账户ID:
 
 ```bash
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-east-1.amazonaws.com
@@ -27,21 +43,24 @@ docker tag queue-agent:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on
 docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
 ```
 
-## Build and push helm chart
+## 构建并推送Helm Chart
 
-Helm chart is packaged and stored in [OCI](https://www.opencontainers.org/)-based registry. You can store helm chart in Amazon ECR.
+解决方案通过Helm Chart部署。Helm Chart可以存储在兼容[OCI标准](https://www.opencontainers.org/)的镜像仓库中。您可以将Helm Chart存储在Amazon ECR。
 
-Before pushing charts, create reposirory in Amazon ECR by running the following command:
+!!! note "预构建Helm Chart"
+    一般情况下，您不需要对Helm Chart内容进行深度自定义。此时您可以直接使用我们预构建的Helm Chart。您可以通过`config.yaml`对运行时进行配置。
 
-```bash
-aws ecr create-repository --repository-name sd-on-eks/charts/sd-on-eks
-```
+!!! tip "首次推送"
+    Amazon ECR需要在推送前预先创建镜像仓库。
+    === "AWS CLI"
+        运行下列命令以创建：
+        ```bash
+        aws ecr create-repository --repository-name sd-on-eks/charts/sd-on-eks
+        ```
 
-Package and push helm chart to Amazon ECR by running the following command. Replace `us-east-1` to your region and `123456789012` to your AWS account 12-digit ID:
+运行下列命令以登录到镜像仓库，并推送Helm Chart。请将 `us-east-1` 替换成您的AWS区域，将 `123456789012` 替换为您的 AWS 账户ID:
 
 ```bash
 helm package src/charts/sd_on_eks
 helm push sd-on-eks-<version>.tgz oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/
 ```
-
-Now your chart is stored in Amazon ECR with `oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/sd-on-eks:<version>`.

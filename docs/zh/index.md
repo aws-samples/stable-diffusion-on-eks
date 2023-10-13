@@ -1,14 +1,14 @@
 # Stable Diffusion on EKS
 
-Implementing a fast scaling and low cost Stable Diffusion inference solution with serverless and containers on AWS
+在 AWS 上使用无服务器和容器解决方案，实施快速扩展和低成本的Stable Diffusion图像生成解决方案
 
-Stable Diffusion is a popular open source project for generating images using Gen AI. Building a scalable and cost efficient inference solution is a common challenge AWS customers facing. This project shows how to use serverless and container services to build an end-to-end low cost and fast scaling asyncronous image generation architecture. This repo contains the sample code and CDK deployment scripts, helping you to deploy this solution in a few steps.
+Stable Diffusion 是一个使用生成式AI技术生成图像的流行开源项目。构建可扩展、低成本的推理解决方案是 AWS 客户面临的共同挑战。本项目展示了如何使用无服务器和容器服务构建端到端低成本、快速扩展的异步图像生成架构。
 
-## Features
+## 功能特性
 
-- Asyncronous API and Serverless Event-Driven Architecture
-- Image Generation with Stable Diffusion Web UI on Amazon EKS
-- Automatic queue length based scaling with KEDA
-- Automatic provisioning ec2 instances with Karpenter
-- Scaling up new inference nodes within 2 minutes
-- Saving up to 70% with GPU spot instances
+- 基于事件驱动架构
+- 利用 KEDA 实现基于队列长度的自动扩展
+- 利用 Karpenter 自动配置 EC2 实例
+- 在 2 分钟内扩展新的推理节点
+- 使用 GPU Spot 实例可节省高达 70% 的成本
+- 支持多种社区Stable Diffusion运行时
