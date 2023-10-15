@@ -1,0 +1,11 @@
+.icon_check {
+    color: green;
+}
+
+.icon_cross {
+    color: red;
+}
+
+code {
+    white-space : pre-wrap !important;
+}

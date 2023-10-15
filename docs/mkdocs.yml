@@ -1,0 +1,49 @@
+site_name: Stable Diffusion on Amazon EKS
+site_url: https://yubingjiaocn.github.io/stable-diffusion-on-eks/
+repo_url: https://github.com/aws-samples/stable-diffusion-on-eks/
+repo_name: aws-samples/stable-diffusion-on-eks
+docs_dir: .
+site_dir: ../site/
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  generator: false
+  copyright: Copyright &copy; 2023 Amazon Web Services
+  alternate:
+    - name: English
+      link: /stable-diffusion-on-eks/en/
+      lang: en
+    - name: 简体中文
+      link: /stable-diffusion-on-eks/zh/
+      lang: zh
+
+plugins:
+  - search
+  - include-markdown
+  - macros
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg

@@ -1,0 +1,42 @@
+INHERIT: ./mkdocs.yml
+docs_dir: en
+site_dir: ../site/en
+theme:
+  language: en
+
+nav:
+  - Implementation Guide:
+      - Solutions Overview:
+          - Overview: index.md
+
+    #       - Feature and benefit: implementation-guide/solution-overview/features.md
+    #       - Use cases: implementation-guide/solution-overview/use-cases.md
+    #       - Cost estimation: implementation-guide/solution-overview/cost.md
+    #   - Architecture:
+    #       - Architecture overview: implementation-guide/architecture/architecture.md
+    #       - AWS Services in the solution: implementation-guide/architecture/services-in-this-solution.md
+    #   - Deployment:
+    #       - Overview: implementation-guide/deployment/index.md
+    #       - Plan your deployment: implementation-guide/deployment/considerations.md
+    #       - Model storage: implementation-guide/deployment/models.md
+    #       - Deployment guide: implementation-guide/deployment/deploy.md
+    #       - Image building: implementation-guide/deployment/image-building.md
+    #       - EBS Snapshot: implementation-guide/deployment/ebs-snapshot.md
+    #       - Configuration: implementation-guide/deployment/configuration.md
+    #   - User Guide:
+    #       - Text to image: implementation-guide/usage/text-to-image.md
+    #       - Image to image: implementation-guide/usage/image-to-image.md
+    #       - Using ControlNet: implementation-guide/usage/controlnet.md
+    #       - Using LoRA: implementation-guide/usage/lora.md
+    #       - Notification and callback: implementation-guide/usage/callback.md
+    #   - Observability:
+    #       - Monitoring: implementation-guide/observability/monitoring.md
+    #       - Logging: implementation-guide/observability/logging.md
+    #   - FAQ: implementation-guide/faq.md
+    #   - Troubleshooting: implementation-guide/trouble-shooting.md
+    #   - Uninstallation: implementation-guide/uninstall.md
+    #   - Developer:
+    #     - Source code: implementation-guide/developer/source.md
+    #     - API Spec: implementation-guide/developer/api-spec.md
+    #   - Release note: implementation-guide/release-notes.md
+  - Hands-on Workshop: "https://catalog.workshops.aws/"

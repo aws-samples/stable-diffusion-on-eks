@@ -1,0 +1,54 @@
+name: GitHub Pages deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-charts:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          charts_dir: src/charts
+          branch: gh-pages
+          target_dir: charts
+
+  deploy-docs:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install mkdocs mkdocs-material mkdocs-macros-plugin mkdocs-include-markdown-plugin
+
+      - name: Build mkdocs
+        run: |
+          mkdocs build -f ./docs/mkdocs.en.yml
+          mkdocs build -f ./docs/mkdocs.zh.yml
+          cp -av ./docs/index.html ./site
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          keep_files: true
