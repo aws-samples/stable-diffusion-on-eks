@@ -12,9 +12,7 @@ import json
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(process)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 args = sys.argv
-# print("Command-line arguments:")
-# for arg in args:
-#     print(arg)
+
 from botocore.exceptions import ClientError
 
 num_of_requests = int(args[1])
