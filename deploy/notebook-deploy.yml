@@ -1,7 +1,5 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: >
-    This template deploys Amazon SageMaker Notebook Instance By Author:Felix
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -15,7 +13,7 @@ Parameters:
   NotebookInstanceType:
     AllowedValues:
       - ml.m5.xlarge
-      - ml.m5.2xlarge
+      - ml.t3.medium
     ConstraintDescription: Must select a valid notebook instance type.
     Default: ml.m5.xlarge
     Description: Select Instance type for the SageMaker Notebook
@@ -26,8 +24,8 @@ Parameters:
     Description: Github Repository
   EBSSize: 
     Type: Number
-    Default: 200
-    Description: EBS Size Default Size is 200GB
+    Default: 50
+    Description: EBS Size Default Size is 50GB
 Resources:
   ExecutionRole: 
     Type: AWS::IAM::Role
@@ -89,3 +87,5 @@ Outputs:
   NotebookInstanceLab:
     Value: !Sub "https://${AWS::Region}.console.aws.amazon.com/sagemaker/home?region=${AWS::Region}#/notebook-instances/openNotebook/${NotebookInstance.NotebookInstanceName}?view=lab"
     Description: Notebook Instance Lab
+  S3Bucket:
+    Value: !Sub ${S3Bucket}
