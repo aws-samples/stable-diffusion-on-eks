@@ -27,8 +27,8 @@
 请将所有需要使用的模型存储在S3存储桶中，目录格式如下：
 
 ```
-└── models/
-    ├── stable-diffusions
+└── /
+    ├── stable-diffusion
     ├── controlnet
     └── lora
 ```
