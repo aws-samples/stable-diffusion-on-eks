@@ -50,7 +50,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
   constructor(props: SDRuntimeAddOnProps, id?: string) {
     super({ ...defaultProps, ...props });
     this.options = this.props as SDRuntimeAddOnProps;
-    if (typeof (id) !== 'undefined') {
+    if (id) {
       this.id = id!.toLowerCase()
     } else {
       this.id = 'sdruntime'
@@ -67,7 +67,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     this.props.name = this.id + 'Addon'
     this.props.release = this.id
 
-    if (typeof (this.options.targetNamespace) !== 'undefined') {
+    if (this.options.targetNamespace) {
       this.props.namespace = this.options.targetNamespace.toLowerCase()
     } else {
       this.props.namespace = "default"
@@ -78,11 +78,11 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     const webUISA = cluster.addServiceAccount('WebUISA' + this.id, { namespace: this.props.namespace });
     webUISA.node.addDependency(ns)
 
-    if (typeof (this.options.chartRepository) !== 'undefined') {
+    if (this.options.chartRepository) {
       this.props.repository = this.options.chartRepository
     }
 
-    if (typeof (this.options.chartVersion) !== 'undefined') {
+    if (this.options.chartVersion) {
       this.props.version = this.options.chartVersion
     }
 
