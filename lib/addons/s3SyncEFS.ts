@@ -92,7 +92,7 @@ export class S3SyncEFSAddOn implements ClusterAddOn {
         verifyMode: "ONLY_FILES_TRANSFERRED"
       }
     })
-
+    if (cdk.Aws.PARTITION == "aws") {
     const schedulerRole = new iam.Role(cluster.stack, "SchedulerRole", {
       assumedBy: new iam.ServicePrincipal("scheduler.amazonaws.com"),
       managedPolicies: [
@@ -120,7 +120,9 @@ export class S3SyncEFSAddOn implements ClusterAddOn {
         }
       }
     })
-
     return Promise.resolve(dataSyncScheduler);
+  } else {
+    return Promise.resolve(dataSyncTask);
+  }
   }
 }
