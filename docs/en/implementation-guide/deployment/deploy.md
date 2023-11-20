@@ -21,6 +21,11 @@ Set `modelBucketArn` to the S3 bucket created on previous section.
 modelBucketArn: arn:aws:s3:::<bucket name>
 ```
 
+If you are deploying in AWS China region:
+```yaml
+modelBucketArn: arn:aws-cn:s3:::<bucket name>
+```
+
 ### Define Runtime
 
 You need to specify each runtime in `modelsRuntime` section. For each runtime, specify the following value:
@@ -66,6 +71,15 @@ SdOnEksDataPlaneStack.APIKey = 1234567890abcdefghij
 SdOnEksDataPlaneStack.EfsFileSystemId = fs-1234567890abcdefg
 SdOnEksDataPlaneStack.FrontApiEndpoint = https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/
 ...
+```
+
+Because of the service differences between AWS China regions, additional operations are required. If you use non-AWS Beijing region and Ningxia region, skip this step:
+Open the AWS Console, find the service **Datasync**, select Tasks in the left navigation bar, and select the task you just created, such as "task-092354086086f941c".
+Then click Actions - Start in the upper right corner
+
+You can also perform the above steps via the command line:
+```
+aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
 ```
 
 You can try it out by making API call with prompt. Your request should follow API Spec of corresponding runtime. For Stable Diffusion Web UI, save the following content as a JSON file:
