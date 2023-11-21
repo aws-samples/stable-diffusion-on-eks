@@ -16,7 +16,19 @@
 
 * 在不支持g5实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
 * 在部分区域部署时， EFS 的性能可能会受到影响，请参见 [Amazon EFS文档](https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput) 以了解在不同区域的EFS读取性能。
-* 目前该解决方案无法在亚马逊云科技中国区域（含北京和宁夏）部署。
+
+**在亚马逊云科技中国区域部署**
+
+该解决方案可以在亚马逊云科技中国区域部署。
+
+| 区域名称           | 验证通过 |
+|----------------|---------------------------------------|
+| 中国 (宁夏)  | :material-check-bold:{ .icon_check }  |
+
+在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：
+
+* 中国区域不支持默认的g5实例类型。您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
+* 中国区域不支持EventBridge Scheduler，故在首次运行或模型有更新时，您需要**手工触发**DataSync将模型从S3同步至EFS上，或直接将模型存储在EFS中。
 
 ## IAM 权限
 
@@ -31,7 +43,16 @@
 | AWS 服务 | 配额条目 | 预估使用量 | 是否可调整 |
 |---------|---------|-----------|-----------|
 | Amazon EC2  | [Running On-Demand G and VT instances](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-DB2E81BA) | 按最大并发GPU实例数量 | :material-check-bold:{ .icon_check }  |
+| Amazon SNS  | [Messages Published per Second](https://console.aws.amazon.com/servicequotas/home/services/sns/quotas/L-F8E2BA85) | 按最大并发请求数 | :material-check-bold:{ .icon_check }  |
 
+除此之外，部署时需要考虑以下服务配额：
+
+| AWS 服务 | 配额条目 | 预估使用量 | 是否可调整 |
+|---------|---------|-----------|-----------|
+| Amazon VPC  | [VPCs per Region](https://console.aws.amazon.com/servicequotas/home/services/vpc/quotas/L-F678F1CE) | 1 | :material-check-bold:{ .icon_check }  |
+| Amazon VPC  | [NAT gateways per Availability Zone](https://console.aws.amazon.com/servicequotas/home/services/vpc/quotas/L-FE5A380F) | 1 | :material-check-bold:{ .icon_check }  |
+| Amazon EC2  | [EC2-VPC Elastic IPs](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-0263D0A3) | 1 | :material-check-bold:{ .icon_check }  |
+| Amazon S3  | [General purpose buckets](https://console.aws.amazon.com/servicequotas/home/services/s3/quotas/L-DC2B2D3D) | 每个队列1个 | :material-check-bold:{ .icon_check }  |
 
 ## 选择 Stable Diffusion 运行时
 
