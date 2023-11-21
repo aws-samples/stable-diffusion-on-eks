@@ -26,6 +26,7 @@
 | 中国 (宁夏)  | :material-check-bold:{ .icon_check }  |
 
 在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：
+
 * 中国区域不支持默认的g5实例类型。您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
 * 中国区域不支持EventBridge Scheduler，故在首次运行或模型有更新时，您需要**手工触发**DataSync将模型从S3同步至EFS上，或直接将模型存储在EFS中。
 

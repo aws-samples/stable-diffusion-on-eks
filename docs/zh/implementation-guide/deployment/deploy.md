@@ -150,7 +150,7 @@ SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --reg
 
         运行以下命令以启动模型同步：
 
-        ```
+        ```bash
         aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
         ```
 
