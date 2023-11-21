@@ -1393,7 +1393,27 @@
 <ul>
 <li>在不支持g5实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
 <li>在部分区域部署时， EFS 的性能可能会受到影响，请参见 <a href="https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput">Amazon EFS文档</a> 以了解在不同区域的EFS读取性能。</li>
-<li>目前该解决方案无法在亚马逊云科技中国区域（含北京和宁夏）部署。</li>
+</ul>
+<p><strong>在亚马逊云科技中国区域部署</strong></p>
+<p>该解决方案可以在亚马逊云科技中国区域部署。</p>
+<table>
+<thead>
+<tr>
+<th>区域名称</th>
+<th>验证通过</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>中国 (宁夏)</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+</tbody>
+</table>
+<p>在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：</p>
+<ul>
+<li>中国区域不支持默认的g5实例类型。您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
+<li>中国区域不支持EventBridge Scheduler，故在首次运行或模型有更新时，您需要<strong>手工触发</strong>DataSync将模型从S3同步至EFS上，或直接将模型存储在EFS中。</li>
 </ul>
 <h2 id="iam">IAM 权限</h2>
 <p>部署该解决方案需要管理员或与之相当的权限。</p>
@@ -1414,6 +1434,49 @@
 <td>Amazon EC2</td>
 <td><a href="https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-DB2E81BA">Running On-Demand G and VT instances</a></td>
 <td>按最大并发GPU实例数量</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon SNS</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/sns/quotas/L-F8E2BA85">Messages Published per Second</a></td>
+<td>按最大并发请求数</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+</tbody>
+</table>
+<p>除此之外，部署时需要考虑以下服务配额：</p>
+<table>
+<thead>
+<tr>
+<th>AWS 服务</th>
+<th>配额条目</th>
+<th>预估使用量</th>
+<th>是否可调整</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amazon VPC</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/vpc/quotas/L-F678F1CE">VPCs per Region</a></td>
+<td>1</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon VPC</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/vpc/quotas/L-FE5A380F">NAT gateways per Availability Zone</a></td>
+<td>1</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon EC2</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-0263D0A3">EC2-VPC Elastic IPs</a></td>
+<td>1</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon S3</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/s3/quotas/L-DC2B2D3D">General purpose buckets</a></td>
+<td>每个队列1个</td>
 <td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
 </tr>
 </tbody>
