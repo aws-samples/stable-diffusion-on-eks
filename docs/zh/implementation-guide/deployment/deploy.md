@@ -23,10 +23,13 @@
 modelBucketArn: arn:aws:s3:::<bucket name>
 ```
 
-如果是亚马逊云科技中国区域, 则为
-```yaml
-modelBucketArn: arn:aws-cn:s3:::<bucket name>
-```
+!!! danger "中国区域限制"
+
+    如您使用亚马逊云科技中国区域, 请确保ARN中的partition为`aws-cn`.
+
+    ```yaml
+    modelBucketArn: arn:aws-cn:s3:::<bucket name>
+    ```
 
 ### 设置静态Stable Diffusion运行时（必需）
 
@@ -136,12 +139,20 @@ SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --reg
 
 !!! danger "中国区域限制"
     如您在亚马逊云科技中国区域部署，您需要在首次运行或模型有更新时，**手工触发**DataSync将模型从S3同步至EFS上。
-    打开亚马逊云科技控制台, 找到服务 **Datasync**, 在左侧导航栏选择任务(Tasks), 选中刚创建的任务, 例如 "task-092354086086f941c". 然后在点击右上角 操作(Actions) - 开始(Start)
 
-    您也可以通过命令行来执行以上步骤:
-    ```
-    aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
-    ```
+    === "亚马逊云科技管理控制台"
+        * 进入[亚马逊云科技DataSync控制台](https://console.amazonaws.cn/datasync/home)
+        * 在左侧导航栏选择 **任务(Tasks)**
+        * 选择刚创建的任务, 例如 `task-092354086086f941c`.
+        * 选择右上角 **操作(Actions)** - **开始(Start)**
+
+    === "亚马逊云科技 CLI"
+
+        运行以下命令以启动模型同步：
+
+        ```
+        aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
+        ```
 
 现在, 您可以：
 
