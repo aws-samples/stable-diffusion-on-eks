@@ -128,6 +128,8 @@ SdOnEksStack.FrontApiEndpoint = https://abcdefghij.execute-api.us-east-1.amazona
 SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --region us-east-1 --role-arn arn:aws:iam::123456789012:role/SdOnEKSStack-SdOnEKSStackAccessRole
 ...
 ```
+!!! danger "中国区域限制"
+    如您在亚马逊云科技中国区域部署，您需要在首次运行或模型有更新时，**手工触发**DataSync将模型从S3同步至EFS上。
 
 您可以：
 
