@@ -44,6 +44,9 @@ export class SharedComponentAddOn implements ClusterAddOn {
       proxy: true,
       deploy: true,
       cloudWatchRole: true,
+      endpointConfiguration: {
+        types: [ apigw.EndpointType.REGIONAL ]
+      },
       defaultMethodOptions: {
         apiKeyRequired: true
       },

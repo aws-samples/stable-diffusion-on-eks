@@ -23,6 +23,11 @@
 modelBucketArn: arn:aws:s3:::<bucket name>
 ```
 
+如果是亚马逊云科技中国区域, 则为
+```yaml
+modelBucketArn: arn:aws-cn:s3:::<bucket name>
+```
+
 ### 设置静态Stable Diffusion运行时（必需）
 
 针对不同的Stable Diffusion模型，您需要指定运行时的参数。运行时定义在 `modelsRuntime` 中，配置如下：
@@ -131,8 +136,14 @@ SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --reg
 
 !!! danger "中国区域限制"
     如您在亚马逊云科技中国区域部署，您需要在首次运行或模型有更新时，**手工触发**DataSync将模型从S3同步至EFS上。
+    打开亚马逊云科技控制台, 找到服务 **Datasync**, 在左侧导航栏选择任务(Tasks), 选中刚创建的任务, 例如 "task-092354086086f941c". 然后在点击右上角 操作(Actions) - 开始(Start)
 
-您可以：
+    您也可以通过命令行来执行以上步骤:
+    ```
+    aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
+    ```
+
+现在, 您可以：
 
 * [发送API请求](../usage/index.md)以使用Stable Diffusion生成图像
 * [登录到Kubernetes集群](../operation/kubernetes-cluster.md)中以进行运维操作
