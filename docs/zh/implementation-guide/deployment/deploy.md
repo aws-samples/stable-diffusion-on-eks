@@ -134,14 +134,14 @@ SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --reg
 ...
 ```
 
-因为亚马逊云科技中国区域服务差异, 需要额外操作, 如果使用非亚马逊云科技北京区域和宁夏区域, 则跳过此步骤:
-打开亚马逊云科技控制台, 找到服务 **Datasync**, 在左侧导航栏选择任务(Tasks), 选中刚创建的任务, 例如 "task-092354086086f941c".
-然后在点击右上角 操作(Actions) - 开始(Start)
+!!! danger "中国区域限制"
+    如您在亚马逊云科技中国区域部署，您需要在首次运行或模型有更新时，**手工触发**DataSync将模型从S3同步至EFS上。
+    打开亚马逊云科技控制台, 找到服务 **Datasync**, 在左侧导航栏选择任务(Tasks), 选中刚创建的任务, 例如 "task-092354086086f941c". 然后在点击右上角 操作(Actions) - 开始(Start)
 
-您也可以通过命令行来执行以上步骤:
-```
-aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
-```
+    您也可以通过命令行来执行以上步骤:
+    ```
+    aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
+    ```
 
 现在, 您可以：
 
