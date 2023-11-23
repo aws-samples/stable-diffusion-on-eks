@@ -124,12 +124,12 @@ def main():
                     imgOutputs = post_invocations(folder, r, 80)
 
                 except Exception as e:
-                    content = json.dumps(failed(taskHeader, repr(e)))
+                    content = json.dumps(failed(taskHeader, e))
                     traceback.print_exc()
                 else:
                     content = json.dumps(succeed(imgOutputs, r, taskHeader))
                 finally:
-                    upload_outputs(content, folder)
+                    upload_outputs(content, folder, None, 'out')
                     publish_message(topic, content)
                     delete_message(message)
                     print(
@@ -344,41 +344,6 @@ def switch_model(name, find_closest=True):
     return current_model_name
 
 
-def succeed(images, response, header):
-    n_iter = response['parameters']['n_iter']
-    batch_size = response['parameters']['batch_size']
-    parameters = {}
-    parameters['id_task'] = header['id_task']
-    parameters['status'] = 1
-    parameters['image_url'] = ','.join(
-        images[: n_iter * batch_size])
-    parameters['seed'] = ','.join(
-        str(x) for x in json.loads(response['info'])['all_seeds'])
-    parameters['error_msg'] = ''
-    parameters['image_mask_url'] = ','.join(
-        images[n_iter * batch_size:])
-    return {
-        'images': [''],
-        'parameters': parameters,
-        'info': ''
-    }
-
-
-def failed(header, message):
-    parameters = {}
-    parameters['id_task'] = header['id_task']
-    parameters['status'] = 0
-    parameters['image_url'] = ''
-    parameters['seed'] = []
-    parameters['error_msg'] = message
-    parameters['image_mask_url'] = ''
-    return {
-        'images': [''],
-        'parameters': parameters,
-        'info': ''
-    }
-
-
 @get_time
 def do_invocations(url, body=None):
     if body is None:
@@ -405,25 +370,29 @@ def post_invocations(folder, response, quality):
             decode_to_image(response["image"]), quality)]
 
     if len(images) > 0:
-        loop = asyncio.get_event_loop()
-        tasks = [loop.create_task(async_upload(i, folder)) for i in images]
-        results = loop.run_until_complete(asyncio.gather(*tasks))
+        results = [upload_outputs(i, folder, None, 'png') for i in images]
 
     return results
 
 
-def upload_outputs(content, folder):
+def upload_outputs(object_bytes, folder, file_name=None, suffix=None):
     try:
-        defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
-        if not folder:
-            folder = defaultFolder
-        suffix = 'out'
-        content_type = f'application/json'
-        file_name = f"response-{uuid.uuid4()}"
+        if suffix == 'out':
+            content_type = f'application/json'
+            if file_name is None:
+                file_name = f"response-{uuid.uuid4()}"
+        else:
+            suffix = 'png'
+            content_type = f'image/{suffix}'
+            if file_name is None:
+                file_name = datetime.datetime.now().strftime(
+                    f"%Y%m%d%H%M%S-{uuid.uuid4()}")
 
         bucket = s3Res.Bucket(s3_bucket)
         bucket.put_object(
-            Body=content, Key=f'{folder}/{file_name}.{suffix}', ContentType=content_type)
+            Body=object_bytes, Key=f'{folder}/{file_name}.{suffix}', ContentType=content_type)
+
+        return f's3://{s3_bucket}/{folder}/{file_name}.{suffix}'
     except Exception as error:
         traceback.print_exc()
         raise error
@@ -487,6 +456,44 @@ def exclude_keys(dictionary, keys):
     return {key: dictionary[key] for key in key_set}
 
 
+# Customizable for success responses
+def succeed(images, response, header):
+    n_iter = response['parameters']['n_iter']
+    batch_size = response['parameters']['batch_size']
+    parameters = response['parameters']
+    parameters['id_task'] = header['id_task']
+    parameters['status'] = 1
+    parameters['image_url'] = ','.join(
+        images[: n_iter * batch_size])
+    parameters['image_seed'] = ','.join(
+        str(x) for x in json.loads(response['info'])['all_seeds'])
+    parameters['error_msg'] = ''
+    parameters['image_mask_url'] = ','.join(images[n_iter * batch_size:])
+    return {
+        'images': [''],
+        'parameters': parameters,
+        'info': ''
+    }
+
+
+# Customizable for failure responses
+def failed(header, exception):
+    parameters = {}
+    parameters['id_task'] = header['id_task']
+    parameters['status'] = 0
+    parameters['image_url'] = ''
+    parameters['image_seed'] = []
+    parameters['error_msg'] = repr(exception)
+    parameters['reason'] = exception.response.json() if hasattr(exception, "response") else None
+    parameters['image_mask_url'] = ''
+    return {
+        'images': [''],
+        'parameters': parameters,
+        'info': ''
+    }
+
+
+# Customizable for request payload
 def prepare_payload(body, header):
     try:
         urls = []
