@@ -6,7 +6,8 @@ updates:
       interval: "monthly"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch", "version-update:semver-minor"]
+      - dependency-name: "aws-cdk-lib"
     labels:
       - "kind/dependencies"
       - "component/cdk"
@@ -17,7 +18,7 @@ updates:
       interval: "monthly"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+        update-types: ["version-update:semver-patch", "version-update:semver-minor"]
     labels:
       - "kind/dependencies"
       - "component/queue-agent"
