@@ -238,7 +238,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="https://catalog.workshops.aws/" class="md-tabs__link">
+      <a href="https://catalog.us-east-1.prod.workshops.aws/workshops/a7b76c11-8837-4a40-b648-69d1ea4efce0/zh-CN" class="md-tabs__link">
         
   
     
@@ -1264,7 +1264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="https://catalog.workshops.aws/" class="md-nav__link">
+      <a href="https://catalog.us-east-1.prod.workshops.aws/workshops/a7b76c11-8837-4a40-b648-69d1ea4efce0/zh-CN" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1391,7 +1391,7 @@
 </table>
 <p>如您在未经验证的区域进行部署，可能需要进行以下处理，或面临以下问题：</p>
 <ul>
-<li>在不支持g5实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
+<li>在不支持<code>g5</code>实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
 <li>在部分区域部署时， EFS 的性能可能会受到影响，请参见 <a href="https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput">Amazon EFS文档</a> 以了解在不同区域的EFS读取性能。</li>
 </ul>
 <p><strong>在亚马逊云科技中国区域部署</strong></p>
@@ -1412,7 +1412,7 @@
 </table>
 <p>在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：</p>
 <ul>
-<li>中国区域不支持默认的g5实例类型。您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
+<li>中国区域不支持默认的<code>g5</code>实例类型。您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
 <li>中国区域不支持EventBridge Scheduler，故在首次运行或模型有更新时，您需要<strong>手工触发</strong>DataSync将模型从S3同步至EFS上，或直接将模型存储在EFS中。</li>
 </ul>
 <h2 id="iam">IAM 权限</h2>
@@ -1433,6 +1433,12 @@
 <tr>
 <td>Amazon EC2</td>
 <td><a href="https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-DB2E81BA">Running On-Demand G and VT instances</a></td>
+<td>按最大并发GPU实例数量</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon EC2</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-3819A6DF">All G and VT Spot Instance Requests</a></td>
 <td>按最大并发GPU实例数量</td>
 <td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
 </tr>
