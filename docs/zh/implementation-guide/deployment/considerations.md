@@ -14,7 +14,7 @@
 
 如您在未经验证的区域进行部署，可能需要进行以下处理，或面临以下问题：
 
-* 在不支持g5实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
+* 在不支持`g5`实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
 * 在部分区域部署时， EFS 的性能可能会受到影响，请参见 [Amazon EFS文档](https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput) 以了解在不同区域的EFS读取性能。
 
 **在亚马逊云科技中国区域部署**
@@ -27,7 +27,7 @@
 
 在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：
 
-* 中国区域不支持默认的g5实例类型。您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
+* 中国区域不支持默认的`g5`实例类型。您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
 * 中国区域不支持EventBridge Scheduler，故在首次运行或模型有更新时，您需要**手工触发**DataSync将模型从S3同步至EFS上，或直接将模型存储在EFS中。
 
 ## IAM 权限
@@ -43,6 +43,7 @@
 | AWS 服务 | 配额条目 | 预估使用量 | 是否可调整 |
 |---------|---------|-----------|-----------|
 | Amazon EC2  | [Running On-Demand G and VT instances](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-DB2E81BA) | 按最大并发GPU实例数量 | :material-check-bold:{ .icon_check }  |
+| Amazon EC2  | [All G and VT Spot Instance Requests](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-3819A6DF) | 按最大并发GPU实例数量 | :material-check-bold:{ .icon_check }  |
 | Amazon SNS  | [Messages Published per Second](https://console.aws.amazon.com/servicequotas/home/services/sns/quotas/L-F8E2BA85) | 按最大并发请求数 | :material-check-bold:{ .icon_check }  |
 
 除此之外，部署时需要考虑以下服务配额：
