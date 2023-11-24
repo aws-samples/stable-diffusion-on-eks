@@ -13,7 +13,7 @@ Stable Diffusion 是一个使用生成式AI技术生成图像的流行开源项�
 - 使用 GPU Spot 实例可节省高达 70% 的成本
 - 支持多种社区Stable Diffusion运行时
 
-!!! danger "免责声明"
+!!! abstract "免责声明"
     该解决方案仅为参考架构和示例代码，按照[MIT-0协议](https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/LICENSE)向您提供。
 
     该解决方案仅作为演示，概念验证（Proof of Concept）或学习用途，您不应将该解决方案直接用在您的生产账户中，或用于生产或其他关键数据。

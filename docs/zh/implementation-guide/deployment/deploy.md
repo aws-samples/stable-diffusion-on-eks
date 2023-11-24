@@ -23,7 +23,7 @@
 modelBucketArn: arn:aws:s3:::<bucket name>
 ```
 
-!!! danger "中国区域限制"
+!!! warning "中国区域"
 
     如您使用亚马逊云科技中国区域, 请确保ARN中的partition为`aws-cn`.
 

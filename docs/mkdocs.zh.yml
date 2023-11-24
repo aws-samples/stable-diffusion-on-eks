@@ -43,4 +43,4 @@ nav:
       - 源代码: implementation-guide/developer/source.md
       - API 定义: implementation-guide/developer/api-spec.md
     - 更新记录: implementation-guide/release-notes.md
-  - 动手实验: "https://catalog.workshops.aws/"
+  - 动手实验: "https://catalog.us-east-1.prod.workshops.aws/workshops/a7b76c11-8837-4a40-b648-69d1ea4efce0/zh-CN"
