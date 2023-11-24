@@ -22,7 +22,7 @@
   "dependencies": {
     "@aws-quickstart/eks-blueprints": "1.12.0",
     "@types/lodash": "^4.14.197",
-    "aws-cdk-lib": "2.99.1",
+    "aws-cdk-lib": "2.110.1",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21",
     "yaml": "^2.3.2"
