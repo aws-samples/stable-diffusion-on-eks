@@ -1,24 +1,24 @@
-# 图生图
+# Image-to-Image
 
-Stable Diffusion的基本用法，输入Prompt和参考图像，可以生成与参考图像类似的图像。
+The basic usage of Stable Diffusion involves providing a prompt and a reference image to generate an image similar to the reference.
 
-## 请求格式
+## Request Format
 
 ```json
 {
     "alwayson_scripts": {
-        // 必要，任务类型
+        // Required, task type
         "task": "image-to-image",
-        // 必要，输入图片的url
+        // Required, URL of the input image
         "image_link": "https://www.segmind.com/sd-img2img-input.jpeg",
-        // 必要，任务ID，在上传结果图片和返回响应时会用到
+        // Required, task ID, used for uploading result images and returning responses
         "id_task": "31311",
-        // 必要，基础模型名称，关联队列分发或模型切换
+        // Required, base model name, associated with queue distribution or model switching
         "sd_model_checkpoint": "revAnimated_v122.safetensors",
-        // 非必要，用户id
+        // Optional, user ID
         "uid": "456"
     },
-    // 以下皆为官方参数，使用默认值或者直接传入即可
+    // All following are official parameters, use default values or pass them directly
     "prompt": "A fantasy landscape, trending on artstation, mystical sky",
     "steps": 16,
     "width": 512,
@@ -26,7 +26,7 @@ Stable Diffusion的基本用法，输入Prompt和参考图像，可以生成与�
 }
 ```
 
-## 响应格式
+## Response Format
 
 ```json
 {
@@ -37,6 +37,6 @@ Stable Diffusion的基本用法，输入Prompt和参考图像，可以生成与�
 }
 ```
 
-## 图片获取
+## Image Retrieval
 
-在图像完成生成后，会存储到 `output_location` 所在的S3存储桶路径中。
+After the image is generated, it will be stored in the S3 bucket path specified by `output_location`.
