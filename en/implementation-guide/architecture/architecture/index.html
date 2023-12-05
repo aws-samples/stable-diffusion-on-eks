@@ -11,14 +11,18 @@
         <link rel="canonical" href="https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/architecture/architecture/">
       
       
+        <link rel="prev" href="../../solution-overview/cost/">
+      
+      
+        <link rel="next" href="../services-in-this-solution/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.12">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
     
     
       
-        <title>架构概览 - Stable Diffusion on Amazon EKS</title>
+        <title>Architecture overview - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -65,7 +69,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#architecture-overview" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              架构概览
+              Architecture overview
             
           </span>
         </div>
@@ -201,16 +205,20 @@
         
   
   
+    
+  
   
     
     
       
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../.." class="md-tabs__link">
           
   
@@ -230,7 +238,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="https://catalog.workshops.aws/" class="md-tabs__link">
+      <a href="https://catalog.us-east-1.prod.workshops.aws/workshops/a7b76c11-8837-4a40-b648-69d1ea4efce0/en-US" class="md-tabs__link">
         
   
     
@@ -291,6 +299,9 @@
       
   
   
+    
+  
+  
   
     
     
@@ -300,12 +311,12 @@
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
           <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
@@ -319,7 +330,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             Implementation Guide
@@ -328,6 +339,7 @@
             
               
                 
+  
   
   
   
@@ -367,12 +379,34 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../solution-overview/cost/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cost estimation
   </span>
   
 
@@ -390,6 +424,897 @@
 
               
             
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Architecture overview
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Architecture overview
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Diagram
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-scheduling-and-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task Scheduling and Distribution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stable-diffusion-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stable Diffusion Runtime
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stable Diffusion Runtime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-runtimes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Static Runtimes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-runtimes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic Runtimes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#management-and-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Management and Maintenance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-in-this-solution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Services in the solution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/considerations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan your deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    (Step 1) Model storage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    (Step 2) Image building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    (Step 3) EBS Snapshot
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    (Step 4) Deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    User Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/text-to-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Text to image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/image-to-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image to image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/controlnet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using ControlNet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/lora/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using LoRA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/callback/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Notification and callback
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operation Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            Operation Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operation/kubernetes-cluster/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubernetes cluster management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_6" id="__nav_1_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/monitoring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/logging/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Logging
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/tracing.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tracing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../uninstall/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Uninstallation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_9" id="__nav_1_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Developer
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            Developer
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/source/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Source code
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/api-spec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Spec
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release note
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -402,8 +1327,9 @@
   
   
   
+  
     <li class="md-nav__item">
-      <a href="https://catalog.workshops.aws/" class="md-nav__link">
+      <a href="https://catalog.us-east-1.prod.workshops.aws/workshops/a7b76c11-8837-4a40-b648-69d1ea4efce0/en-US" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -436,6 +1362,89 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Diagram
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-scheduling-and-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task Scheduling and Distribution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stable-diffusion-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stable Diffusion Runtime
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stable Diffusion Runtime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-runtimes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Static Runtimes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-runtimes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic Runtimes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#management-and-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Management and Maintenance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -452,10 +1461,27 @@
   
 
 
-<h1 id="_1">架构概览</h1>
-<p>[![arch]][arch]</p>
+<h1 id="architecture-overview">Architecture Overview</h1>
+<h2 id="architecture-diagram">Architecture Diagram</h2>
+<p><img alt="Architecture Diagram" src="../../../images/architecture-diagram.png" /></p>
+<h2 id="components">Components</h2>
+<p>This solution consists of three main components:</p>
 <ul>
-<li>Users send prompts to the application running on Amazon Fargate via Amazon CloudFront</li>
+<li>Serverless architecture-based task scheduling and distribution</li>
+<li>Stable Diffusion runtime based on Amazon EKS and Amazon EC2</li>
+<li>Management and maintenance components</li>
+</ul>
+<h3 id="task-scheduling-and-distribution">Task Scheduling and Distribution</h3>
+<p>This component includes an API endpoint based on Amazon API Gateway and a task distribution portion based on Amazon SNS and Amazon SQS.</p>
+<ul>
+<li>Users send requests (models, prompts, etc.) to the API endpoint provided by Amazon API Gateway.</li>
+<li>The request is validated by Amazon Lambda and delivered to the Amazon SNS topic.</li>
+<li>Amazon SNS delivers the request to the corresponding runtime's SQS queue based on the model used in the request.</li>
+</ul>
+<h3 id="stable-diffusion-runtime">Stable Diffusion Runtime</h3>
+<p>This component includes the Stable Diffusion runtime based on Amazon EKS, supporting elastic scaling based on requests.</p>
+<p>For each runtime:</p>
+<ul>
 <li>Application backend sends the prompt to Amazon API Gateway, Amazon Lambda validates the requests, and publishes to an Amazon SNS topic</li>
 <li>SNS publishes the message to Amazon SQS queues via matching subscription filters</li>
 <li>In Amazon EKS cluster, open source Kubernetes Event Driven Auto-Scaler (KEDA) scales up new pods based on the queue length</li>
@@ -464,7 +1490,23 @@
 <li>Queue Agent calls SD Runtime to generate images and save them to Amazon S3</li>
 <li>Queue Agent sends output to a SNS topic and the application backend receives notification from SQS queue</li>
 <li>Amazon CloudWatch, Amazon Distro for OpenTelemetry, and Amazon X-Ray collect metrics, logs, and traces to monitor guidance components</li>
-<li>Amazon IAM for security and resource access control, Amazon CDK for automated deployment of guidance components into AWS*</li>
+<li>Amazon IAM for security and resource access control, Amazon CDK for automated deployment of guidance components into AWS</li>
+</ul>
+<p>Depending on the model's nature, runtimes are categorized into static runtimes (pre-loaded models) and dynamic runtimes (on-demand loaded models).</p>
+<h4 id="static-runtimes">Static Runtimes</h4>
+<p>Static runtimes use models that need to be specified in advance and loaded into memory at startup. SNS only delivers requests using the specified model to the corresponding runtime.</p>
+<h4 id="dynamic-runtimes">Dynamic Runtimes</h4>
+<p>Dynamic runtimes do not require specifying models in advance. SNS delivers all requests without static runtimes to this runtime. The runtime loads the model from Amazon EFS and performs model inference based on the model used in the request.</p>
+<div class="admonition bug">
+<p class="admonition-title">Note</p>
+<p>In the current implementation, requests are randomly distributed to one of the replicas of dynamic runtimes. This routing strategy may lead to unnecessary model loading, resulting in longer image generation times.</p>
+</div>
+<h3 id="management-and-maintenance">Management and Maintenance</h3>
+<p>This solution provides comprehensive observability and management components:</p>
+<ul>
+<li>Numeric monitoring and logs based on CloudWatch</li>
+<li>End-to-end tracing based on AWS X-Ray</li>
+<li>Infrastructure as code deployment using AWS CDK</li>
 </ul>
 
 
@@ -502,7 +1544,7 @@
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.6c14ae12.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
       
     
   </body>
