@@ -1,7 +1,7 @@
-# 回调和通知
+# Callbacks and Notifications
 
-Stable Diffusion on Amazon EKS方案采用异步推理模式，当图片生成或报错后，会通过Amazon SNS通知用户。用户应用可以通过订阅SNS Topic以获取图片生成完成的通知。
+The Stable Diffusion on Amazon EKS solution operates in an asynchronous inference mode. When an image is generated or an error occurs, the user is notified through Amazon SNS. User applications can subscribe to the SNS Topic to receive notifications when image generation is complete.
 
-请参考SNS文档以了解SNS支持的后端种类。
+Refer to the SNS documentation to understand the types of backends supported by SNS.
 
-您可以在CloudFormation的输出中找到生成的SNS Topic
+You can find the generated SNS Topic in the CloudFormation output.

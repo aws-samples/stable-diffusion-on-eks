@@ -1,4 +1,4 @@
-访问我们的 [GitHub 仓库][source] 来下载这个解决方案的源代码。该解决方案模板是使用 [AWS Cloud Development Kit (CDK)][cdk] 生成的。请参考 [README.md][readme] 文件获取更多信息。
+Visit our [GitHub repository][source] to download the source code for this solution. The solution template is generated using the [AWS Cloud Development Kit (CDK)][cdk]. Refer to the [README.md][readme] file for more information.
 
 [source]: https://github.com/aws-samples/stable-diffusion-on-eks
 [cdk]: http://aws.amazon.com/cdk/

@@ -1,12 +1,11 @@
-# 费用预估
+# Cost Estimation
 
-!!! Important "重要"
+!!! Important "Important"
 
-    本节中描述的成本估算只是示例，可能会因您的环境而异。
+    The cost estimation described in this section is only an example and may vary depending on your environment.
 
+You will incur costs for using various Amazon Web Services when running the solution. The main factors affecting the cost of the solution include:
 
-您需要承担运行解决方案时使用亚马逊云科技各个服务的成本费用。影响解决方案成本的主要因素包括：
-
-- 选择的实例类型和购买方式
-- 生成的图片量
-- 弹性伸缩配置
+- Instance types and purchasing options chosen
+- Volume of generated images
+- Elastic scaling configurations
