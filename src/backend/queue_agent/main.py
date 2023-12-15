@@ -520,7 +520,7 @@ def prepare_payload(body, header):
             if offset > 0:
                 init_images = [encode_to_base64(x) for x in results[:offset]]
                 # extra_single_image request, only one original image is expected
-                if 'upscaler_1' in header:
+                if 'upscaler_1' in body:
                     body.update({"image": init_images[0]})
                 # img to img request
                 else:
