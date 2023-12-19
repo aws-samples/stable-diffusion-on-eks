@@ -470,7 +470,9 @@ def succeed(images, response, header):
             "n_iter": 1,
             "batch_size": 1
         }
-        response['info']['all_seeds'] = [1]
+        response['info']={
+            "all_seeds": [1]
+        }
 
     n_iter = response['parameters']['n_iter']
     batch_size = response['parameters']['batch_size']
