@@ -463,6 +463,15 @@ def exclude_keys(dictionary, keys):
 
 # Customizable for success responses
 def succeed(images, response, header):
+
+    # extra-single-image
+    if not 'parameters' in response:
+        response['parameters'] = {
+            "n_iter": 1,
+            "batch_size": 1
+        }
+        response['info']['all_seeds'] = [1]
+
     n_iter = response['parameters']['n_iter']
     batch_size = response['parameters']['batch_size']
     parameters = response['parameters']
