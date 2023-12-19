@@ -117,6 +117,8 @@ def main():
                         r = invoke_txt2img(payload, taskHeader)
                     elif taskType == 'image-to-image':
                         r = invoke_img2img(payload, taskHeader)
+                    elif taskType == 'extra-single-image':
+                        r = invoke_extra_single_img(payload, taskHeader)
                     else:
                         raise RuntimeError(
                             f'Unsupported task type: {taskType}')
@@ -287,6 +289,9 @@ def invoke_txt2img(body, header):
 def invoke_img2img(body, header):
     return do_invocations(apiBaseUrl+"img2img", prepare_payload(body, header))
 
+@xray_recorder.capture('extra-single-image')
+def invoke_extra_single_img(body, header):
+    return do_invocations(apiBaseUrl+"extra-single-image", prepare_payload(body, header))
 
 def invoke_set_options(options):
     return do_invocations(apiBaseUrl+"options", options)
@@ -458,6 +463,15 @@ def exclude_keys(dictionary, keys):
 
 # Customizable for success responses
 def succeed(images, response, header):
+
+    # extra-single-image
+    if not 'parameters' in response:
+        response['parameters'] = {
+            "n_iter": 1,
+            "batch_size": 1
+        }
+        response['info'] = """{"all_seeds": [1]}"""
+
     n_iter = response['parameters']['n_iter']
     batch_size = response['parameters']['batch_size']
     parameters = response['parameters']
@@ -514,7 +528,12 @@ def prepare_payload(body, header):
             results = loop.run_until_complete(asyncio.gather(*tasks))
             if offset > 0:
                 init_images = [encode_to_base64(x) for x in results[:offset]]
-                body.update({"init_images": init_images})
+                # extra_single_image request, only one original image is expected
+                if 'upscaler_1' in body:
+                    body.update({"image": init_images[0]})
+                # img to img request
+                else:
+                    body.update({"init_images": init_images})
 
             if 'controlnet' in header:
                 for x in header['controlnet']['args']:
