@@ -17,14 +17,14 @@ You can find the command to connect to the EKS cluster from the CloudFormation o
     * In the list, select **SdOnEKSStack** (or your custom name)
     * Choose **Output**
     * Record the value of the **ConfigCommand** item
-    * Execute that command in your terminal.
+    * Run that command in your terminal.
 
 === "AWS CLI"
 
     Run the following command to retrieve the command:
 
     ```bash
-    aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`sdNotificationOutputArn`].OutputValue'
+    aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`ConfigCommand`].OutputValue'
     ```
 
-    Execute that command in your terminal.
+    Run that command in your terminal.

@@ -24,7 +24,7 @@
     运行以下命令以获取该命令：
 
     ```bash
-    aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`sdNotificationOutputArn`].OutputValue'
+    aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`ConfigCommand`].OutputValue'
     ```
 
     在终端中执行该命令。
