@@ -92,37 +92,38 @@ export class S3SyncEFSAddOn implements ClusterAddOn {
         verifyMode: "ONLY_FILES_TRANSFERRED"
       }
     })
-    if (cdk.Aws.PARTITION == "aws") {
-    const schedulerRole = new iam.Role(cluster.stack, "SchedulerRole", {
-      assumedBy: new iam.ServicePrincipal("scheduler.amazonaws.com"),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName("AWSDataSyncFullAccess")
-      ]
-    })
 
-    const dataSyncScheduler = new cdk.CfnResource(cluster.stack, "dataSyncScheduler", {
-      type: "AWS::Scheduler::Schedule",
-      properties: {
-        Name: "dataSyncScheduler",
-        Description: "",
-        State: "ENABLED",
-        GroupName: "default",
-        ScheduleExpression: "rate(1 minutes)",
-        FlexibleTimeWindow: {
-          Mode: "OFF"
-        },
-        Target: {
-          Arn: "arn:aws:scheduler:::aws-sdk:datasync:startTaskExecution",
-          Input: JSON.stringify({
-            TaskArn: dataSyncTask.attrTaskArn
-          }),
-          RoleArn: schedulerRole.roleArn
+    if (cdk.Aws.PARTITION != "aws-cn") {
+      const schedulerRole = new iam.Role(cluster.stack, "SchedulerRole", {
+        assumedBy: new iam.ServicePrincipal("scheduler.amazonaws.com"),
+        managedPolicies: [
+          iam.ManagedPolicy.fromAwsManagedPolicyName("AWSDataSyncFullAccess")
+        ]
+      })
+
+      const dataSyncScheduler = new cdk.CfnResource(cluster.stack, "dataSyncScheduler", {
+        type: "AWS::Scheduler::Schedule",
+        properties: {
+          Name: "dataSyncScheduler",
+          Description: "",
+          State: "ENABLED",
+          GroupName: "default",
+          ScheduleExpression: "rate(1 minutes)",
+          FlexibleTimeWindow: {
+            Mode: "OFF"
+          },
+          Target: {
+            Arn: "arn:aws:scheduler:::aws-sdk:datasync:startTaskExecution",
+            Input: JSON.stringify({
+              TaskArn: dataSyncTask.attrTaskArn
+            }),
+            RoleArn: schedulerRole.roleArn
+          }
         }
-      }
-    })
-    return Promise.resolve(dataSyncScheduler);
-  } else {
-    return Promise.resolve(dataSyncTask);
-  }
+      })
+      return Promise.resolve(dataSyncScheduler);
+    } else {
+      return Promise.resolve(dataSyncTask);
+    }
   }
 }
