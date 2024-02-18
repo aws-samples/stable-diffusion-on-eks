@@ -59,7 +59,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
   @blueprints.utils.dependable(blueprints.KarpenterAddOn.name)
   @blueprints.utils.dependable("SharedComponentAddOn")
-  @blueprints.utils.dependable("nvidiaDevicePluginAddon")
+//  @blueprints.utils.dependable("nvidiaDevicePluginAddon")
 
   deploy(clusterInfo: blueprints.ClusterInfo): Promise<Construct> {
     const cluster = clusterInfo.cluster
