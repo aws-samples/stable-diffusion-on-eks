@@ -9,7 +9,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as efs from 'aws-cdk-lib/aws-efs';
 import SDRuntimeAddon, { SDRuntimeAddOnProps } from './runtime/sdRuntime';
 import { EbsThroughputTunerAddOn, EbsThroughputTunerAddOnProps } from './addons/ebsThroughputTuner'
-// import nvidiaDevicePluginAddon from './addons/nvidiaDevicePlugin'
+import nvidiaDevicePluginAddon from './addons/nvidiaDevicePlugin'
 import { S3SyncEFSAddOnProps, S3SyncEFSAddOn } from './addons/s3SyncEFS'
 import { SharedComponentAddOn, SharedComponentAddOnProps } from './addons/sharedComponent';
 import { SNSResourceProvider } from './resourceProvider/sns'
@@ -57,7 +57,7 @@ export default class DataPlaneStack {
       irsaRoles: ["CloudWatchFullAccess", "AmazonSQSFullAccess"]
     };
 
-/*     const CloudWatchLogsWritePolicy = new iam.PolicyStatement({
+    const CloudWatchLogsWritePolicy = new iam.PolicyStatement({
       actions: [
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
@@ -87,8 +87,8 @@ export default class DataPlaneStack {
       },
       createNamespace: true
     }
- */
-/*     const containerInsightsParams: blueprints.ContainerInsightAddonProps = {
+
+    const containerInsightsParams: blueprints.ContainerInsightAddonProps = {
       values: {
         adotCollector: {
           daemonSet: {
@@ -108,7 +108,7 @@ export default class DataPlaneStack {
           }
         }
       }
-    } */
+    }
 
     const SharedComponentAddOnParams: SharedComponentAddOnProps = {
       modelstorageEfs: blueprints.getNamedResource("efs-model-storage"),
@@ -137,16 +137,9 @@ export default class DataPlaneStack {
       new blueprints.addons.EfsCsiDriverAddOn(),
       new blueprints.addons.KarpenterAddOn({ interruptionHandling: true }),
       new blueprints.addons.KedaAddOn(kedaParams),
-      new blueprints.addons.CloudWatchInsights(),
-      new blueprints.addons.GpuOperatorAddon({
-        values: {
-          driver: {
-            enabled: false
-          }
-        }
-      }),
-//      new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
-//      new nvidiaDevicePluginAddon({}),
+      new blueprints.addons.ContainerInsightsAddOn(containerInsightsParams),
+      new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
+      new nvidiaDevicePluginAddon({}),
       new SharedComponentAddOn(SharedComponentAddOnParams),
       new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams),
       new S3SyncEFSAddOn(s3SyncEFSAddOnParams)
@@ -197,7 +190,7 @@ const MngProps: blueprints.MngClusterProviderProps = {
   minSize: 2,
   maxSize: 2,
   desiredSize: 2,
-  version: eks.KubernetesVersion.V1_28,
+  version: eks.KubernetesVersion.V1_27,
   instanceTypes: [new ec2.InstanceType('m5.large')],
   amiType: eks.NodegroupAmiType.AL2_X86_64,
   enableSsmPermissions: true,
@@ -209,7 +202,7 @@ const MngProps: blueprints.MngClusterProviderProps = {
 
 // Deploy EKS cluster with all add-ons
 const blueprint = blueprints.EksBlueprint.builder()
-  .version(eks.KubernetesVersion.V1_28)
+  .version(eks.KubernetesVersion.V1_27)
   .addOns(...addOns)
   .resourceProvider(
     blueprints.GlobalResources.Vpc,
