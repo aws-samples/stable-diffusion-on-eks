@@ -14,7 +14,7 @@ modelsRuntime:
         capacityType:
           onDemand: true
           spot: true
-    sdWebuiInferenceApi:
+    runtime:
       scaling:
         queueLength: 20 # Target value for queue length. One new instance will be launched when queue launch reaches the value.
         minReplicaCount: 1 # Minimum number of replicas of SD Runtime.
@@ -32,7 +32,7 @@ dynamicModelRuntime:
         capacityType:
           onDemand: true
           spot: true
-    sdWebuiInferenceApi:
+    runtime:
       scaling:
         queueLength: 20 # Target value for queue length. One new instance will be launched when queue launch reaches the value.
         minReplicaCount: 1 # Minimum number of replicas of SD Runtime.

@@ -7,7 +7,7 @@ modelsRuntime:
   chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
   chartVersion: "0.1.0"
   extraValues:
-    karpenter: 
+    karpenter:
       provisioner:
         instanceType:
         - "g5.xlarge"
@@ -23,7 +23,7 @@ modelsRuntime:
           iops: 4000
           throughput: 1000
           snapshotID: snap-0c31434acc0a8a558
-    sdWebuiInferenceApi:
+    runtime:
       scaling:
         maxReplicaCount: 2
       inferenceApi:
@@ -53,7 +53,7 @@ modelsRuntime:
           iops: 4000
           throughput: 1000
           snapshotID: snap-0c31434acc0a8a558
-    sdWebuiInferenceApi:
+    runtime:
       scaling:
         maxReplicaCount: 2
       inferenceApi:
@@ -82,7 +82,7 @@ dynamicModelRuntime:
           iops: 4000
           throughput: 1000
           snapshotID: snap-0c31434acc0a8a558
-    sdWebuiInferenceApi:
+    runtime:
       scaling:
         maxReplicaCount: 2
         minReplicaCount: 1

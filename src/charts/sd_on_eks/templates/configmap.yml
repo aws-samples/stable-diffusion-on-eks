@@ -1,24 +1,24 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "sdchart.fullname" . }}-sd-webui-config
+  name: {{ include "sdchart.fullname" . }}-config
   namespace: {{ .Release.Namespace }}
   labels:
   {{- include "sdchart.labels" . | nindent 4 }}
-  {{- if .Values.sdWebuiInferenceApi.labels }}
-  {{- toYaml .Values.sdWebuiInferenceApi.labels | nindent 4 }}
+  {{- if .Values.runtime.labels }}
+  {{- toYaml .Values.runtime.labels | nindent 4 }}
   {{- end }}
 
-  {{- if .Values.sdWebuiInferenceApi.annotations }}
+  {{- if .Values.runtime.annotations }}
   annotations:
-  {{ toYaml .Values.sdWebuiInferenceApi.annotations | nindent 4 }}
+  {{ toYaml .Values.runtime.annotations | nindent 4 }}
   {{- end }}
 data:
   AWS_DEFAULT_REGION: {{ quote .Values.global.awsRegion }}
-  SQS_QUEUE_URL: {{ quote .Values.sdWebuiInferenceApi.queueAgent.sqsQueueUrl }}
-  S3_BUCKET: {{ quote .Values.sdWebuiInferenceApi.queueAgent.s3Bucket }}
-  SNS_TOPIC_ARN: {{ quote .Values.sdWebuiInferenceApi.queueAgent.snsTopicArn }}
-  SD_MODEL_CHECKPOINT: {{ quote .Values.sdWebuiInferenceApi.inferenceApi.modelFilename }}
-  {{- if .Values.sdWebuiInferenceApi.queueAgent.dynamicModel }}
+  SQS_QUEUE_URL: {{ quote .Values.runtime.queueAgent.sqsQueueUrl }}
+  S3_BUCKET: {{ quote .Values.runtime.queueAgent.s3Bucket }}
+  SNS_TOPIC_ARN: {{ quote .Values.runtime.queueAgent.snsTopicArn }}
+  SD_MODEL_CHECKPOINT: {{ quote .Values.runtime.inferenceApi.modelFilename }}
+  {{- if .Values.runtime.queueAgent.dynamicModel }}
   DYNAMIC_SD_MODEL: "true"
   {{- end }}

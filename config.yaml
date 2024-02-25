@@ -21,10 +21,11 @@ modelsRuntime:
       provisioner:
         instanceType:
         - "g5.xlarge" # List of allowed instance type for Karpenter provisioning.
+        - "g5.2xlarge"
         capacityType: # Allowed purchase mode for instances
           onDemand: true
           spot: false
-    sdWebuiInferenceApi:
+    runtime:
 #      inferenceApi:
 #        image:
 #          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/inference-api # Image Repository of stable diffusion runtime.
@@ -65,7 +66,7 @@ dynamicModelRuntime:
         capacityType: # Allowed purchase mode for instances
           onDemand: true
           spot: false
-    sdWebuiInferenceApi:
+    runtime:
 #      inferenceApi:
 #        image:
 #          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/inference-api # Image Repository of stable diffusion runtime.

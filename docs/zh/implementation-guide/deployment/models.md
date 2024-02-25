@@ -45,7 +45,7 @@
     * 选择上一步创建的存储桶，并进入所需的文件夹。
     * 如果是首次上传：
         * 选择 **Create Folder**（创建文件夹）
-        * 在 **Folder Name**（文件夹名称）中，输入 *models*
+        * 在 **Folder Name**（文件夹名称）中，输入 *stable-diffusion*
         * 选择 **Create folder**（创建文件夹）
         * 重复以上操作，直到文件夹符合以上目录结构。
     * 选择 **Upload**（上传）
