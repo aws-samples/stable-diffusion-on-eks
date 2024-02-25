@@ -20,6 +20,11 @@ spec:
     matchLabels:
       app: inference-api
     {{- include "sdchart.selectorLabels" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
