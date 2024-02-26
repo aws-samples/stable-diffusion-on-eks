@@ -4,8 +4,8 @@ metadata:
   name: {{ include "sdchart.fullname" . }}-nodetemplate-gpu
   labels:
   {{- include "sdchart.labels" . | nindent 4 }}
-  {{- if .Values.sdWebuiInferenceApi.labels }}
-  {{- toYaml .Values.sdWebuiInferenceApi.labels | nindent 4 }}
+  {{- if .Values.runtime.labels }}
+  {{- toYaml .Values.runtime.labels | nindent 4 }}
   {{- end }}
 spec:
   metadataOptions:

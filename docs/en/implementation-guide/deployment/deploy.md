@@ -37,7 +37,7 @@ modelsRuntime:
   modelFilename: "v1-5-pruned-emaonly.safetensors" # Model for this runtime, request will be routed by model filename.
   type: "SDWebUI" # Specify type of runtime. Different type of runtime represents different API Spec.
   extraValues:
-    sdWebuiInferenceApi:
+    runtime:
       inferenceApi:
         image:
           repository: sdoneks/inference-api # Image repository of your runtime

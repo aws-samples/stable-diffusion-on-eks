@@ -52,39 +52,39 @@ Stable diffusion 运行时通过Helm Chart进行部署。您可以通过 `models
 | `karpenter.nodeTemplate.osVolume` | Control the Elastic Block Storage (EBS) volumes that Karpenter attaches to provisioned nodes. See [this](https://karpenter.sh/docs/concepts/node-templates/#specblockdevicemappings) for schema. This volume will be attached to `/dev/xvda`. |  |
 | `karpenter.nodeTemplate.dataVolume` | Control the Elastic Block Storage (EBS) volumes that Karpenter attaches to provisioned nodes. See [this](https://karpenter.sh/docs/concepts/node-templates/#specblockdevicemappings) for schema. This volume will be attached to `/dev/xvdb`. Required when using `Bottlerocket`. |  |
 | `karpenter.nodeTemplate.userData` | UserData that is applied to your worker nodes. See [the examples here](https://github.com/aws/karpenter/tree/main/examples/provisioner/launchtemplates) for format. | `""` |
-| **sdWebuiInferenceApi** | | |
-| `sdWebuiInferenceApi.labels` | Labels applied to all resources. Should be in key-values format. | `""` |
-| `sdWebuiInferenceApi.annotations` | Annotations applied to stable diffusion runtime. Should be in key-values format. | `""` |
-| `sdWebuiInferenceApi.serviceAccountName` | Name of service account used by runtime. Not changable. | Populated by CDK |
-| `sdWebuiInferenceApi.replicas` | Replica count of runtime. | `1` |
-| `sdWebuiInferenceApi.scaling.enabled` | Enable auto scaling by SQS length.  | `true` |
-| `sdWebuiInferenceApi.scaling.queueLength` | Target value for queue length. KEDA will scale pod to `ApproximateNumberOfMessage / queueLength` replicas.  | `10` |
-| `sdWebuiInferenceApi.scaling.cooldownPeriod` | The period (in seconds) to wait after the last trigger reported active before scaling the resource back to `minReplicaCount`.  | `60` |
-| `sdWebuiInferenceApi.scaling.maxReplicaCount` | This setting is passed to the HPA definition that KEDA will create for a given resource and holds the maximum number of replicas of the target resource. | `20` |
-| `sdWebuiInferenceApi.scaling.minReplicaCount` | Minimum number of replicas KEDA will scale the resource down to.  | `0` |
-| `sdWebuiInferenceApi.scaling.pollingInterval` | Interval (in seconds) to check each trigger on.  | `1` |
-| `sdWebuiInferenceApi.scaling.scaleOnInFlight` | When set to `true`, not visible (in-flight) messages will be counted in `ApproximateNumberOfMessage` | `false` |
-| `sdWebuiInferenceApi.scaling.extraHPAConfig` | KEDA would feed values from this section directly to the HPA’s `behavior` field. Follow [Kubernetes documentation](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior) for details. | `{}` |
+| **runtime** | | |
+| `runtime.labels` | Labels applied to all resources. Should be in key-values format. | `""` |
+| `runtime.annotations` | Annotations applied to stable diffusion runtime. Should be in key-values format. | `""` |
+| `runtime.serviceAccountName` | Name of service account used by runtime. Not changable. | Populated by CDK |
+| `runtime.replicas` | Replica count of runtime. | `1` |
+| `runtime.scaling.enabled` | Enable auto scaling by SQS length.  | `true` |
+| `runtime.scaling.queueLength` | Target value for queue length. KEDA will scale pod to `ApproximateNumberOfMessage / queueLength` replicas.  | `10` |
+| `runtime.scaling.cooldownPeriod` | The period (in seconds) to wait after the last trigger reported active before scaling the resource back to `minReplicaCount`.  | `60` |
+| `runtime.scaling.maxReplicaCount` | This setting is passed to the HPA definition that KEDA will create for a given resource and holds the maximum number of replicas of the target resource. | `20` |
+| `runtime.scaling.minReplicaCount` | Minimum number of replicas KEDA will scale the resource down to.  | `0` |
+| `runtime.scaling.pollingInterval` | Interval (in seconds) to check each trigger on.  | `1` |
+| `runtime.scaling.scaleOnInFlight` | When set to `true`, not visible (in-flight) messages will be counted in `ApproximateNumberOfMessage` | `false` |
+| `runtime.scaling.extraHPAConfig` | KEDA would feed values from this section directly to the HPA’s `behavior` field. Follow [Kubernetes documentation](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior) for details. | `{}` |
 | **Stable Diffusion Runtime** | | |
-| `sdWebuiInferenceApi.inferenceApi.image.repository` | Image Repository of Runtime.  | `sdoneks/inference-api` |
-| `sdWebuiInferenceApi.inferenceApi.image.tag` | Image tag of Runtime.  | `latest` |
-| `sdWebuiInferenceApi.inferenceApi.modelFilename` | Model filename of Runtime. Not changable. | Populated by CDK |
-| `sdWebuiInferenceApi.inferenceApi.extraEnv` | Extra environment variable for Runtime. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
-| `sdWebuiInferenceApi.inferenceApi.resources` | Resource request and limit for Runtime. |  |
+| `runtime.inferenceApi.image.repository` | Image Repository of Runtime.  | `sdoneks/inference-api` |
+| `runtime.inferenceApi.image.tag` | Image tag of Runtime.  | `latest` |
+| `runtime.inferenceApi.modelFilename` | Model filename of Runtime. Not changable. | Populated by CDK |
+| `runtime.inferenceApi.extraEnv` | Extra environment variable for Runtime. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
+| `runtime.inferenceApi.resources` | Resource request and limit for Runtime. |  |
 | **Queue Agent** | | |
-| `sdWebuiInferenceApi.queueAgent.image.repository` | Image Repository of queue agent.  | `sdoneks/queue-agent` |
-| `sdWebuiInferenceApi.queueAgent.image.tag` | Image tag of queue agent.  | `latest` |
-| `sdWebuiInferenceApi.queueAgent.extraEnv` | Extra environment variable for queue agent. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
-| `sdWebuiInferenceApi.queueAgent.dynamicModel` | Enable model switch by request. Not changable. | Populated by CDK |
-| `sdWebuiInferenceApi.queueAgent.s3Bucket` | S3 bucket for generated image. Not changable. | Populated by CDK |
-| `sdWebuiInferenceApi.queueAgent.snsTopicArn` | SNS topic for image generate complete notification. Not changable. | Populated by CDK |
-| `sdWebuiInferenceApi.queueAgent.sqsQueueUrl` | SQS queue URL of job queue. Not changable. | Populated by CDK |
-| `sdWebuiInferenceApi.queueAgent.resources` | Resource request and limit for queue agent. | |
-| `sdWebuiInferenceApi.queueAgent.XRay.enabled` | Enable X-ray tracing agent for queue agent. | `true` |
+| `runtime.queueAgent.image.repository` | Image Repository of queue agent.  | `sdoneks/queue-agent` |
+| `runtime.queueAgent.image.tag` | Image tag of queue agent.  | `latest` |
+| `runtime.queueAgent.extraEnv` | Extra environment variable for queue agent. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
+| `runtime.queueAgent.dynamicModel` | Enable model switch by request. Not changable. | Populated by CDK |
+| `runtime.queueAgent.s3Bucket` | S3 bucket for generated image. Not changable. | Populated by CDK |
+| `runtime.queueAgent.snsTopicArn` | SNS topic for image generate complete notification. Not changable. | Populated by CDK |
+| `runtime.queueAgent.sqsQueueUrl` | SQS queue URL of job queue. Not changable. | Populated by CDK |
+| `runtime.queueAgent.resources` | Resource request and limit for queue agent. | |
+| `runtime.queueAgent.XRay.enabled` | Enable X-ray tracing agent for queue agent. | `true` |
 | **Persistence** | | |
-| `sdWebuiInferenceApi.persistence.enabled` | Enable presistence of model stroage. | `true` |
-| `sdWebuiInferenceApi.persistence.labels` | Labels applied to presistence volume. Should be in key-values format. | `{}` |
-| `sdWebuiInferenceApi.persistence.annotations` | Annotations applied to presistence volume. Should be in key-values format. | `{}` |
-| `sdWebuiInferenceApi.persistence.storageClass` | Storage class for model storage | `efs-model-storage-sc` |
-| `sdWebuiInferenceApi.persistence.size` | Size of persistence volume. | `2Ti` |
-| `sdWebuiInferenceApi.persistence.accessModes` | Access mode of persistence volume. | `ReadWriteMany` |
+| `runtime.persistence.enabled` | Enable presistence of model stroage. | `true` |
+| `runtime.persistence.labels` | Labels applied to presistence volume. Should be in key-values format. | `{}` |
+| `runtime.persistence.annotations` | Annotations applied to presistence volume. Should be in key-values format. | `{}` |
+| `runtime.persistence.storageClass` | Storage class for model storage | `efs-model-storage-sc` |
+| `runtime.persistence.size` | Size of persistence volume. | `2Ti` |
+| `runtime.persistence.accessModes` | Access mode of persistence volume. | `ReadWriteMany` |

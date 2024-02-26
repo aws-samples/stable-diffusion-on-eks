@@ -1,4 +1,4 @@
-{{- if .Values.sdWebuiInferenceApi.scaling.enabled }}
+{{- if .Values.runtime.scaling.enabled }}
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -6,30 +6,30 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
   {{- include "sdchart.labels" . | nindent 4 }}
-  {{- if .Values.sdWebuiInferenceApi.labels }}
-  {{- toYaml .Values.sdWebuiInferenceApi.labels | nindent 4 }}
+  {{- if .Values.runtime.labels }}
+  {{- toYaml .Values.runtime.labels | nindent 4 }}
   {{- end }}
 spec:
-  cooldownPeriod: {{ .Values.sdWebuiInferenceApi.scaling.cooldownPeriod }}
-  maxReplicaCount: {{ .Values.sdWebuiInferenceApi.scaling.maxReplicaCount }}
-  minReplicaCount: {{ .Values.sdWebuiInferenceApi.scaling.minReplicaCount }}
-  pollingInterval: {{ .Values.sdWebuiInferenceApi.scaling.pollingInterval }}
-  scaleOnInFlight: {{ .Values.sdWebuiInferenceApi.scaling.scaleOnInFlight }}
-  {{- if .Values.sdWebuiInferenceApi.scaling.extraHPAConfig }}
+  cooldownPeriod: {{ .Values.runtime.scaling.cooldownPeriod }}
+  maxReplicaCount: {{ .Values.runtime.scaling.maxReplicaCount }}
+  minReplicaCount: {{ .Values.runtime.scaling.minReplicaCount }}
+  pollingInterval: {{ .Values.runtime.scaling.pollingInterval }}
+  scaleOnInFlight: {{ .Values.runtime.scaling.scaleOnInFlight }}
+  {{- if .Values.runtime.scaling.extraHPAConfig }}
   advanced:
     horizontalPodAutoscalerConfig:
       behavior:
-      {{- toYaml .Values.sdWebuiInferenceApi.extraHPAConfig | nindent 8 }}
+      {{- toYaml .Values.runtime.extraHPAConfig | nindent 8 }}
   {{- end }}
   scaleTargetRef:
-    name: {{ include "sdchart.fullname" . }}-sd-webui-inference-api
+    name: {{ include "sdchart.fullname" . }}-inference-api
   triggers:
   - authenticationRef:
       name: {{ include "sdchart.fullname" . }}-keda-trigger-auth-aws-credentials
     metadata:
       awsRegion: {{ .Values.global.awsRegion }}
       identityOwner: operator
-      queueLength: {{ quote .Values.sdWebuiInferenceApi.scaling.queueLength }}
-      queueURL: {{ .Values.sdWebuiInferenceApi.queueAgent.sqsQueueUrl }}
+      queueLength: {{ quote .Values.runtime.scaling.queueLength }}
+      queueURL: {{ .Values.runtime.queueAgent.sqsQueueUrl }}
     type: aws-sqs-queue
 {{- end }}

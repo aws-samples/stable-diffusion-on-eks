@@ -80,6 +80,18 @@
 
 您需要充分了解并遵守您所使用的 Stable Diffusion 运行时的许可证条款。
 
+!!! info "运行时支持"
+    在现阶段，该解决方案只支持Stable Diffusion Web UI的API规范。
+
+    如您选择其他运行时，您需要修改[Queue Agent的源代码](https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/src/backend/queue_agent/main.py)以适配其他运行时的API地址和语法。
+
+    如您自行构建运行时，请确保运行时的API规范符合[Stable Diffusion Web UI的API规范](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API)。
+
+    默认情况下，该解决方案会将模型加载至`/tmp/models`目录，请确保您的运行时被配置成从该目录读取模型。
+
+!!! example "示例运行时"
+    您可以使用社区提供的[示例 Dockerfile](https://github.com/yubingjiaocn/stable-diffusion-webui-docker) 构建 *Stable Diffusion Web UI* 的运行时容器镜像。请注意，该镜像仅用于技术评估和测试用途，请勿将该镜像部署至生产环境。
+
 ## 其他重要提示和限制
 
 - 一个区域中只能有一个活动的Stable Diffusion on Amazon EKS解决方案堆栈。如果您的部署失败，请确保在重试部署之前已删除失败的堆栈。
@@ -91,6 +103,6 @@
     - 1个Internet网关
     - 对应的路由表和安全组
 
-    目前该VPC的参数无法自定义。后续版本会允许您在现有VPC内部署。
+    目前该VPC的参数无法自定义。
 
-- 在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为`1.27`。我们会随着Amazon EKS版本发布更新集群版本。解决方案的后续版本会允许您在现有EKS集群内部署。
+- 在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为`1.27`。我们会随着Amazon EKS版本发布更新集群版本。

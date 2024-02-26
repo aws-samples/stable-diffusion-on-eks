@@ -58,7 +58,7 @@ modelsRuntime:
   chartRepository: "" # 可选参数，如您构建了Helm Chart，则需要填入Chart所在的地址。需要包含协议前缀 (oci:// 或 https:// )
   chartVersion: "" # 可选参数，如您构建了Helm Chart，则需要填入Chart的版本
   extraValues: # 添加以下内容
-    sdWebuiInferenceApi:
+    runtime:
       inferenceApi:
         image:
           repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/inference-api # Stable Diffusion 运行时镜像的地址.

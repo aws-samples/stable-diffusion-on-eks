@@ -30,7 +30,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   name: 'sdRuntimeAddOn',
   namespace: 'sdruntime',
   release: 'sdruntime',
-  version: '0.1.0',
+  version: '0.1.1',
   repository: 'https://aws-samples.github.io/stable-diffusion-on-eks/charts',
   values: {
     global: {
@@ -75,8 +75,8 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
     const ns = createNamespace(this.id+"-"+this.props.namespace+"-namespace-struct", this.props.namespace, cluster, true)
 
-    const webUISA = cluster.addServiceAccount('WebUISA' + this.id, { namespace: this.props.namespace });
-    webUISA.node.addDependency(ns)
+    const runtimeSA = cluster.addServiceAccount('runtimeSA' + this.id, { namespace: this.props.namespace });
+    runtimeSA.node.addDependency(ns)
 
     if (this.options.chartRepository) {
       this.props.repository = this.options.chartRepository
@@ -90,17 +90,17 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       bucketArn: this.options.ModelBucketArn!
     });
 
-    modelBucket.grantRead(webUISA);
+    modelBucket.grantRead(runtimeSA);
 
     const inputQueue = new sqs.Queue(cluster.stack, 'InputQueue' + this.id);
-    inputQueue.grantConsumeMessages(webUISA);
+    inputQueue.grantConsumeMessages(runtimeSA);
 
 
-    this.options.outputBucket!.grantWrite(webUISA);
-    this.options.outputBucket!.grantPutAcl(webUISA);
-    this.options.outputSns!.grantPublish(webUISA);
+    this.options.outputBucket!.grantWrite(runtimeSA);
+    this.options.outputBucket!.grantPutAcl(runtimeSA);
+    this.options.outputSns!.grantPublish(runtimeSA);
 
-    webUISA.role.addManagedPolicy(
+    runtimeSA.role.addManagedPolicy(
       iam.ManagedPolicy.fromAwsManagedPolicyName(
         'AWSXRayDaemonWriteAccess',
       ))
@@ -152,8 +152,8 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     pvc.node.addDependency(ns)
 
     var generatedValues = {
-      sdWebuiInferenceApi: {
-        serviceAccountName: webUISA.serviceAccountName,
+      runtime: {
+        serviceAccountName: runtimeSA.serviceAccountName,
         inferenceApi: {
           modelFilename: this.options.sdModelCheckpoint
         },
@@ -179,7 +179,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
             })
         }
       }))
-      generatedValues.sdWebuiInferenceApi.queueAgent.dynamicModel = false
+      generatedValues.runtime.queueAgent.dynamicModel = false
     } else {
       this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
         filterPolicy: {
@@ -189,7 +189,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
             })
         }
       }))
-      generatedValues.sdWebuiInferenceApi.queueAgent.dynamicModel = true
+      generatedValues.runtime.queueAgent.dynamicModel = true
     }
 
     const values = lodash.merge(this.props.values, this.options.extraValues, generatedValues)
