@@ -1567,6 +1567,17 @@
 </table>
 <p>您也可以选择其他运行时，或构建自己的运行时。您需要将运行时打包为容器镜像，以便在 EKS 上运行。</p>
 <p>您需要充分了解并遵守您所使用的 Stable Diffusion 运行时的许可证条款。</p>
+<div class="admonition info">
+<p class="admonition-title">运行时支持</p>
+<p>在现阶段，该解决方案只支持Stable Diffusion Web UI的API规范。</p>
+<p>如您选择其他运行时，您需要修改<a href="https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/src/backend/queue_agent/main.py">Queue Agent的源代码</a>以适配其他运行时的API地址和语法。</p>
+<p>如您自行构建运行时，请确保运行时的API规范符合<a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API">Stable Diffusion Web UI的API规范</a>。</p>
+<p>默认情况下，该解决方案会将模型加载至<code>/tmp/models</code>目录，请确保您的运行时被配置成从该目录读取模型。</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">示例运行时</p>
+<p>您可以使用社区提供的<a href="https://github.com/yubingjiaocn/stable-diffusion-webui-docker">示例 Dockerfile</a> 构建 <em>Stable Diffusion Web UI</em> 的运行时容器镜像。请注意，该镜像仅用于技术评估和测试用途，请勿将该镜像部署至生产环境。</p>
+</div>
 <h2 id="_4">其他重要提示和限制</h2>
 <ul>
 <li>一个区域中只能有一个活动的Stable Diffusion on Amazon EKS解决方案堆栈。如果您的部署失败，请确保在重试部署之前已删除失败的堆栈。</li>
@@ -1580,10 +1591,10 @@
 <li>1个Internet网关</li>
 <li>对应的路由表和安全组</li>
 </ul>
-<p>目前该VPC的参数无法自定义。后续版本会允许您在现有VPC内部署。</p>
+<p>目前该VPC的参数无法自定义。</p>
 </li>
 <li>
-<p>在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为<code>1.27</code>。我们会随着Amazon EKS版本发布更新集群版本。解决方案的后续版本会允许您在现有EKS集群内部署。</p>
+<p>在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为<code>1.27</code>。我们会随着Amazon EKS版本发布更新集群版本。</p>
 </li>
 </ul>
 

@@ -1646,67 +1646,67 @@
 <td><code>""</code></td>
 </tr>
 <tr>
-<td><strong>sdWebuiInferenceApi</strong></td>
+<td><strong>runtime</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.labels</code></td>
+<td><code>runtime.labels</code></td>
 <td>Labels applied to all resources. Should be in key-values format.</td>
 <td><code>""</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.annotations</code></td>
+<td><code>runtime.annotations</code></td>
 <td>Annotations applied to stable diffusion runtime. Should be in key-values format.</td>
 <td><code>""</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.serviceAccountName</code></td>
+<td><code>runtime.serviceAccountName</code></td>
 <td>Name of service account used by runtime. Not changable.</td>
 <td>Populated by CDK</td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.replicas</code></td>
+<td><code>runtime.replicas</code></td>
 <td>Replica count of runtime.</td>
 <td><code>1</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.enabled</code></td>
+<td><code>runtime.scaling.enabled</code></td>
 <td>Enable auto scaling by SQS length.</td>
 <td><code>true</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.queueLength</code></td>
+<td><code>runtime.scaling.queueLength</code></td>
 <td>Target value for queue length. KEDA will scale pod to <code>ApproximateNumberOfMessage / queueLength</code> replicas.</td>
 <td><code>10</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.cooldownPeriod</code></td>
+<td><code>runtime.scaling.cooldownPeriod</code></td>
 <td>The period (in seconds) to wait after the last trigger reported active before scaling the resource back to <code>minReplicaCount</code>.</td>
 <td><code>60</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.maxReplicaCount</code></td>
+<td><code>runtime.scaling.maxReplicaCount</code></td>
 <td>This setting is passed to the HPA definition that KEDA will create for a given resource and holds the maximum number of replicas of the target resource.</td>
 <td><code>20</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.minReplicaCount</code></td>
+<td><code>runtime.scaling.minReplicaCount</code></td>
 <td>Minimum number of replicas KEDA will scale the resource down to.</td>
 <td><code>0</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.pollingInterval</code></td>
+<td><code>runtime.scaling.pollingInterval</code></td>
 <td>Interval (in seconds) to check each trigger on.</td>
 <td><code>1</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.scaleOnInFlight</code></td>
+<td><code>runtime.scaling.scaleOnInFlight</code></td>
 <td>When set to <code>true</code>, not visible (in-flight) messages will be counted in <code>ApproximateNumberOfMessage</code></td>
 <td><code>false</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.scaling.extraHPAConfig</code></td>
+<td><code>runtime.scaling.extraHPAConfig</code></td>
 <td>KEDA would feed values from this section directly to the HPA’s <code>behavior</code> field. Follow <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior">Kubernetes documentation</a> for details.</td>
 <td><code>{}</code></td>
 </tr>
@@ -1716,27 +1716,27 @@
 <td></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.inferenceApi.image.repository</code></td>
+<td><code>runtime.inferenceApi.image.repository</code></td>
 <td>Image Repository of Runtime.</td>
 <td><code>sdoneks/inference-api</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.inferenceApi.image.tag</code></td>
+<td><code>runtime.inferenceApi.image.tag</code></td>
 <td>Image tag of Runtime.</td>
 <td><code>latest</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.inferenceApi.modelFilename</code></td>
+<td><code>runtime.inferenceApi.modelFilename</code></td>
 <td>Model filename of Runtime. Not changable.</td>
 <td>Populated by CDK</td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.inferenceApi.extraEnv</code></td>
+<td><code>runtime.inferenceApi.extraEnv</code></td>
 <td>Extra environment variable for Runtime. Should be in <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container">Kubernetes format</a>.</td>
 <td><code>{}</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.inferenceApi.resources</code></td>
+<td><code>runtime.inferenceApi.resources</code></td>
 <td>Resource request and limit for Runtime.</td>
 <td></td>
 </tr>
@@ -1746,47 +1746,47 @@
 <td></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.image.repository</code></td>
+<td><code>runtime.queueAgent.image.repository</code></td>
 <td>Image Repository of queue agent.</td>
 <td><code>sdoneks/queue-agent</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.image.tag</code></td>
+<td><code>runtime.queueAgent.image.tag</code></td>
 <td>Image tag of queue agent.</td>
 <td><code>latest</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.extraEnv</code></td>
+<td><code>runtime.queueAgent.extraEnv</code></td>
 <td>Extra environment variable for queue agent. Should be in <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container">Kubernetes format</a>.</td>
 <td><code>{}</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.dynamicModel</code></td>
+<td><code>runtime.queueAgent.dynamicModel</code></td>
 <td>Enable model switch by request. Not changable.</td>
 <td>Populated by CDK</td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.s3Bucket</code></td>
+<td><code>runtime.queueAgent.s3Bucket</code></td>
 <td>S3 bucket for generated image. Not changable.</td>
 <td>Populated by CDK</td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.snsTopicArn</code></td>
+<td><code>runtime.queueAgent.snsTopicArn</code></td>
 <td>SNS topic for image generate complete notification. Not changable.</td>
 <td>Populated by CDK</td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.sqsQueueUrl</code></td>
+<td><code>runtime.queueAgent.sqsQueueUrl</code></td>
 <td>SQS queue URL of job queue. Not changable.</td>
 <td>Populated by CDK</td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.resources</code></td>
+<td><code>runtime.queueAgent.resources</code></td>
 <td>Resource request and limit for queue agent.</td>
 <td></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.queueAgent.XRay.enabled</code></td>
+<td><code>runtime.queueAgent.XRay.enabled</code></td>
 <td>Enable X-ray tracing agent for queue agent.</td>
 <td><code>true</code></td>
 </tr>
@@ -1796,32 +1796,32 @@
 <td></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.persistence.enabled</code></td>
+<td><code>runtime.persistence.enabled</code></td>
 <td>Enable presistence of model stroage.</td>
 <td><code>true</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.persistence.labels</code></td>
+<td><code>runtime.persistence.labels</code></td>
 <td>Labels applied to presistence volume. Should be in key-values format.</td>
 <td><code>{}</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.persistence.annotations</code></td>
+<td><code>runtime.persistence.annotations</code></td>
 <td>Annotations applied to presistence volume. Should be in key-values format.</td>
 <td><code>{}</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.persistence.storageClass</code></td>
+<td><code>runtime.persistence.storageClass</code></td>
 <td>Storage class for model storage</td>
 <td><code>efs-model-storage-sc</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.persistence.size</code></td>
+<td><code>runtime.persistence.size</code></td>
 <td>Size of persistence volume.</td>
 <td><code>2Ti</code></td>
 </tr>
 <tr>
-<td><code>sdWebuiInferenceApi.persistence.accessModes</code></td>
+<td><code>runtime.persistence.accessModes</code></td>
 <td>Access mode of persistence volume.</td>
 <td><code>ReadWriteMany</code></td>
 </tr>
