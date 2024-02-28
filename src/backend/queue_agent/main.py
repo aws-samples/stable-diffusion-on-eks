@@ -160,14 +160,15 @@ def check_readiness():
             logger.info('Service is ready.')
             global current_model_name
             if "sd_model_checkpoint" in opts:
-                current_model_name = opts['sd_model_checkpoint']
-                logger.info(f'Init model is: {current_model_name}.')
-            else:
-                current_model_name = ''
-                if dynamic_sd_model == "true":
-                    logger.info(f'Dynamic SD model is enabled, init model is not loaded.')
+                if opts['sd_model_checkpoint'] != None:
+                    current_model_name = opts['sd_model_checkpoint']
+                    logger.info(f'Init model is: {current_model_name}.')
                 else:
-                    logger.error(f'Init model {current_model_name} failed to load.')
+                    current_model_name = ''
+                    if dynamic_sd_model == "true":
+                        logger.info(f'Dynamic SD model is enabled, init model is not loaded.')
+                    else:
+                        logger.error(f'Init model {current_model_name} failed to load.')
             break
         except Exception as e:
             logger.debug(repr(e))
