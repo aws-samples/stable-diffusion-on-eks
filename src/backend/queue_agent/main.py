@@ -30,6 +30,9 @@ logging.basicConfig(
 )
 
 logging.getLogger("aws_xray_sdk").setLevel(logging.ERROR)
+for name in logging.Logger.manager.loggerDict.keys():
+    if name in ('boto', 'urllib3', 's3transfer', 'boto3', 'botocore', 'nose'):
+        logging.getLogger(name).setLevel(logging.ERROR)
 
 aws_default_region = os.getenv("AWS_DEFAULT_REGION")
 sqs_queue_url = os.getenv("SQS_QUEUE_URL")
@@ -113,7 +116,7 @@ def main():
                     logging.info(f"Start process {taskType} task with ID: {taskId}")
 
                     if dynamic_sd_model == 'true' and taskHeader['sd_model_checkpoint']:
-                        logging.info(f'Try to switching model to: {taskHeader['sd_model_checkpoint']}.')
+                        logging.info(f'Try to switching model to: {taskHeader["sd_model_checkpoint"]}.')
                         switch_model(taskHeader['sd_model_checkpoint'])
                         logging.info(f'Current model is: {current_model_name}.')
 
@@ -318,9 +321,11 @@ def switch_model(name, find_closest=False):
     if find_closest:
         name = name.lower()
         current = current_model_name.lower()
-
-    if name in current:
-        return current_model_name
+        if name in current:
+            return current_model_name
+    else:
+        if name == current_model_name:
+            return current_model_name
 
     # refresh then check from model list
     invoke_refresh_checkpoints()
