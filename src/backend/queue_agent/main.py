@@ -25,6 +25,10 @@ from aws_xray_sdk.core.models.trace_header import TraceHeader
 
 patch_all()
 
+logging.basicConfig(
+    level=os.environ.get('LOGLEVEL', 'INFO').upper()
+)
+
 logging.getLogger("aws_xray_sdk").setLevel(logging.ERROR)
 
 aws_default_region = os.getenv("AWS_DEFAULT_REGION")
@@ -83,7 +87,7 @@ def main():
     # 7. Delete msg;
     while True:
         if shutdown:
-            print('Received SIGTERM, shutting down...')
+            logging.info('Received SIGTERM, shutting down...')
             break
 
         received_messages = receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
@@ -106,12 +110,12 @@ def main():
                     taskId = taskHeader['id_task'] if 'id_task' in taskHeader else None
                     folder = get_prefix(
                         payload['s3_output_path']) if 's3_output_path' in payload else None
-                    print(
-                        f"Start process {taskType} task with ID: {taskId}")
+                    logging.info(f"Start process {taskType} task with ID: {taskId}")
 
                     if dynamic_sd_model == 'true' and taskHeader['sd_model_checkpoint']:
+                        logging.info(f'Try to switching model to: {taskHeader['sd_model_checkpoint']}.')
                         switch_model(taskHeader['sd_model_checkpoint'])
-                        print(f'Current model is: {current_model_name}.')
+                        logging.info(f'Current model is: {current_model_name}.')
 
                     if taskType == 'text-to-image':
                         r = invoke_txt2img(payload, taskHeader)
@@ -132,32 +136,37 @@ def main():
                     upload_outputs(content, folder, None, 'out')
                     publish_message(topic, content)
                     delete_message(message)
-                    print(
-                        f"End process {taskType} task with ID: {taskId}")
+                    logging.info(f"End process {taskType} task with ID: {taskId}")
 
 
 def print_env():
-    print(f'AWS_DEFAULT_REGION={aws_default_region}')
-    print(f'SQS_QUEUE_URL={sqs_queue_url}')
-    print(f'SNS_TOPIC_ARN={sns_topic_arn}')
-    print(f'S3_BUCKET={s3_bucket}')
-    print(f'DYNAMIC_SD_MODEL={dynamic_sd_model}')
+    logging.info(f'AWS_DEFAULT_REGION={aws_default_region}')
+    logging.info(f'SQS_QUEUE_URL={sqs_queue_url}')
+    logging.info(f'SNS_TOPIC_ARN={sns_topic_arn}')
+    logging.info(f'S3_BUCKET={s3_bucket}')
+    logging.info(f'DYNAMIC_SD_MODEL={dynamic_sd_model}')
 
 
 def check_readiness():
     while True:
         try:
-            print('Checking service readiness...')
+            logging.info('Checking service readiness...')
             # checking with options "sd_model_checkpoint" also for caching current model
             opts = invoke_get_options()
-            print('Service is ready.')
+            logging.info('Service is ready.')
+            global current_model_name
             if "sd_model_checkpoint" in opts:
-                global current_model_name
                 current_model_name = opts['sd_model_checkpoint']
-                print(f'Init model is: {current_model_name}.')
+                logging.info(f'Init model is: {current_model_name}.')
+            else:
+                current_model_name = ''
+                if dynamic_sd_model == "true":
+                    logging.info(f'Dynamic SD model is enabled, init model is not loaded.')
+                else:
+                    logging.error(f'Init model {current_model_name} failed to load.')
             break
         except Exception as e:
-            print(repr(e))
+            logging.debug(repr(e))
             time.sleep(1)
 
 
@@ -172,7 +181,7 @@ def get_time(f):
         s_time = time.time()
         res = f(*arg, **kwarg)
         e_time = time.time()
-        print('Used: {:.4f} seconds on api: {}.'.format(
+        logging.info('Used: {:.4f} seconds on api: {}.'.format(
             e_time - s_time, arg[0]))
         return res
     return inner
@@ -304,7 +313,7 @@ def invoke_refresh_checkpoints():
     return do_invocations(apiBaseUrl+"refresh-checkpoints", {})
 
 
-def switch_model(name, find_closest=True):
+def switch_model(name, find_closest=False):
     global current_model_name
     # check current model
     if find_closest:
@@ -346,13 +355,17 @@ def switch_model(name, find_closest=True):
 
 @get_time
 def do_invocations(url, body=None):
+
     if body is None:
+        logging.debug(f"Invoking {url}")
         response = apiClient.get(
             url=url, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
     else:
+        logging.debug(f"Invoking {url} with body: {body}")
         response = apiClient.post(
             url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
     response.raise_for_status()
+    logging.debug(response.text)
     return response.json()
 
 
@@ -389,6 +402,7 @@ def upload_outputs(object_bytes, folder, file_name=None, suffix=None):
                     f"%Y%m%d%H%M%S-{uuid.uuid4()}")
 
         bucket = s3Res.Bucket(s3_bucket)
+        logging.info(f"Uploading s3://{s3_bucket}/{folder}/{file_name}.{suffix}")
         bucket.put_object(
             Body=object_bytes, Key=f'{folder}/{file_name}.{suffix}', ContentType=content_type)
 
@@ -406,7 +420,7 @@ async def async_get(url):
                     res.raise_for_status()
                     # todo: need a counter to delete expired responses
                     # await session.delete_expired_responses()
-                    # print(res.from_cache, res.created_at, res.expires, res.is_expired)
+                    # logging.info(res.from_cache, res.created_at, res.expires, res.is_expired)
                     return await res.read()
         elif url.startswith("s3://"):
             bucket, key = get_bucket_and_key(url)
