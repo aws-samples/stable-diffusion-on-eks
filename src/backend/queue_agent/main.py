@@ -122,11 +122,10 @@ def main():
                     elif taskType == 'image-to-image':
                         r = invoke_img2img(payload, taskHeader)
                     else:
-                        raise RuntimeError(
-                            f'Unsupported task type: {taskType}')
-
+                        logging.error(f'Unsupported task type: {taskType}, ignoring')
+                        delete_message(message)
+                        continue
                     imgOutputs = post_invocations(folder, r, 80)
-
                 except Exception as e:
                     content = json.dumps(failed(taskHeader, e))
                     traceback.print_exc()
