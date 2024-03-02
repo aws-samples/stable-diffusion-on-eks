@@ -139,7 +139,6 @@ export default class DataPlaneStack {
       new blueprints.addons.KedaAddOn(kedaParams),
       new blueprints.addons.ContainerInsightsAddOn(containerInsightsParams),
       new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
-      new nvidiaDevicePluginAddon({}),
       new SharedComponentAddOn(SharedComponentAddOnParams),
       new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams),
       new S3SyncEFSAddOn(s3SyncEFSAddOnParams)
