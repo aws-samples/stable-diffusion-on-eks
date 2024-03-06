@@ -1,10 +1,13 @@
 import logging
+
+import aioboto3
 from botocore.exceptions import ClientError
 
 logger = logging.getLogger("queue-agent")
 
+ab3_session = aioboto3.Session()
 
-def publish_message(topic, message):
+def publish_message(topic, message: str) -> str:
     try:
         response = topic.publish(Message=message)
         message_id = response['MessageId']
@@ -14,10 +17,10 @@ def publish_message(topic, message):
     else:
         return message_id
 
-async def async_publish_message(content):
+async def async_publish_message(topic, content: str):
     try:
         async with ab3_session.resource("sns") as sns:
-            topic = await sns.Topic(sns_topic_arn)
+            topic = await sns.Topic(topic)
             response = await topic.publish(Message=content)
             return response['MessageId']
     except Exception as e:

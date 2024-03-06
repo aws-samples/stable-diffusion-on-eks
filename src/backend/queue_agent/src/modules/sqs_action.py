@@ -1,4 +1,8 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
 import logging
+
 from botocore.exceptions import ClientError
 
 logger = logging.getLogger("queue-agent")

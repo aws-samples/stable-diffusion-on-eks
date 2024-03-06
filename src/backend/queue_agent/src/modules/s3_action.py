@@ -1,8 +1,12 @@
-import boto3
-import aioboto3
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
 import datetime
-import uuid
 import logging
+import uuid
+
+import aioboto3
+import boto3
 
 logger = logging.getLogger("queue-agent")
 s3Res = boto3.resource('s3')

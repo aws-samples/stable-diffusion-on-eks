@@ -1,45 +1,71 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
-import os
 import json
-import requests
-import boto3
 import logging
+import os
 import signal
-import utils
-from aiohttp_client_cache import CacheBackend
-from requests.adapters import HTTPAdapter, Retry
-from aws_xray_sdk.core import xray_recorder
+import sys
+
+import boto3
+from aws_xray_sdk.core import patch_all, xray_recorder
 from aws_xray_sdk.core.models.trace_header import TraceHeader
+from modules import sns_action, sqs_action
+from runtimes import sdwebui
+
+patch_all()
+
+# Logging configuration
+logging.basicConfig()
+logging.getLogger().setLevel(logging.ERROR)
 
 logger = logging.getLogger("queue-agent")
+logger.propagate = False
+logger.setLevel(os.environ.get('LOGLEVEL', 'INFO').upper())
+handler = logging.StreamHandler(sys.stdout)
+handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(handler)
 
+# Set current logger as global
+logger = logging.getLogger("queue-agent")
+
+# Get base environment variable
 aws_default_region = os.getenv("AWS_DEFAULT_REGION")
 sqs_queue_url = os.getenv("SQS_QUEUE_URL")
 sns_topic_arn = os.getenv("SNS_TOPIC_ARN")
 s3_bucket = os.getenv("S3_BUCKET")
-dynamic_sd_model = os.getenv("DYNAMIC_SD_MODEL")
 
-current_model_name = ''
+api_base_url = ""
+
+# Check current runtime type
+runtime_type = os.getenv("RUNTIME_TYPE", "").lower
+
+# Runtime type should be specified
+if runtime_type == "":
+    logger.error(f'Runtime type not specified')
+    raise RuntimeError
+
+# Init for SD Web UI
+if runtime_type == "sdwebui":
+    api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080/sdapi/v1/")
+    dynamic_sd_model_str = os.getenv("DYNAMIC_SD_MODEL", "false")
+    if dynamic_sd_model_str.lower == "false":
+        dynamic_sd_model = False
+    else:
+        dynamic_sd_model = True
+
+# TODO: Add some init for ComfyUI
+if runtime_type == "comfyui":
+    api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080/")
+    # Change here to ComfyUI's base URL
+    # You can specify any required environment variable here
+
 sqsRes = boto3.resource('sqs')
 snsRes = boto3.resource('sns')
 
-apiClient = requests.Session()
-retries = Retry(
-    total=3,
-    connect=100,
-    backoff_factor=0.1,
-    allowed_methods=["GET", "POST"])
-apiClient.mount('http://', HTTPAdapter(max_retries=retries))
+SQS_WAIT_TIME_SECONDS = 20
 
-REQUESTS_TIMEOUT_SECONDS = 60
-
-cache = CacheBackend(
-    cache_name='memory-cache',
-    expire_after=600
-)
-
+# For graceful shutdown
 shutdown = False
 
 def main():
@@ -50,12 +76,14 @@ def main():
     print_env()
 
     queue = sqsRes.Queue(sqs_queue_url)
-    SQS_WAIT_TIME_SECONDS = 20
     topic = snsRes.Topic(sns_topic_arn)
 
-    check_readiness()
+    if runtime_type == "sdwebui":
+        sdwebui.check_readiness(api_base_url, dynamic_sd_model)
 
-    # TODO: Add runtime selection
+    if runtime_type == "comfyui":
+        # TODO: Add health check for ComfyUI
+        pass
 
     # main loop
     # 1. Pull msg from sqs;
@@ -70,7 +98,7 @@ def main():
             logger.info('Received SIGTERM, shutting down...')
             break
 
-        received_messages = utils.receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
+        received_messages = sqs_action.receive_messages(queue, 1, SQS_WAIT_TIME_SECONDS)
 
         for message in received_messages:
             with xray_recorder.in_segment('Queue-Agent') as segment:
@@ -81,18 +109,30 @@ def main():
                 segment.trace_id = sqsTraceHeader.root
                 segment.parent_id = sqsTraceHeader.parent
                 segment.sampled = sqsTraceHeader.sampled
+
+                # Process received message
                 snsPayload = json.loads(message.body)
                 payload = json.loads(snsPayload['Message'])
-                # Todo: Add runtime choice
-                utils.delete_message(message)
-                logger.info(f"End process {taskType} task with ID: {taskId}")
+                response = ""
 
-def print_env():
+                if runtime_type == "sdwebui":
+                    response = sdwebui.handler(api_base_url, payload, s3_bucket, dynamic_sd_model)
+
+                if runtime_type == "comfyui":
+                    # TODO: Add ComfyUI handler here
+                    # response = comfyui.handler(api_base_url, payload, s3_bucket)
+                    pass
+
+                # Put response handler to SNS and delete message
+                sns_action.publish_message(topic, response)
+                sqs_action.delete_message(message)
+
+
+def print_env() -> None:
     logger.info(f'AWS_DEFAULT_REGION={aws_default_region}')
     logger.info(f'SQS_QUEUE_URL={sqs_queue_url}')
     logger.info(f'SNS_TOPIC_ARN={sns_topic_arn}')
     logger.info(f'S3_BUCKET={s3_bucket}')
-    logger.info(f'DYNAMIC_SD_MODEL={dynamic_sd_model}')
 
 def signalHandler(signum, frame):
     global shutdown

@@ -1,7 +1,33 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
 
-@utils.get_time
-def do_invocations(url, body=None):
+import aioboto3
+import requests
+from aiohttp_client_cache import CacheBackend
+from requests.adapters import HTTPAdapter, Retry
+from requests_cache import CachedSession
+from s3_action import *
+from time_utils import get_time
 
+ab3_session = aioboto3.Session()
+
+apiClient = requests.Session()
+retries = Retry(
+    total=3,
+    connect=100,
+    backoff_factor=0.1,
+    allowed_methods=["GET", "POST"])
+apiClient.mount('http://', HTTPAdapter(max_retries=retries))
+
+REQUESTS_TIMEOUT_SECONDS = 60
+
+cache = CacheBackend(
+    cache_name='memory-cache',
+    expire_after=600
+)
+
+@get_time
+def do_invocations(url: str, body:str=None) -> str:
     if body is None:
         logger.debug(f"Invoking {url}")
         response = apiClient.get(
@@ -14,7 +40,7 @@ def do_invocations(url, body=None):
     logger.debug(response.text)
     return response.json()
 
-async def async_get(url):
+async def async_get(url: str) -> None:
     try:
         if url.startswith("http://") or url.startswith("https://"):
             async with CachedSession(cache=cache) as session:

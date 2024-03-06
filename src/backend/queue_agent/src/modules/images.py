@@ -1,7 +1,11 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
 import base64
 import io
-from tkinter import Image
-from PIL import PngImagePlugin
+
+from PIL import Image, PngImagePlugin
+
 
 def decode_to_image(encoding):
     image = None
