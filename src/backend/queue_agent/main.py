@@ -19,7 +19,7 @@ import difflib
 import signal
 from aiohttp_client_cache import CachedSession, CacheBackend
 from botocore.exceptions import ClientError
-from PIL import PngImagePlugin, Image
+from PIL import PngImagePlugin, GifImagePlugin, Image
 from requests.adapters import HTTPAdapter, Retry
 from aws_xray_sdk.core import xray_recorder, patch_all
 from aws_xray_sdk.core.models.trace_header import TraceHeader
@@ -56,7 +56,7 @@ retries = Retry(
     backoff_factor=0.1,
     allowed_methods=["GET", "POST"])
 apiClient.mount('http://', HTTPAdapter(max_retries=retries))
-REQUESTS_TIMEOUT_SECONDS = 60
+REQUESTS_TIMEOUT_SECONDS = 300
 
 cache = CacheBackend(
     cache_name='memory-cache',
@@ -117,6 +117,12 @@ def main():
                         payload['s3_output_path']) if 's3_output_path' in payload else None
                     logger.info(f"Start process {taskType} task with ID: {taskId}")
 
+                    # Check if there is animated image
+                    animated = False
+
+                    if 'AnimateDiff'.casefold() in map(str.casefold, taskHeader.keys()):
+                        animated = True
+
                     if dynamic_sd_model == 'true' and taskHeader['sd_model_checkpoint']:
                         logger.info(f'Try to switching model to: {taskHeader["sd_model_checkpoint"]}.')
                         switch_model(taskHeader['sd_model_checkpoint'])
@@ -130,7 +136,7 @@ def main():
                         logger.error(f'Unsupported task type: {taskType}, ignoring')
                         delete_message(message)
                         continue
-                    imgOutputs = post_invocations(folder, r, 80)
+                    imgOutputs = post_invocations(folder, r, 80, animated)
                 except Exception as e:
                     content = json.dumps(failed(taskHeader, e))
                     traceback.print_exc()
@@ -291,6 +297,11 @@ def export_pil_to_bytes(image, quality):
 
     return bytes_data
 
+def export_gif_to_bytes(image):
+    with io.BytesIO() as output_bytes:
+        image.save(output_bytes, format="GIF", save_all=True, loop=0)
+        bytes_data = output_bytes.getvalue()
+    return bytes_data
 
 @xray_recorder.capture('text-to-image')
 def invoke_txt2img(body, header):
@@ -320,7 +331,11 @@ def invoke_refresh_checkpoints():
 
 def switch_model(name, find_closest=False):
     global current_model_name
-    # check current model
+    opts = invoke_get_options()
+    if "sd_model_checkpoint" in opts:
+        if opts['sd_model_checkpoint'] != None:
+            current_model_name = opts['sd_model_checkpoint']
+
     if find_closest:
         name = name.lower()
         current = current_model_name.lower()
@@ -350,7 +365,7 @@ def switch_model(name, find_closest=False):
         found_model = max_model
 
     if not found_model:
-        raise RuntimeError(f'Model not found: {name}')
+        logger.error(f'Model not found: {name}, skip switching model')
     elif found_model != current_model_name:
         options = {}
         options["sd_model_checkpoint"] = found_model
@@ -362,35 +377,42 @@ def switch_model(name, find_closest=False):
 
 @get_time
 def do_invocations(url, body=None):
-
-    if body is None:
-        logger.debug(f"Invoking {url}")
-        response = apiClient.get(
-            url=url, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
-    else:
-        logger.debug(f"Invoking {url} with body: {body}")
-        response = apiClient.post(
-            url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
-    response.raise_for_status()
-    logger.debug(response.text)
+    try:
+        if body is None:
+            logger.debug(f"Invoking {url}")
+            response = apiClient.get(
+                url=url, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
+        else:
+            logger.debug(f"Invoking {url} with body: {body}")
+            response = apiClient.post(
+                url=url, json=body, timeout=(1, REQUESTS_TIMEOUT_SECONDS))
+        response.raise_for_status()
+        logger.debug(response.text)
+    except requests.exceptions.ReadTimeout as err:
+        logger.error(err.args[0])
     return response.json()
 
 
-def post_invocations(folder, response, quality):
+def post_invocations(folder, response, quality, animated):
     defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
     if not folder:
         folder = defaultFolder
     images = []
     results = []
-    if "images" in response.keys():
-        images = [export_pil_to_bytes(decode_to_image(i), quality)
-                  for i in response["images"]]
-    elif "image" in response.keys():
-        images = [export_pil_to_bytes(
-            decode_to_image(response["image"]), quality)]
-
-    if len(images) > 0:
-        results = [upload_outputs(i, folder, None, 'png') for i in images]
+    if animated:
+        if "images" in response.keys():
+            images = [export_gif_to_bytes(decode_to_image(i)) for i in response["images"]]
+        if len(images) > 0:
+            results = [upload_outputs(i, folder, None, 'gif') for i in images]
+    else:
+        if "images" in response.keys():
+            images = [export_pil_to_bytes(decode_to_image(i), quality)
+                    for i in response["images"]]
+        elif "image" in response.keys():
+            images = [export_pil_to_bytes(
+                decode_to_image(response["image"]), quality)]
+        if len(images) > 0:
+            results = [upload_outputs(i, folder, None, 'png') for i in images]
 
     return results
 
@@ -401,8 +423,14 @@ def upload_outputs(object_bytes, folder, file_name=None, suffix=None):
             content_type = f'application/json'
             if file_name is None:
                 file_name = f"response-{uuid.uuid4()}"
-        else:
-            suffix = 'png'
+
+        if suffix == 'png':
+            content_type = f'image/{suffix}'
+            if file_name is None:
+                file_name = datetime.datetime.now().strftime(
+                    f"%Y%m%d%H%M%S-{uuid.uuid4()}")
+
+        if suffix == 'gif':
             content_type = f'image/{suffix}'
             if file_name is None:
                 file_name = datetime.datetime.now().strftime(
@@ -417,7 +445,6 @@ def upload_outputs(object_bytes, folder, file_name=None, suffix=None):
     except Exception as error:
         logger.error('Failed to upload content to S3', exc_info=True)
         raise error
-
 
 async def async_get(url):
     try:
