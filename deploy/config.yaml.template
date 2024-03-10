@@ -1,0 +1,36 @@
+stackName: {STACK_NAME}
+modelBucketArn: {MODEL_BUCKET}
+modelsRuntime:
+- name: "sd1-5"
+  namespace: "default"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
+  type: "SDWebUI"
+  extraValues:
+    karpenter:
+      nodeTemplate:
+        amiFamily: Bottlerocket
+        dataVolume:
+          volumeSize: 80Gi
+          volumeType: gp3
+          deleteOnTermination: true
+          iops: 4000
+          throughput: 1000
+          snapshotID: {SNAP_ID}
+      provisioner:
+        instanceType:
+        - "g5.xlarge" # List of allowed instance type for Karpenter provisioning.
+        - "g5.2xlarge"
+        capacityType: # Allowed purchase mode for instances
+          onDemand: true
+          spot: true
+      persistence:
+        enabled: true
+        existingClaim: "efs-model-storage-pvc"
+      scaling:
+        queueLength: 10 # Target value for queue length. One new instance will be launched when queue launch reaches the value.
+        minReplicaCount: 0 # Minimum number of replicas of SD Runtime.
+        maxReplicaCount: 5 # Maxinum number of replicas of SD Runtime.
+        cooldownPeriod: 300 # The period (in seconds) to wait after the last message before scaling down.
+
+dynamicModelRuntime:
+  enabled: false

@@ -1,9 +1,0 @@
-url,bucket,key
-https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors,,stable-diffusion/v1-5-pruned-emaonly.safetensors
-https://huggingface.co/emmajoanne/models/resolve/main/revAnimated_v122.safetensors,,stable-diffusion/revAnimated_v122.safetensors
-https://huggingface.co/emmajoanne/models/resolve/main/chilloutmix_NiPrunedFp32.safetensors,,stable-diffusion/chilloutmix_NiPrunedFp32.safetensors
-https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1p_sd15_depth.pth,,controlnet/control_v11f1p_sd15_depth.pth
-https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_canny.pth,,controlnet/control_v11p_sd15_canny.pth
-https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_openpose.pth,,controlnet/control_v11p_sd15_openpose.pth
-https://civitai.com/api/download/models/28797?type=Model&format=SafeTensor&size=full&fp=fp16,,lora/LeoArmor.safetensors
-https://civitai.com/api/download/models/41106?type=Model&format=SafeTensor,,lora/SagittariusArmor
