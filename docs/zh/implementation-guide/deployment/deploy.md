@@ -131,28 +131,10 @@ npx cdk deploy
 ```bash
 Outputs:
 SdOnEksStack.GetAPIKeyCommand = aws apigateway get-api-keys --query 'items[?id==`abcdefghij`].value' --include-values --output text
-SdOnEksStack.EfsFileSystemId = fs-1234567890abcdefg
 SdOnEksStack.FrontApiEndpoint = https://abcdefghij.execute-api.us-east-1.amazonaws.com/prod/
 SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --region us-east-1 --role-arn arn:aws:iam::123456789012:role/SdOnEKSStack-SdOnEKSStackAccessRole
 ...
 ```
-
-!!! danger "中国区域限制"
-    如您在亚马逊云科技中国区域部署，您需要在首次运行或模型有更新时，**手工触发**DataSync将模型从S3同步至EFS上。
-
-    === "亚马逊云科技管理控制台"
-        * 进入[亚马逊云科技DataSync控制台](https://console.amazonaws.cn/datasync/home)
-        * 在左侧导航栏选择 **任务(Tasks)**
-        * 选择刚创建的任务, 例如 `task-092354086086f941c`.
-        * 选择右上角 **操作(Actions)** - **开始(Start)**
-
-    === "亚马逊云科技 CLI"
-
-        运行以下命令以启动模型同步：
-
-        ```bash
-        aws datasync start-task-execution --task-arn=$(for taskid in $(aws datasync list-tasks --output yaml | grep TaskArn | awk '{print $2}'); do if [ "$(aws datasync list-tags-for-resource --resource-arn $taskid --output yaml | grep -A1 stack-name | grep Value | awk '{print $2}')" = $(cat config.yaml|grep stackName|awk '{print $2}'|sed 's/\"//g')"Stack" ]; then echo $taskid; fi; done)
-        ```
 
 现在, 您可以：
 

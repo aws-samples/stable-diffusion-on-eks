@@ -85,6 +85,6 @@ Stable diffusion 运行时通过Helm Chart进行部署。您可以通过 `models
 | `runtime.persistence.enabled` | Enable presistence of model stroage. | `true` |
 | `runtime.persistence.labels` | Labels applied to presistence volume. Should be in key-values format. | `{}` |
 | `runtime.persistence.annotations` | Annotations applied to presistence volume. Should be in key-values format. | `{}` |
-| `runtime.persistence.storageClass` | Storage class for model storage | `efs-model-storage-sc` |
+| `runtime.persistence.storageClass` | Storage class for model storage | `s3-model-storage-sc` |
 | `runtime.persistence.size` | Size of persistence volume. | `2Ti` |
 | `runtime.persistence.accessModes` | Access mode of persistence volume. | `ReadWriteMany` |

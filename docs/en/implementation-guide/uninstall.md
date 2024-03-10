@@ -9,7 +9,6 @@ The deployed solution can be deleted using CloudFormation.
 
 * The following will be **permanently deleted**:
     * Amazon EKS cluster and all worker nodes
-    * EFS file system
     * SNS topics and all subscriptions
     * SQS queues
     * VPC
