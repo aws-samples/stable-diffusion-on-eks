@@ -1,10 +1,10 @@
-stackName: {STACK_NAME}
-modelBucketArn: {MODEL_BUCKET}
+stackName: ${STACK_NAME}
+modelBucketArn: ${MODEL_BUCKET}
 modelsRuntime:
 - name: "sd1-5"
   namespace: "default"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
-  type: "SDWebUI"
+  type: ${RUNTIME_TYPE}
   extraValues:
     karpenter:
       nodeTemplate:
@@ -15,12 +15,14 @@ modelsRuntime:
           deleteOnTermination: true
           iops: 4000
           throughput: 1000
-          snapshotID: {SNAP_ID}
+          snapshotID: ${SNAPSHOT_ID}
       provisioner:
         instanceType:
-        - "g5.xlarge" # List of allowed instance type for Karpenter provisioning.
+        - "g5.xlarge"
+        - "g4dn.xlarge"
         - "g5.2xlarge"
-        capacityType: # Allowed purchase mode for instances
+        - "g4dn.2xlarge"
+        capacityType:
           onDemand: true
           spot: true
       persistence:
