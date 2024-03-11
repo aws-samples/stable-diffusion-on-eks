@@ -12,6 +12,7 @@ import { s3CSIDriverAddOn, s3CSIDriverAddOnProps } from './addons/s3CSIDriver'
 import { SharedComponentAddOn, SharedComponentAddOnProps } from './addons/sharedComponent';
 import { SNSResourceProvider } from './resourceProvider/sns'
 import { s3GWEndpointProvider } from './resourceProvider/s3GWEndpoint'
+import { dcgmExporterAddOn } from './addons/dcgmExporter';
 
 export interface dataPlaneProps {
   stackName: string,
@@ -135,7 +136,8 @@ export default class DataPlaneStack {
       new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
       new s3CSIDriverAddOn(s3CSIDriverAddOnParams),
       new SharedComponentAddOn(SharedComponentAddOnParams),
-      new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams)
+      new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams),
+      new dcgmExporterAddOn({})
     ];
 
 let models: string[] = [];
