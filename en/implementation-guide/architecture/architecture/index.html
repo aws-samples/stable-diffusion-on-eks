@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.12">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -1494,7 +1494,7 @@
 <li>SNS publishes the message to Amazon SQS queues via matching subscription filters</li>
 <li>In Amazon EKS cluster, open source Kubernetes Event Driven Auto-Scaler (KEDA) scales up new pods based on the queue length</li>
 <li>Karpenter (an open source Kubernetes compute auto-scaler) launches new GPU spot instances to place pending pods. The nodes run Bottlerocket OS with pre-cached Stable Diffusion Runtime images</li>
-<li>SD Runtime loads model files from Amazon EFS file system</li>
+<li>SD Runtime loads model files from Amazon S3 bucket</li>
 <li>Queue Agent calls SD Runtime to generate images and save them to Amazon S3</li>
 <li>Queue Agent sends output to a SNS topic and the application backend receives notification from SQS queue</li>
 <li>Amazon CloudWatch, Amazon Distro for OpenTelemetry, and Amazon X-Ray collect metrics, logs, and traces to monitor guidance components</li>
@@ -1504,7 +1504,7 @@
 <h4 id="static-runtimes">Static Runtimes</h4>
 <p>Static runtimes use models that need to be specified in advance and loaded into memory at startup. SNS only delivers requests using the specified model to the corresponding runtime.</p>
 <h4 id="dynamic-runtimes">Dynamic Runtimes</h4>
-<p>Dynamic runtimes do not require specifying models in advance. SNS delivers all requests without static runtimes to this runtime. The runtime loads the model from Amazon EFS and performs model inference based on the model used in the request.</p>
+<p>Dynamic runtimes do not require specifying models in advance. SNS delivers all requests without static runtimes to this runtime. The runtime loads the model from Amazon S3 and performs model inference based on the model used in the request.</p>
 <div class="admonition bug">
 <p class="admonition-title">Note</p>
 <p>In the current implementation, requests are randomly distributed to one of the replicas of dynamic runtimes. This routing strategy may lead to unnecessary model loading, resulting in longer image generation times.</p>

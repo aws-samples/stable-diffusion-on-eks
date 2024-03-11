@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.12">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -1603,32 +1603,10 @@
 <p>在部署完成后，您会看到如下输出：</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Outputs:
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>SdOnEksStack.GetAPIKeyCommand<span class="w"> </span><span class="o">=</span><span class="w"> </span>aws<span class="w"> </span>apigateway<span class="w"> </span>get-api-keys<span class="w"> </span>--query<span class="w"> </span><span class="s1">&#39;items[?id==`abcdefghij`].value&#39;</span><span class="w"> </span>--include-values<span class="w"> </span>--output<span class="w"> </span>text
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>SdOnEksStack.EfsFileSystemId<span class="w"> </span><span class="o">=</span><span class="w"> </span>fs-1234567890abcdefg
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>SdOnEksStack.FrontApiEndpoint<span class="w"> </span><span class="o">=</span><span class="w"> </span>https://abcdefghij.execute-api.us-east-1.amazonaws.com/prod/
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>SdOnEKSStack.ConfigCommand<span class="w"> </span><span class="o">=</span><span class="w"> </span>aws<span class="w"> </span>eks<span class="w"> </span>update-kubeconfig<span class="w"> </span>--name<span class="w"> </span>SdOnEKSStack<span class="w"> </span>--region<span class="w"> </span>us-east-1<span class="w"> </span>--role-arn<span class="w"> </span>arn:aws:iam::123456789012:role/SdOnEKSStack-SdOnEKSStackAccessRole
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>...
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>SdOnEksStack.FrontApiEndpoint<span class="w"> </span><span class="o">=</span><span class="w"> </span>https://abcdefghij.execute-api.us-east-1.amazonaws.com/prod/
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>SdOnEKSStack.ConfigCommand<span class="w"> </span><span class="o">=</span><span class="w"> </span>aws<span class="w"> </span>eks<span class="w"> </span>update-kubeconfig<span class="w"> </span>--name<span class="w"> </span>SdOnEKSStack<span class="w"> </span>--region<span class="w"> </span>us-east-1<span class="w"> </span>--role-arn<span class="w"> </span>arn:aws:iam::123456789012:role/SdOnEKSStack-SdOnEKSStackAccessRole
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>...
 </span></code></pre></div>
-<div class="admonition danger">
-<p class="admonition-title">中国区域限制</p>
-<p>如您在亚马逊云科技中国区域部署，您需要在首次运行或模型有更新时，<strong>手工触发</strong>DataSync将模型从S3同步至EFS上。</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">亚马逊云科技管理控制台</label><label for="__tabbed_1_2">亚马逊云科技 CLI</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<ul>
-<li>进入<a href="https://console.amazonaws.cn/datasync/home">亚马逊云科技DataSync控制台</a></li>
-<li>在左侧导航栏选择 <strong>任务(Tasks)</strong></li>
-<li>选择刚创建的任务, 例如 <code>task-092354086086f941c</code>.</li>
-<li>选择右上角 <strong>操作(Actions)</strong> - <strong>开始(Start)</strong></li>
-</ul>
-</div>
-<div class="tabbed-block">
-<p>运行以下命令以启动模型同步：</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>aws<span class="w"> </span>datasync<span class="w"> </span>start-task-execution<span class="w"> </span>--task-arn<span class="o">=</span><span class="k">$(for</span><span class="w"> </span>taskid<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>aws<span class="w"> </span>datasync<span class="w"> </span>list-tasks<span class="w"> </span>--output<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>TaskArn<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>aws<span class="w"> </span>datasync<span class="w"> </span>list-tags-for-resource<span class="w"> </span>--resource-arn<span class="w"> </span><span class="nv">$taskid</span><span class="w"> </span>--output<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A1<span class="w"> </span>stack-name<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Value<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>config.yaml<span class="p">|</span>grep<span class="w"> </span>stackName<span class="p">|</span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="p">|</span>sed<span class="w"> </span><span class="s1">&#39;s/\&quot;//g&#39;</span><span class="k">)</span><span class="s2">&quot;Stack&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$taskid</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span><span class="p">;</span><span class="w"> </span><span class="k">done)</span>
-</span></code></pre></div>
-</div>
-</div>
-</div>
-</div>
 <p>现在, 您可以：</p>
 <ul>
 <li><a href="../../usage/">发送API请求</a>以使用Stable Diffusion生成图像</li>

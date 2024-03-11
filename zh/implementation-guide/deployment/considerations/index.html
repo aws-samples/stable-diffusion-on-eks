@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.12">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -1435,12 +1435,11 @@
 <p>如您在未经验证的区域进行部署，可能需要进行以下处理，或面临以下问题：</p>
 <ul>
 <li>在不支持<code>g5</code>实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
-<li>在部分区域部署时， EFS 的性能可能会受到影响，请参见 <a href="https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput">Amazon EFS文档</a> 以了解在不同区域的EFS读取性能。</li>
 </ul>
 <p><strong>在亚马逊云科技中国区域部署</strong></p>
 <div class="admonition danger">
 <p class="admonition-title">中国区域网络限制</p>
-<p>近期，我们发现在中国区部署该解决方案时，出现EBS和EFS无法部署，报错信息显示 <code>Waiter has timed out</code> 或 <code>Unexpected EOF</code>. 详情请参考对应<a href="https://github.com/aws-samples/stable-diffusion-on-eks/issues/53">Issue</a>.</p>
+<p>近期，我们发现在中国区部署该解决方案时，出现EBS无法部署，报错信息显示 <code>Waiter has timed out</code> 或 <code>Unexpected EOF</code>. 详情请参考对应<a href="https://github.com/aws-samples/stable-diffusion-on-eks/issues/53">Issue</a>.</p>
 <p>该问题的根因是部分组件的Helm Chart位于Github上，在中国区部署时，负责部署自定义资源的Lambda无法获取Helm Chart，导致报错。目前我们正在积极处理该问题，后续会将需要的Helm Chart和容器镜像复制到中国区域。该过程预计在2024年Q1完成。</p>
 <p>如您在部署过程中遇到该问题，请暂时切换到海外区域进行测试，或自行搭建Helm Repo以临时解决此问题。</p>
 </div>
@@ -1462,7 +1461,6 @@
 <p>在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：</p>
 <ul>
 <li>中国区域不支持默认的<code>g5</code>实例类型。您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
-<li>中国区域不支持EventBridge Scheduler，故在首次运行或模型有更新时，您需要<strong>手工触发</strong>DataSync将模型从S3同步至EFS上，或直接将模型存储在EFS中。</li>
 </ul>
 <h2 id="iam">IAM 权限</h2>
 <p>部署该解决方案需要管理员或与之相当的权限。</p>
