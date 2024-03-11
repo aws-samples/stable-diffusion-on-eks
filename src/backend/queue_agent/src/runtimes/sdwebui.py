@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: MIT-0
 
 import asyncio
-import datetime
+import base64
 import json
 import logging
 import time
 import traceback
 
 from aws_xray_sdk.core import xray_recorder
-from modules import http_action, misc, s3_action
+from modules import http_action, misc
 
 logger = logging.getLogger("queue-agent-sdwebui")
 
@@ -38,34 +38,40 @@ def check_readiness(api_base_url: str, dynamic_sd_model: bool) -> bool:
             time.sleep(1)
     return True
 
-def handler(api_base_url: str, payload: dict, s3_bucket, dynamic_sd_model: bool) -> str:
+def handler(api_base_url: str, task_type: str, task_id: str, payload: dict, dynamic_sd_model: bool) -> dict:
+    response = {}
     try:
         taskHeader = payload['alwayson_scripts']
-        taskType = taskHeader['task'] if 'task' in taskHeader else None
-        taskId = taskHeader['id_task'] if 'id_task' in taskHeader else None
-        folder = s3_action.get_s3_prefix(
-            payload['s3_output_path']) if 's3_output_path' in payload else None
-        logger.info(f"Start process {taskType} task with ID: {taskId}")
+        logger.info(f"Start process {task_type} task with ID: {task_id}")
 
         if dynamic_sd_model and taskHeader['sd_model_checkpoint']:
             logger.info(f'Try to switching model to: {taskHeader["sd_model_checkpoint"]}.')
             current_model_name = switch_model(api_base_url, taskHeader['sd_model_checkpoint'])
             logger.info(f'Current model is: {current_model_name}.')
 
-        if taskType == 'text-to-image':
+        if task_type == 'text-to-image':
             task_response = invoke_txt2img(api_base_url, payload, taskHeader)
-        elif taskType == 'image-to-image':
+        elif task_type == 'image-to-image':
             task_response = invoke_img2img(api_base_url, payload, taskHeader)
         else:
-            logger.error(f'Unsupported task type: {taskType}, ignoring')
-        imgOutputs = post_invocations(s3_bucket, api_base_url, folder, task_response, 80)
+            logger.error(f'Unsupported task type: {task_type}, ignoring')
+
+        imgOutputs = post_invocations(task_response)
+        content = json.dumps(succeed(task_id, task_response, taskHeader))
+        response["success"] = True
+        response["image"] = imgOutputs
+        response["content"] = content
+        logger.info(f"End process {task_type} task with ID: {task_id}")
     except Exception as e:
-        content = json.dumps(failed(taskHeader, e))
+        content = json.dumps(failed(task_id, taskHeader, e))
+        logger.error(f"{task_type} task with ID: {task_id} finished with error")
         traceback.print_exc()
-    content = json.dumps(succeed(imgOutputs, task_response, taskHeader))
-    s3_action.upload_file(content, folder, None, 'out')
-    logger.info(f"End process {taskType} task with ID: {taskId}")
-    return content
+        response["success"] = False
+        response["content"] = content
+    return response
+
+
+
 
 @xray_recorder.capture('text-to-image')
 def invoke_txt2img(api_base_url: str, body, header) -> str:
@@ -130,18 +136,12 @@ def switch_model(api_base_url: str, name: str, find_closest=False) -> str:
     return current_model_name
 
 # Customizable for success responses
-def succeed(images, response, header):
-    n_iter = response['parameters']['n_iter']
-    batch_size = response['parameters']['batch_size']
+def succeed(task_id, response, header):
     parameters = response['parameters']
-    parameters['id_task'] = header['id_task']
-    parameters['status'] = 1
-    parameters['image_url'] = ','.join(
-        images[: n_iter * batch_size])
+    parameters['id_task'] = task_id
     parameters['image_seed'] = ','.join(
         str(x) for x in json.loads(response['info'])['all_seeds'])
     parameters['error_msg'] = ''
-    parameters['image_mask_url'] = ','.join(images[n_iter * batch_size:])
     return {
         'images': [''],
         'parameters': parameters,
@@ -150,15 +150,13 @@ def succeed(images, response, header):
 
 
 # Customizable for failure responses
-def failed(header, exception):
+def failed(task_id, header, exception):
     parameters = {}
-    parameters['id_task'] = header['id_task']
+    parameters['id_task'] = task_id
     parameters['status'] = 0
-    parameters['image_url'] = ''
     parameters['image_seed'] = []
     parameters['error_msg'] = repr(exception)
     parameters['reason'] = exception.response.json() if hasattr(exception, "response") else None
-    parameters['image_mask_url'] = ''
     return {
         'images': [''],
         'parameters': parameters,
@@ -215,20 +213,15 @@ def prepare_payload(body, header):
 
     return body
 
-def post_invocations(s3_bucket, folder, response, quality):
-    defaultFolder = datetime.date.today().strftime("%Y-%m-%d")
-    if not folder:
-        folder = defaultFolder
-    images = []
-    results = []
+def post_invocations(response):
+    img_bytes = []
+
     if "images" in response.keys():
-        images = [images.export_pil_to_bytes(images.decode_to_image(i), quality)
-                  for i in response["images"]]
+        for i in response["images"]:
+            img_bytes.append(base64.b64decode(i))
+
     elif "image" in response.keys():
-        images = [images.export_pil_to_bytes(
-            images.decode_to_image(response["image"]), quality)]
+        for i in response["image"]:
+            img_bytes.append(base64.b64decode(i))
 
-    if len(images) > 0:
-        results = [s3_action.upload_file(i, s3_bucket, folder, None, 'png') for i in images]
-
-    return results
+    return img_bytes

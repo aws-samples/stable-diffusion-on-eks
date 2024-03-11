@@ -6,12 +6,13 @@ import logging
 import os
 import signal
 import sys
+import uuid
 
 import boto3
 from aws_xray_sdk.core import patch_all, xray_recorder
 from aws_xray_sdk.core.models.trace_header import TraceHeader
-from modules import sns_action, sqs_action
-from runtimes import sdwebui
+from modules import s3_action, sns_action, sqs_action
+from runtimes import comfyui, sdwebui
 
 patch_all()
 
@@ -57,6 +58,7 @@ if runtime_type == "sdwebui":
 # TODO: Add some init for ComfyUI
 if runtime_type == "comfyui":
     api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080/")
+    client_id = str(uuid.uuid4())
     # Change here to ComfyUI's base URL
     # You can specify any required environment variable here
 
@@ -82,8 +84,7 @@ def main():
         sdwebui.check_readiness(api_base_url, dynamic_sd_model)
 
     if runtime_type == "comfyui":
-        # TODO: Add health check for ComfyUI
-        pass
+        comfyui.check_readiness(api_base_url)
 
     # main loop
     # 1. Pull msg from sqs;
@@ -111,22 +112,50 @@ def main():
                 segment.sampled = sqsTraceHeader.sampled
 
                 # Process received message
-                snsPayload = json.loads(message.body)
-                payload = json.loads(snsPayload['Message'])
-                response = ""
+                payload = json.loads(json.loads(message.body)['Message'])
+                metadata = payload["metadata"]
+                task_id = metadata["id"]
+                if "prefix" in metadata.keys():
+                    prefix = metadata["prefix"] + "/" + str(task_id)
+                else:
+                    prefix = str(task_id)
+                if "tasktype" in metadata.keys():
+                    tasktype = metadata["tasktype"]
+
+                if "context" in payload.keys():
+                    context = payload["context"]
+                else:
+                    context = {}
+
+                body = payload["body"]
+
+                response = {}
 
                 if runtime_type == "sdwebui":
-                    response = sdwebui.handler(api_base_url, payload, s3_bucket, dynamic_sd_model)
+                    response = sdwebui.handler(api_base_url, tasktype, task_id, body, dynamic_sd_model)
 
                 if runtime_type == "comfyui":
-                    # TODO: Add ComfyUI handler here
-                    # response = comfyui.handler(api_base_url, payload, s3_bucket)
-                    pass
+                    response = comfyui.handler(api_base_url, task_id, body)
+
+                result = []
+
+                if response["success"]:
+                    idx = 0
+                    if len(response["image"]) > 0:
+                        for i in response["image"]:
+                            idx += 1
+                            result.append(s3_action.upload_file(i, s3_bucket, prefix, str(task_id)+"-"+str(idx)))
+
+                result.append(s3_action.upload_file(response, s3_bucket, prefix, str(task_id), ".out"))
+
+                sns_response = {'id': task_id,
+                                'result': response["success"],
+                                'image_url': result,
+                                'context': context}
 
                 # Put response handler to SNS and delete message
-                sns_action.publish_message(topic, response)
+                sns_action.publish_message(topic, json.dumps(sns_response))
                 sqs_action.delete_message(message)
-
 
 def print_env() -> None:
     logger.info(f'AWS_DEFAULT_REGION={aws_default_region}')

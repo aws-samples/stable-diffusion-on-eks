@@ -25,7 +25,7 @@ COMFYUI_ENDPOINT='comfyui-lb-1023792722.us-east-1.elb.amazonaws.com'
 server_address = COMFYUI_ENDPOINT
 client_id = str(uuid.uuid4())
 
-api_base_url = server_address 
+api_base_url = server_address
 
 # Check current runtime type
 runtime_type = os.getenv("RUNTIME_TYPE", "").lower
@@ -54,25 +54,31 @@ def test_workflow():
 def main():
 
     if runtime_type == "comfyui":
-        comfyui.check_readiness(api_base_url, dynamic_sd_model)
-        pass
-    
+        comfyui.check_readiness(api_base_url)
+
+    task_id = "test"
+    payload = test_workflow()
+    response = {}
+
     while True:
         if shutdown:
             logger.info('Received SIGTERM, shutting down...')
             break
 
-        payload = test_workflow()
-        response = ""
-        
         if runtime_type == "comfyui":
-            response = comfyui.handler(api_base_url, payload, s3_bucket, dynamic_sd_model)
+            response = comfyui.handler(api_base_url, task_id, payload)
+            if response["success"]:
+                images = response["image"]
+                idx = 1
+                for image_data in images:
+                        OUTPUT_LOCATION = "./outputs/comfyui/{}_{}.png".format(task_id, idx)
+                        with open(OUTPUT_LOCATION, "wb") as binary_file:
+                            # Write bytes to file
+                            binary_file.write(image_data)
+                        idx = idx + 1
+                        print("{} DONE!!!".format(OUTPUT_LOCATION))
             break
-
         time.sleep(1)
-
-    pass
-
 
 def signalHandler(signum, frame):
     global shutdown

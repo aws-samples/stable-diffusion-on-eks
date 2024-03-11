@@ -1,5 +1,7 @@
 FROM public.ecr.aws/docker/library/python:3.10-slim
 
+RUN apt-get update; apt-get install libmagic1 -y; rm -rf /var/lib/apt/lists/*
+
 RUN adduser --disabled-password --gecos '' app && \
     mkdir /app || true; \
     chown -R app /app

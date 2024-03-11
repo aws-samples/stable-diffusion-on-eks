@@ -1,13 +1,17 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
+import logging
+
 import aioboto3
 import requests
 from aiohttp_client_cache import CacheBackend
 from requests.adapters import HTTPAdapter, Retry
 from requests_cache import CachedSession
-from s3_action import *
-from time_utils import get_time
+
+from . import s3_action, time_utils
+
+logger = logging.getLogger("queue-agent")
 
 ab3_session = aioboto3.Session()
 
@@ -26,7 +30,7 @@ cache = CacheBackend(
     expire_after=600
 )
 
-@get_time
+@time_utils.get_time
 def do_invocations(url: str, body:str=None) -> str:
     if body is None:
         logger.debug(f"Invoking {url}")
@@ -51,7 +55,7 @@ async def async_get(url: str) -> None:
                     # logger.info(res.from_cache, res.created_at, res.expires, res.is_expired)
                     return await res.read()
         elif url.startswith("s3://"):
-            bucket, key = get_bucket_and_key(url)
+            bucket, key = s3_action.get_bucket_and_key(url)
             async with ab3_session.resource("s3") as s3:
                 obj = await s3.Object(bucket, key)
                 res = await obj.get()
