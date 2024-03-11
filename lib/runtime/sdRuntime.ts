@@ -166,8 +166,8 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
           sqsQueueUrl: inputQueue.queueUrl,
           dynamicModel: this.options.dynamicModel
         },
-        // Temp add static provisioning values here
         persistence: {
+          enabled: true,
           existingClaim: this.id+"-s3-model-storage-pvc"
         }
       }
@@ -198,6 +198,9 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     const values = lodash.merge(this.props.values, this.options.extraValues, generatedValues)
 
     const chart = this.addHelmChart(clusterInfo, values, true);
+
+    chart.node.addDependency(pv)
+    chart.node.addDependency(pvc)
 
     return Promise.resolve(chart);
   }
