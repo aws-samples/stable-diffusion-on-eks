@@ -6,6 +6,7 @@ SCRIPTPATH=$(realpath $(dirname "$0"))
 STACK_NAME=${STACK_NAME:-"sdoneks"}
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
+API_VERSION=${STACK_NAME:-"v1alpha2"}
 
 API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name ${STACK_NAME} --output text --query 'Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue')
 
@@ -24,14 +25,14 @@ if [[ ${RUNTIME_TYPE} == "sdwebui" ]]
     curl -X POST ${API_ENDPOINT} \
         -H "Content-Type: application/json" \
         -H "x-api-key: ${API_KEY}" \
-        -d @${SCRIPTPATH}/t2i.json
+        -d @${SCRIPTPATH}/${API_VERSION}/t2i.json
 
     printf "\nGenerating test image-to-image request... \n"
 
     curl -X POST ${API_ENDPOINT} \
         -H "Content-Type: application/json" \
         -H "x-api-key: ${API_KEY}" \
-        -d @${SCRIPTPATH}/i2i.json
+        -d @${SCRIPTPATH}/${API_VERSION}/i2i.json
 fi
 
 if [[ ${RUNTIME_TYPE} == "comfyui" ]]
@@ -41,5 +42,5 @@ if [[ ${RUNTIME_TYPE} == "comfyui" ]]
     curl -X POST ${API_ENDPOINT} \
         -H "Content-Type: application/json" \
         -H "x-api-key: ${API_KEY}" \
-        -d @${SCRIPTPATH}/pipeline.json
+        -d @${SCRIPTPATH}/${API_VERSION}/pipeline.json
 fi

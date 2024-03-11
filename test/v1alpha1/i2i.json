@@ -1,12 +1,13 @@
 {
     "alwayson_scripts": {
         "task": "image-to-image",
-        "image_link": "https://oss.ipartszone.com/partsimages/1174/B6Y1-14-302A/main/1677038516057.jpg",
+        "image_link": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png",
         "id_task": "test-i2i",
         "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
-        "uid": "123"
+        "uid": "123",
+        "save_dir": "outputs"
     },
-    "prompt": "Add a pirate ship to ",
+    "prompt": "cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",
     "steps": 16,
     "width": 512,
     "height": 512

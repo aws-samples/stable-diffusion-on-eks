@@ -1,0 +1,18 @@
+{
+  "task": {
+    "metadata": {
+      "id": "test-i2i",
+      "runtime": "sd1-5",
+      "tasktype": "image-to-image",
+      "image_link": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png",
+      "context": ""
+    },
+    "content": {
+      "alwayson_scripts": {},
+      "prompt": "cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",
+      "steps": 16,
+      "width": 512,
+      "height": 512
+    }
+  }
+}
