@@ -45,7 +45,7 @@ paths:
                     description: Location of output file
                     example: "s3://sdoneksstack-outputs3bucket/abc"
       security:
-      - apikey: {}
+      - apikey: []
 externalDocs:
   description: Usage introduction
   url: >-
@@ -88,7 +88,7 @@ components:
                         example: output
             prompt:
                 type: string
-                example: ""
+                example: "a dog"
             steps:
                 type: integer
                 example: 16

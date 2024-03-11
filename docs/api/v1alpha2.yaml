@@ -41,7 +41,7 @@ paths:
                     description: Location of output file
                     example: "s3://sdoneksstack-outputs3bucket/abc"
       security:
-      - apikey: {}
+      - apikey: []
 externalDocs:
   description: Usage introduction
   url: >-
