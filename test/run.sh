@@ -22,14 +22,14 @@ if [[ ${RUNTIME_TYPE} == "sdwebui" ]]
   then
     printf "Generating test text-to-image request... \n"
 
-    curl -X POST ${API_ENDPOINT} \
+    curl -X POST ${API_ENDPOINT}/${API_VERSION}/ \
         -H "Content-Type: application/json" \
         -H "x-api-key: ${API_KEY}" \
         -d @${SCRIPTPATH}/${API_VERSION}/t2i.json
 
     printf "\nGenerating test image-to-image request... \n"
 
-    curl -X POST ${API_ENDPOINT} \
+    curl -X POST ${API_ENDPOINT}/${API_VERSION}/ \
         -H "Content-Type: application/json" \
         -H "x-api-key: ${API_KEY}" \
         -d @${SCRIPTPATH}/${API_VERSION}/i2i.json
