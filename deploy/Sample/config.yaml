@@ -36,7 +36,7 @@ modelsRuntime:
           tag: latest
       persistence:
         enabled: true
-        existingClaim: "efs-model-storage-pvc"
+        existingClaim: "s3-model-storage-pvc"
 - name: "sdruntime2"
   namespace: "sdruntime2"
   modelFilename: "revAnimated_v122.safetensors"
@@ -66,7 +66,7 @@ modelsRuntime:
           tag: latest
       persistence:
         enabled: true
-        existingClaim: "efs-model-storage-pvc"
+        existingClaim: "s3-model-storage-pvc"
 dynamicModelRuntime:
   enabled: true
   chartRepository: "oci://123456789012.dkr.ecr.us-west-2.amazonaws.com/sd-on-eks/charts/sd-on-eks"
@@ -96,5 +96,5 @@ dynamicModelRuntime:
           tag: latest
       persistence:
         enabled: true
-        existingClaim: "efs-model-storage-pvc"
+        existingClaim: "s3-model-storage-pvc"
   namespace: "default"

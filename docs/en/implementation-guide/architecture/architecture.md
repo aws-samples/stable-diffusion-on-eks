@@ -30,7 +30,7 @@ For each runtime:
 * SNS publishes the message to Amazon SQS queues via matching subscription filters
 * In Amazon EKS cluster, open source Kubernetes Event Driven Auto-Scaler (KEDA) scales up new pods based on the queue length
 * Karpenter (an open source Kubernetes compute auto-scaler) launches new GPU spot instances to place pending pods. The nodes run Bottlerocket OS with pre-cached Stable Diffusion Runtime images
-* SD Runtime loads model files from Amazon EFS file system
+* SD Runtime loads model files from Amazon S3 bucket
 * Queue Agent calls SD Runtime to generate images and save them to Amazon S3
 * Queue Agent sends output to a SNS topic and the application backend receives notification from SQS queue
 * Amazon CloudWatch, Amazon Distro for OpenTelemetry, and Amazon X-Ray collect metrics, logs, and traces to monitor guidance components
@@ -44,7 +44,7 @@ Static runtimes use models that need to be specified in advance and loaded into 
 
 #### Dynamic Runtimes
 
-Dynamic runtimes do not require specifying models in advance. SNS delivers all requests without static runtimes to this runtime. The runtime loads the model from Amazon EFS and performs model inference based on the model used in the request.
+Dynamic runtimes do not require specifying models in advance. SNS delivers all requests without static runtimes to this runtime. The runtime loads the model from Amazon S3 and performs model inference based on the model used in the request.
 
 !!! bug "Note"
     In the current implementation, requests are randomly distributed to one of the replicas of dynamic runtimes. This routing strategy may lead to unnecessary model loading, resulting in longer image generation times.

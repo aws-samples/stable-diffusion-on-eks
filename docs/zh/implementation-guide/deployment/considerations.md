@@ -15,13 +15,12 @@
 如您在未经验证的区域进行部署，可能需要进行以下处理，或面临以下问题：
 
 * 在不支持`g5`实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
-* 在部分区域部署时， EFS 的性能可能会受到影响，请参见 [Amazon EFS文档](https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput) 以了解在不同区域的EFS读取性能。
 
 **在亚马逊云科技中国区域部署**
 
 !!! danger "中国区域网络限制"
 
-    近期，我们发现在中国区部署该解决方案时，出现EBS和EFS无法部署，报错信息显示 `Waiter has timed out` 或 `Unexpected EOF`. 详情请参考对应[Issue](https://github.com/aws-samples/stable-diffusion-on-eks/issues/53).
+    近期，我们发现在中国区部署该解决方案时，出现EBS无法部署，报错信息显示 `Waiter has timed out` 或 `Unexpected EOF`. 详情请参考对应[Issue](https://github.com/aws-samples/stable-diffusion-on-eks/issues/53).
 
     该问题的根因是部分组件的Helm Chart位于Github上，在中国区部署时，负责部署自定义资源的Lambda无法获取Helm Chart，导致报错。目前我们正在积极处理该问题，后续会将需要的Helm Chart和容器镜像复制到中国区域。该过程预计在2024年Q1完成。
 
@@ -37,7 +36,6 @@
 在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：
 
 * 中国区域不支持默认的`g5`实例类型。您需要手工指定 Karpenter 使用的实例类型为 `g4dn` 或其他 GPU 实例类型。
-* 中国区域不支持EventBridge Scheduler，故在首次运行或模型有更新时，您需要**手工触发**DataSync将模型从S3同步至EFS上，或直接将模型存储在EFS中。
 
 ## IAM 权限
 

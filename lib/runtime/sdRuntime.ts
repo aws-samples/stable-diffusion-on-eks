@@ -4,7 +4,6 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
-import * as efs from 'aws-cdk-lib/aws-efs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { aws_sns_subscriptions } from "aws-cdk-lib";
 import * as lodash from "lodash";
@@ -21,8 +20,7 @@ export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProp
   allModels?: string[],
   chartRepository?: string,
   chartVersion?: string,
-  extraValues?: {},
-  efsFilesystem?: efs.IFileSystem
+  extraValues?: {}
 }
 
 export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProps = {
@@ -59,6 +57,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
   @blueprints.utils.dependable(blueprints.KarpenterAddOn.name)
   @blueprints.utils.dependable("SharedComponentAddOn")
+  @blueprints.utils.dependable("s3CSIDriverAddOn")
 
   deploy(clusterInfo: blueprints.ClusterInfo): Promise<Construct> {
     const cluster = clusterInfo.cluster
@@ -105,35 +104,39 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       ))
 
     // Static provisioning resource
-    const pv = cluster.addManifest(this.id+"EfsModelStoragePv", {
+    const pv = cluster.addManifest(this.id+"S3ModelStoragePv", {
       "apiVersion": "v1",
       "kind": "PersistentVolume",
       "metadata": {
-        "name": this.id+"-efs-model-storage-pv"
+        "name": this.id+"-s3-model-storage-pv"
       },
       "spec": {
         "capacity": {
           "storage": "2Ti"
         },
-        "volumeMode": "Filesystem",
         "accessModes": [
           "ReadWriteMany"
         ],
-        "storageClassName": "efs-sc",
-        "persistentVolumeReclaimPolicy": "Retain",
+        "mountOptions": [
+          "allow-delete",
+          "allow-other"
+        ],
         "csi": {
-          "driver": "efs.csi.aws.com",
-          "volumeHandle": this.options.efsFilesystem!.fileSystemId
+          "driver": "s3.csi.aws.com",
+          "volumeHandle": "s3-csi-driver-volume",
+          "volumeAttributes": {
+            "bucketName": modelBucket.bucketName
+          }
         }
       }
     })
     pv.node.addDependency(ns)
 
-    const pvc = cluster.addManifest(this.id+"EfsModelStoragePvc", {
+    const pvc = cluster.addManifest(this.id+"S3ModelStoragePvc", {
       "apiVersion": "v1",
       "kind": "PersistentVolumeClaim",
       "metadata": {
-        "name": this.id+"-efs-model-storage-pvc",
+        "name": this.id+"-s3-model-storage-pvc",
         "namespace": this.props.namespace
       },
       "spec": {
@@ -145,7 +148,8 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         "accessModes": [
           "ReadWriteMany"
         ],
-        "storageClassName": "efs-sc"
+        "storageClassName": "",
+        "volumeName": this.id+"-s3-model-storage-pv"
       }
     })
     pvc.node.addDependency(ns)
@@ -164,7 +168,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         },
         // Temp add static provisioning values here
         persistence: {
-          existingClaim: this.id+"-efs-model-storage-pvc"
+          existingClaim: this.id+"-s3-model-storage-pvc"
         }
       }
     }

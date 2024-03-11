@@ -13,7 +13,6 @@ The services used by this solution or the EC2 instance types may not be availabl
 If you deploy in an unverified region, you may need to take the following actions or face potential issues:
 
 * When deploying in a region that does not support the g5 instance type, you may need to manually specify the instance type used by Karpenter as `g4dn` or another GPU instance type.
-* Performance of EFS may be affected in some regions. Refer to the [Amazon EFS documentation](https://docs.aws.amazon.com/efs/latest/ug/limits.html#:~:text=Total%20default%20Elastic%20Throughput) for EFS read performance in different regions.
 
 ## IAM Permissions
 

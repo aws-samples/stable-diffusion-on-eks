@@ -6,11 +6,9 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as efs from 'aws-cdk-lib/aws-efs';
 import SDRuntimeAddon, { SDRuntimeAddOnProps } from './runtime/sdRuntime';
 import { EbsThroughputTunerAddOn, EbsThroughputTunerAddOnProps } from './addons/ebsThroughputTuner'
-import nvidiaDevicePluginAddon from './addons/nvidiaDevicePlugin'
-import { S3SyncEFSAddOnProps, S3SyncEFSAddOn } from './addons/s3SyncEFS'
+import { s3CSIDriverAddOn } from './addons/s3CSIDriver'
 import { SharedComponentAddOn, SharedComponentAddOnProps } from './addons/sharedComponent';
 import { SNSResourceProvider } from './resourceProvider/sns'
 
@@ -36,19 +34,9 @@ export interface dataPlaneProps {
 }
 
 export default class DataPlaneStack {
-  cluster: eks.ICluster;
-
   constructor(scope: Construct, id: string,
     dataplaneProps: dataPlaneProps,
     props: cdk.StackProps) {
-
-    const efsParams: blueprints.CreateEfsFileSystemProps = {
-      name: "efs-model-storage",
-      efsProps: {
-        removalPolicy: cdk.RemovalPolicy.DESTROY,
-        throughputMode: efs.ThroughputMode.ELASTIC
-      }
-    }
 
     const kedaParams: blueprints.KedaAddOnProps = {
       podSecurityContextFsGroup: 1001,
@@ -111,7 +99,6 @@ export default class DataPlaneStack {
     }
 
     const SharedComponentAddOnParams: SharedComponentAddOnProps = {
-      modelstorageEfs: blueprints.getNamedResource("efs-model-storage"),
       inputSns: blueprints.getNamedResource("inputSNSTopic"),
       outputSns: blueprints.getNamedResource("outputSNSTopic"),
       outputBucket: blueprints.getNamedResource("outputS3Bucket")
@@ -123,25 +110,19 @@ export default class DataPlaneStack {
       iops: 3000
     };
 
-    const s3SyncEFSAddOnParams: S3SyncEFSAddOnProps = {
-      bucketArn: dataplaneProps.modelBucketArn,
-      efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
-    }
-
     const addOns: Array<blueprints.ClusterAddOn> = [
       new blueprints.addons.VpcCniAddOn(),
       new blueprints.addons.CoreDnsAddOn(),
       new blueprints.addons.KubeProxyAddOn(),
       new blueprints.addons.AwsLoadBalancerControllerAddOn(),
       new blueprints.addons.EbsCsiDriverAddOn(),
-      new blueprints.addons.EfsCsiDriverAddOn(),
       new blueprints.addons.KarpenterAddOn({ interruptionHandling: true }),
       new blueprints.addons.KedaAddOn(kedaParams),
       new blueprints.addons.ContainerInsightsAddOn(containerInsightsParams),
       new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
+      new s3CSIDriverAddOn({ s3BucketArn: dataplaneProps.modelBucketArn }),
       new SharedComponentAddOn(SharedComponentAddOnParams),
-      new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams),
-      new S3SyncEFSAddOn(s3SyncEFSAddOnParams)
+      new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams)
     ];
 
 let models: string[] = [];
@@ -158,8 +139,7 @@ dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
     chartVersion: val.chartVersion,
     extraValues: val.extraValues,
     targetNamespace: val.namespace,
-    dynamicModel: false,
-    efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
+    dynamicModel: false
   };
   addOns.push(new SDRuntimeAddon(sdRuntimeParams, val.name))
   models.push(val.modelFilename)
@@ -178,8 +158,7 @@ if (dataplaneProps.dynamicModelRuntime.enabled) {
     chartRepository: dataplaneProps.dynamicModelRuntime.chartRepository,
     chartVersion: dataplaneProps.dynamicModelRuntime.chartVersion,
     extraValues: dataplaneProps.dynamicModelRuntime.extraValues,
-    allModels: models,
-    efsFilesystem: blueprints.getNamedResource("efs-model-storage") as efs.IFileSystem
+    allModels: models
   };
   addOns.push(new SDRuntimeAddon(sdRuntimeParams, "dynamicSDRuntime"))
 }
@@ -211,7 +190,6 @@ const blueprint = blueprints.EksBlueprint.builder()
   .resourceProvider("outputS3Bucket", new blueprints.CreateS3BucketProvider({
     id: 'outputS3Bucket'
   }))
-  .resourceProvider("efs-model-storage", new blueprints.CreateEfsFileSystemProvider(efsParams))
   .clusterProvider(new blueprints.MngClusterProvider(MngProps))
   .build(scope, id + 'Stack', props);
 

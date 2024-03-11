@@ -3,8 +3,6 @@
 | AWS 服务 | 描述  |
 | ---- | ----|
 | [Amazon S3](http://aws.amazon.com/s3/)         | 用于存储模型和生成的图像。|
-| [Amazon EFS](http://aws.amazon.com/efs/)         | 用于存储模型。|
-| [Amazon Datasync](http://aws.amazon.com/datasync/)         | 用于将模型从S3存储桶同步至EFS中。|
 | [Amazon ECR](http://aws.amazon.com/ecr/)         | 用于存储运行时所需的容器镜像。|
 | [Amazon API Gateway](http://aws.amazon.com/api-gateway/)         | 用于提供对外访问的API接口。|
 | [AWS Lambda](https://aws.amazon.com/lambda)    | 用于进行请求验证和路由。|

@@ -3,8 +3,6 @@ The following AWS services are included in this solution:
 | AWS Service | Description |
 | ---- | ----|
 | [Amazon S3](http://aws.amazon.com/s3/)         | Used for storing models and generated images.|
-| [Amazon EFS](http://aws.amazon.com/efs/)         | Used for storing models.|
-| [Amazon Datasync](http://aws.amazon.com/datasync/)         | Used to sync models from S3 buckets to EFS.|
 | [Amazon ECR](http://aws.amazon.com/ecr/)         | Used for storing container images required by the runtime.|
 | [Amazon API Gateway](http://aws.amazon.com/api-gateway/)         | Used to provide an API interface for external access.|
 | [AWS Lambda](https://aws.amazon.com/lambda)    | Used for request validation and routing.|
