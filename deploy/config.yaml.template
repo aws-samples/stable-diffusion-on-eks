@@ -1,5 +1,5 @@
 stackName: ${STACK_NAME}
-modelBucketArn: ${MODEL_BUCKET}
+modelBucketArn: arn:aws:s3:::${MODEL_BUCKET}
 modelsRuntime:
 - name: "sd1-5"
   namespace: "default"
@@ -27,7 +27,7 @@ modelsRuntime:
           spot: true
       persistence:
         enabled: true
-        existingClaim: "efs-model-storage-pvc"
+        existingClaim: "s3-model-storage-pvc"
       scaling:
         queueLength: 10 # Target value for queue length. One new instance will be launched when queue launch reaches the value.
         minReplicaCount: 0 # Minimum number of replicas of SD Runtime.

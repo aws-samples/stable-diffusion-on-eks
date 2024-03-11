@@ -17,68 +17,95 @@ download () {
 cur_dir=$(pwd)
 tmp_dir=$(mktemp -d)
 
-cd $tmp_dir
+cd "$tmp_dir"
 
-yum install --quiet -y findutils jq tar gzip zsh git diffutils wget \
-  tree unzip openssl gettext bash-completion python3 pip3 python3-pip \
-  amazon-linux-extras nc yum-utils
+sudo wget -O /usr/local/bin/pacapt https://github.com/icy/pacapt/raw/ng/pacapt
+sudo chmod 755 /usr/local/bin/pacapt
+sudo ln -sv /usr/local/bin/pacapt /usr/local/bin/pacman || true
+
+sudo pacapt install --noconfirm jq git wget unzip openssl bash-completion python3 python3-pip
 
 pip3 install -q awscurl==0.28 urllib3==1.26.6
 
 # kubectl
-printf "Installing kubectl..."
-download "https://dl.k8s.io/release/v$kubectl_version/bin/linux/amd64/kubectl" "kubectl"
-chmod +x ./kubectl
-mv ./kubectl /usr/local/bin
+if which kubectl > /dev/null
+  then
+    printf "kubectl is installed, skipping...\n"
+  else
+    printf "Installing kubectl...\n"
+    download "https://dl.k8s.io/release/v$kubectl_version/bin/linux/amd64/kubectl" "kubectl"
+    chmod +x ./kubectl
+    mv ./kubectl /usr/local/bin
+fi
 
 # helm
-printf "Installing helm..."
-download "https://get.helm.sh/helm-v$helm_version-linux-amd64.tar.gz" "helm.tar.gz"
-tar zxf helm.tar.gz
-chmod +x linux-amd64/helm
-mv ./linux-amd64/helm /usr/local/bin
-rm -rf linux-amd64/ helm.tar.gz
+if which helm > /dev/null
+  then
+    printf "helm is installed, skipping...\n"
+  else
+    printf "Installing helm...\n"
+    download "https://get.helm.sh/helm-v$helm_version-linux-amd64.tar.gz" "helm.tar.gz"
+    tar zxf helm.tar.gz
+    chmod +x linux-amd64/helm
+    mv ./linux-amd64/helm /usr/local/bin
+    rm -rf linux-amd64/ helm.tar.gz
+fi
 
 # aws cli v2
-printf "Installing AWS CLI v2..."
+printf "Installing/Upgrading AWS CLI v2...\n"
 curl --location --show-error --silent "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip -o -q awscliv2.zip -d /tmp
-/tmp/aws/install --update
+sudo /tmp/aws/install --update
 rm -rf /tmp/aws awscliv2.zip
 
 # yq
-printf "Installing yq..."
-download "https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64" "yq"
-chmod +x ./yq
-mv ./yq /usr/local/bin
+if which yq > /dev/null
+  then
+    printf "yq is installed, skipping...\n"
+  else
+    printf "Installing yq...\n"
+    download "https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64" "yq"
+    chmod +x ./yq
+    mv ./yq /usr/local/bin
+fi
 
 # s5cmd
-printf "Installing s5cmd..."
-download "https://github.com/peak/s5cmd/releases/download/s5cmd_${s5cmd_version}_Linux-64bit.tar.gz" "s5cmd.tar.gz"
-tar zxf s5cmd.tar.gz
-chmod +x ./s5cmd
-mv ./s5cmd /usr/local/bin
-rm -rf s5cmd.tar.gz
+if which s5cmd > /dev/null
+  then
+    printf "s5cmd is installed, skipping...\n"
+  else
+    printf "Installing s5cmd...\n"
+    download "https://github.com/peak/s5cmd/releases/download/s5cmd_${s5cmd_version}_Linux-64bit.tar.gz" "s5cmd.tar.gz"
+    tar zxf s5cmd.tar.gz
+    chmod +x ./s5cmd
+    mv ./s5cmd /usr/local/bin
+    rm -rf s5cmd.tar.gz
+fi
 
 # Node.js
 if which node > /dev/null
   then
-      printf "Node.js is installed, skipping..."
+    printf "Node.js is installed, skipping...\n"
   else
-      printf "Installing Node.js..."
-      download "https://nodejs.org/dist/v{$node_version}/node-v{$node_version}-linux-x64.tar.xz" "node.tar.xz"
-      sudo mkdir -p /usr/local/lib/nodejs
-      sudo tar -xJvf node.tar.xz -C /usr/local/lib/nodejs
-      export PATH=/usr/local/lib/nodejs/node-$node_version-linux-x64/bin:$PATH
-      printf "export /usr/local/lib/nodejs/node-$node_version-linux-x64/bin:\$PATH" >> ~/.bash_profile
-      source ~/.bash_profile
-  fi
+    printf "Installing Node.js...\n"
+    download "https://nodejs.org/dist/v{$node_version}/node-v{$node_version}-linux-x64.tar.xz" "node.tar.xz"
+    sudo mkdir -p /usr/local/lib/nodejs
+    sudo tar -xJvf node.tar.xz -C /usr/local/lib/nodejs
+    export PATH=/usr/local/lib/nodejs/node-$node_version-linux-x64/bin:$PATH
+    printf "export /usr/local/lib/nodejs/node-$node_version-linux-x64/bin:\$PATH" >> ~/.bash_profile
+    source ~/.bash_profile
+fi
 
 # CDK CLI
-printf "Installing AWS CDK CLI and bootstraping CDK environment..."
-sudo npm install -g aws-cdk@$cdk_version
-cdk bootstrap
+if which cdk > /dev/null
+  then
+    printf "CDK CLI is installed, skipping...\n"
+  else
+    printf "Installing AWS CDK CLI and bootstraping CDK environment...\n"
+    sudo npm install -g aws-cdk@$cdk_version
+    cdk bootstrap
+fi
 
-printf "Tools install complete. "
+printf "Tools install complete. \n"
 
 cd $cur_dir

@@ -15,7 +15,7 @@ printf "Downloading SD 1.5 base model from hugging face...\n"
 curl --location --show-error --silent --output "${tmp_dir}/${MODEL_NAME}" "${MODEL_URL}"
 
 printf "Uploading model to S3...\n"
-s5cmd cp --destination-region=${AWS_DEFAULT_REGION} "${tmp_dir}/${MODEL_NAME}" s3://${MODEL_BUCKET}/stable-diffusion/${MODEL_NAME}
+s5cmd cp --destination-region="${AWS_DEFAULT_REGION}" "${tmp_dir}/${MODEL_NAME}" s3://${MODEL_BUCKET}/stable-diffusion/${MODEL_NAME}
 
 printf "Model uploaded to s3://${MODEL_BUCKET}/stable-diffusion/${MODEL_NAME}\n"
 
