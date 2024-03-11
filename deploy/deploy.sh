@@ -31,7 +31,8 @@ if [ -z "$SNAPSHOT_ID" ]; then
   git submodule update --init --recursive
   if [[ "$RUNTIME_TYPE" == "sdwebui" ]] ; then
     SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q docker.io/sdoneks/inference-api:sdwebui-v1.7.0-20240229,docker.io/sdoneks/queue-agent:latest)
-  else
+  fi
+  if [[ ${RUNTIME_TYPE} == "comfyui" ]]; then
     SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q docker.io/sdoneks/inference-api:comfyui,docker.io/sdoneks/queue-agent:latest)
   fi
 else
