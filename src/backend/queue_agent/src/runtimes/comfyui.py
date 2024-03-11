@@ -49,10 +49,16 @@ class comfyuiCaller(object):
             return json.loads(response.read())
 
     def queue_prompt(self, prompt):
-        p = {"prompt": prompt, "client_id": self.client_id}
-        data = json.dumps(p).encode('utf-8')
-        req =  urllib.request.Request("http://{}/prompt".format(self.api_base_url), data=data)
-        return json.loads(urllib.request.urlopen(req).read())
+        try:
+            p = {"prompt": prompt, "client_id": self.client_id}
+            data = json.dumps(p).encode('utf-8')
+            # print(data)
+            req =  urllib.request.Request("http://{}/prompt".format(self.api_base_url), data=data)
+            output = urllib.request.urlopen(req)
+            return json.loads(output.read())
+        except Exception as e:
+            print(e)
+            return None
     
     def get_image(self, filename,  subfolder, folder_type):
         data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
@@ -60,22 +66,41 @@ class comfyuiCaller(object):
         with urllib.request.urlopen("http://{}/view?{}".format(self.api_base_url, url_values)) as response:
             return response.read()
         
-    def get_images(self, prompt):
-        prompt_id = self.queue_prompt(prompt)['prompt_id']
-        logger.info("prompt_id:" + prompt_id)
-        output_images = {}
+    def track_progress(self, prompt, prompt_id):
+        print("prompt_id:" + prompt_id)
+        node_ids = list(prompt.keys())
+        finished_nodes = []
+
         while True:
             out = self.wss.recv()
             if isinstance(out, str):
                 message = json.loads(out)
+                if message['type'] == 'progress':
+                    data = message['data']
+                    current_step = data['value']
+                    print('In K-Sampler -> Step: ', current_step, ' of: ', data['max'])
+                if message['type'] == 'execution_cached':
+                    data = message['data']
+                    for itm in data['nodes']:
+                        if itm not in finished_nodes:
+                            finished_nodes.append(itm)
+                            print('Progess: ', len(finished_nodes), '/', len(node_ids), ' Tasks done')
                 if message['type'] == 'executing':
                     data = message['data']
-                    logger.info(data)
+                    if data['node'] not in finished_nodes:
+                        finished_nodes.append(data['node'])
+                        print('Progess: ', len(finished_nodes), '/', len(node_ids), ' Tasks done')
+
                     if data['node'] is None and data['prompt_id'] == prompt_id:
                         break #Execution is done
             else:
-                time.sleep(1)
-                continue #previews are binary data
+                continue
+        return
+        
+    def get_images(self, prompt):
+        prompt_id = self.queue_prompt(prompt)['prompt_id']
+        output_images = {}
+        self.track_progress(prompt, prompt_id)
 
         history = self.get_history(prompt_id)[prompt_id]
         for o in history['outputs']:

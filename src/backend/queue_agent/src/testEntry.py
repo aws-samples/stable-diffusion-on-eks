@@ -40,9 +40,16 @@ shutdown = False
 dynamic_sd_model = False
 
 def test_workflow():
-    workflowfile = './runtimes/test_workflow_api.json'
-    with open(workflowfile, 'r', encoding="utf-8") as workflowfile_data:
-        return json.load(workflowfile_data)
+    try:
+        workflowfile = './runtimes/test_workflow_api.json'
+        with open(workflowfile, 'r', encoding="utf-8") as workflowfile_data:
+            return json.load(workflowfile_data)
+    except FileNotFoundError:
+        print(f"The file {workflowfile} was not found.")
+        return None
+    except json.JSONDecodeError:
+        print(f"The file {workflowfile} contains invalid JSON.")
+        return None
 
 def main():
 
