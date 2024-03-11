@@ -11,6 +11,7 @@ import { EbsThroughputTunerAddOn, EbsThroughputTunerAddOnProps } from './addons/
 import { s3CSIDriverAddOn, s3CSIDriverAddOnProps } from './addons/s3CSIDriver'
 import { SharedComponentAddOn, SharedComponentAddOnProps } from './addons/sharedComponent';
 import { SNSResourceProvider } from './resourceProvider/sns'
+import { s3GWEndpointProvider } from './resourceProvider/s3GWEndpoint'
 
 export interface dataPlaneProps {
   stackName: string,
@@ -194,6 +195,7 @@ const blueprint = blueprints.EksBlueprint.builder()
   .resourceProvider("outputS3Bucket", new blueprints.CreateS3BucketProvider({
     id: 'outputS3Bucket'
   }))
+  .resourceProvider("s3GWEndpoint", new s3GWEndpointProvider("s3GWEndpoint"))
   .clusterProvider(new blueprints.MngClusterProvider(MngProps))
   .build(scope, id + 'Stack', props);
 
