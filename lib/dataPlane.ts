@@ -8,7 +8,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import SDRuntimeAddon, { SDRuntimeAddOnProps } from './runtime/sdRuntime';
 import { EbsThroughputTunerAddOn, EbsThroughputTunerAddOnProps } from './addons/ebsThroughputTuner'
-import { s3CSIDriverAddOn } from './addons/s3CSIDriver'
+import { s3CSIDriverAddOn, s3CSIDriverAddOnProps } from './addons/s3CSIDriver'
 import { SharedComponentAddOn, SharedComponentAddOnProps } from './addons/sharedComponent';
 import { SNSResourceProvider } from './resourceProvider/sns'
 
@@ -110,6 +110,10 @@ export default class DataPlaneStack {
       iops: 3000
     };
 
+    const s3CSIDriverAddOnParams: s3CSIDriverAddOnProps = {
+      s3BucketArn: dataplaneProps.modelBucketArn
+    };
+
     const addOns: Array<blueprints.ClusterAddOn> = [
       new blueprints.addons.VpcCniAddOn(),
       new blueprints.addons.CoreDnsAddOn(),
@@ -120,7 +124,7 @@ export default class DataPlaneStack {
       new blueprints.addons.KedaAddOn(kedaParams),
       new blueprints.addons.ContainerInsightsAddOn(containerInsightsParams),
       new blueprints.addons.AwsForFluentBitAddOn(awsForFluentBitParams),
-      new s3CSIDriverAddOn({ s3BucketArn: dataplaneProps.modelBucketArn }),
+      new s3CSIDriverAddOn(s3CSIDriverAddOnParams),
       new SharedComponentAddOn(SharedComponentAddOnParams),
       new EbsThroughputTunerAddOn(EbsThroughputModifyAddOnParams)
     ];
