@@ -12,13 +12,33 @@ export interface SharedComponentAddOnProps {
   inputSns: sns.ITopic;
   outputSns: sns.ITopic;
   outputBucket: s3.IBucket;
+  apiGWProps?: {
+    stageName?: string,
+    throttle?: {
+      rateLimit?: number,
+      burstLimit?: number
+    }
+  }
+}
+
+export const defaultProps: SharedComponentAddOnProps = {
+  inputSns: undefined!,
+  outputSns: undefined!,
+  outputBucket: undefined!,
+  apiGWProps: {
+    stageName: "prod",
+    throttle: {
+      rateLimit: 10,
+      burstLimit: 2
+    }
+  }
 }
 
 export class SharedComponentAddOn implements ClusterAddOn {
   readonly options: SharedComponentAddOnProps;
 
   constructor(props: SharedComponentAddOnProps) {
-    this.options = props
+    this.options = { ...defaultProps, ...props };
   }
 
   deploy(clusterInfo: ClusterInfo): Promise<Construct> {
@@ -49,7 +69,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
         apiKeyRequired: true
       },
       deployOptions: {
-        stageName: "prod",
+        stageName: this.options.apiGWProps!.stageName,
         tracingEnabled: true,
         metricsEnabled: true,
       }
@@ -71,8 +91,8 @@ export class SharedComponentAddOn implements ClusterAddOn {
         stage: api.deploymentStage
       }],
       throttle: {
-        rateLimit: 10,
-        burstLimit: 2
+        rateLimit: this.options.apiGWProps!.throttle!.rateLimit,
+        burstLimit: this.options.apiGWProps!.throttle!.burstLimit
       }
     });
 

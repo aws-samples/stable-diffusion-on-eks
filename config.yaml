@@ -1,5 +1,10 @@
 stackName: "SdOnEKS" # Name of stack
 modelBucketArn: 'arn:aws:s3:::dummy-bucket' # ARN of S3 bucket for model storage. Models file should be manual populated into the bucket.
+APIGW:
+  stageName: prod
+  throttle:
+    rateLimit: 30
+    burstLimit: 50
 modelsRuntime:
 - name: "sdruntime1" # Name of runtime, should be unique
   namespace: "default"  # Namespace of runtime, suggest deploy different runtimes on seperate namespaces

@@ -16,6 +16,13 @@ import { s3GWEndpointProvider } from './resourceProvider/s3GWEndpoint'
 export interface dataPlaneProps {
   stackName: string,
   modelBucketArn: string;
+  APIGW?: {
+    stageName?: string,
+    throttle?: {
+      rateLimit?: number,
+      burstLimit?: number
+    }
+  }
   modelsRuntime: {
     name: string,
     namespace: string,
@@ -102,7 +109,8 @@ export default class DataPlaneStack {
     const SharedComponentAddOnParams: SharedComponentAddOnProps = {
       inputSns: blueprints.getNamedResource("inputSNSTopic"),
       outputSns: blueprints.getNamedResource("outputSNSTopic"),
-      outputBucket: blueprints.getNamedResource("outputS3Bucket")
+      outputBucket: blueprints.getNamedResource("outputS3Bucket"),
+      apiGWProps: dataplaneProps.APIGW
     };
 
     const EbsThroughputModifyAddOnParams: EbsThroughputTunerAddOnProps = {
