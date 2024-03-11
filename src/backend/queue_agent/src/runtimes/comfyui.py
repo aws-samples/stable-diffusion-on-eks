@@ -98,7 +98,10 @@ class comfyuiCaller(object):
         return
         
     def get_images(self, prompt):
-        prompt_id = self.queue_prompt(prompt)['prompt_id']
+        output = self.queue_prompt(prompt)
+        if output is None:
+            raise("internal error")
+        prompt_id = output['prompt_id']
         output_images = {}
         self.track_progress(prompt, prompt_id)
 
