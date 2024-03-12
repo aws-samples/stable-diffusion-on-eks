@@ -6,7 +6,7 @@ kubectl_version='1.29.0'
 helm_version='3.10.1'
 yq_version='4.30.4'
 s5cmd_version='2.2.2'
-node_version='20.1.1'
+node_version='20.11.1'
 cdk_version='2.115.0'
 
 download () {
@@ -19,9 +19,11 @@ tmp_dir=$(mktemp -d)
 
 cd "$tmp_dir"
 
-sudo wget -O /usr/local/bin/pacapt https://github.com/icy/pacapt/raw/ng/pacapt
-sudo chmod 755 /usr/local/bin/pacapt
-sudo ln -sv /usr/local/bin/pacapt /usr/local/bin/pacman || true
+if which pacapt > /dev/null
+  then
+    sudo wget -O /usr/bin/pacapt https://github.com/icy/pacapt/raw/ng/pacapt
+    sudo chmod 755 /usr/bin/pacapt
+fi
 
 sudo pacapt install --noconfirm jq git wget unzip openssl bash-completion python3 python3-pip
 
@@ -35,7 +37,7 @@ if which kubectl > /dev/null
     printf "Installing kubectl...\n"
     download "https://dl.k8s.io/release/v$kubectl_version/bin/linux/amd64/kubectl" "kubectl"
     chmod +x ./kubectl
-    mv ./kubectl /usr/local/bin
+    sudo mv ./kubectl /usr/bin
 fi
 
 # helm
@@ -47,7 +49,7 @@ if which helm > /dev/null
     download "https://get.helm.sh/helm-v$helm_version-linux-amd64.tar.gz" "helm.tar.gz"
     tar zxf helm.tar.gz
     chmod +x linux-amd64/helm
-    mv ./linux-amd64/helm /usr/local/bin
+    sudo mv ./linux-amd64/helm /usr/bin
     rm -rf linux-amd64/ helm.tar.gz
 fi
 
@@ -66,7 +68,7 @@ if which yq > /dev/null
     printf "Installing yq...\n"
     download "https://github.com/mikefarah/yq/releases/download/v${yq_version}/yq_linux_amd64" "yq"
     chmod +x ./yq
-    mv ./yq /usr/local/bin
+    sudo mv ./yq /usr/bin
 fi
 
 # s5cmd
@@ -75,10 +77,10 @@ if which s5cmd > /dev/null
     printf "s5cmd is installed, skipping...\n"
   else
     printf "Installing s5cmd...\n"
-    download "https://github.com/peak/s5cmd/releases/download/s5cmd_${s5cmd_version}_Linux-64bit.tar.gz" "s5cmd.tar.gz"
+    download "https://github.com/peak/s5cmd/releases/download/v${s5cmd_version}/s5cmd_${s5cmd_version}_Linux-64bit.tar.gz" "s5cmd.tar.gz"
     tar zxf s5cmd.tar.gz
     chmod +x ./s5cmd
-    mv ./s5cmd /usr/local/bin
+    sudo mv ./s5cmd /usr/bin
     rm -rf s5cmd.tar.gz
 fi
 
@@ -90,9 +92,9 @@ if which node > /dev/null
     printf "Installing Node.js...\n"
     download "https://nodejs.org/dist/v{$node_version}/node-v{$node_version}-linux-x64.tar.xz" "node.tar.xz"
     sudo mkdir -p /usr/local/lib/nodejs
-    sudo tar -xJvf node.tar.xz -C /usr/local/lib/nodejs
-    export PATH=/usr/local/lib/nodejs/node-$node_version-linux-x64/bin:$PATH
-    printf "export /usr/local/lib/nodejs/node-$node_version-linux-x64/bin:\$PATH" >> ~/.bash_profile
+    sudo tar -xJf node.tar.xz -C /usr/local/lib/nodejs
+    export PATH="/usr/local/lib/nodejs/node-$node_version-linux-x64/bin:$PATH"
+    printf "export PATH=\"/usr/local/lib/nodejs/node-$node_version-linux-x64/bin:\$PATH\"" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
