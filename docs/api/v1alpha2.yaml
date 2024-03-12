@@ -75,6 +75,10 @@ components:
                     - pipeline
                   example: "text-to-image"
                   type: string
+                prefix:
+                  type: string
+                  description: Prefix for output file store
+                  example: "/output"    
                 context:
                   type: object
                   description: All content in context will be brought to callback
