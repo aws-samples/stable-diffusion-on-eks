@@ -115,19 +115,24 @@ def main():
                 payload = json.loads(json.loads(message.body)['Message'])
                 metadata = payload["metadata"]
                 task_id = metadata["id"]
+
                 if "prefix" in metadata.keys():
-                    prefix = metadata["prefix"] + "/" + str(task_id)
+                    if metadata["prefix"][-1] == '/':
+                        prefix = metadata["prefix"] + str(task_id)
+                    else:
+                        prefix = metadata["prefix"] + "/" + str(task_id)
                 else:
                     prefix = str(task_id)
+
                 if "tasktype" in metadata.keys():
                     tasktype = metadata["tasktype"]
 
-                if "context" in payload.keys():
-                    context = payload["context"]
+                if "context" in metadata.keys():
+                    context = metadata["context"]
                 else:
                     context = {}
 
-                body = payload["body"]
+                body = payload["content"]
 
                 response = {}
 

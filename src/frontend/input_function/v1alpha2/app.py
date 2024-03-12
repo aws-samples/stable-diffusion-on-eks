@@ -1,43 +1,41 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
-import os
-import boto3
 import json
+import os
 import traceback
 
-sns_client = boto3.client('sns')
+import boto3
 
+sns_client = boto3.client('sns')
 
 def lambda_handler(event, context):
     if event['httpMethod'] == 'POST':
         try:
             payload = json.loads(event['body'])
-
-            if ('alwayson_scripts' not in payload or 'task' not in payload['alwayson_scripts'] or 'sd_model_checkpoint' not in payload['alwayson_scripts'] or 'id_task' not in payload['alwayson_scripts']):
+            val = validate(payload)
+            if val != "success":
                 return {
                     'statusCode': 400,
-                    'body': 'Incorrect payload structure'
+                    'body': 'Incorrect payload structure, ' + val
                 }
 
-            task = payload['alwayson_scripts']['task']
-            id_task = payload['alwayson_scripts']['id_task']
-            sd_model_checkpoint = payload['alwayson_scripts']['sd_model_checkpoint']
-            s3_output_path = f"{os.environ['S3_OUTPUT_BUCKET']}/{payload['alwayson_scripts']['id_task']}"
-
-            payload['s3_output_path'] = s3_output_path
+            id = payload["metadata"]["id"]
+            runtime = payload["metadata"]["runtime"]
+            prefix = payload["metadata"]["prefix"]
+            s3_output_path = f"{os.environ['S3_OUTPUT_BUCKET']}/{prefix}/{id}"
 
             print(event['headers'])
             print(event['queryStringParameters'])
 
             sns_client.publish(
                 TargetArn=os.environ['SNS_TOPIC_ARN'],
-                Message=json.dumps({"default": json.dumps(payload)}),
+                Message=json.dumps(payload),
                 MessageStructure='json',
                 MessageAttributes={
-                    'sd_model_checkpoint': {
+                    'runtime': {
                         'DataType': 'String',
-                        'StringValue': sd_model_checkpoint
+                        'StringValue': runtime
                     }
                 }
             )
@@ -45,9 +43,8 @@ def lambda_handler(event, context):
             return {
                 'statusCode': 200,
                 'body': json.dumps({
-                    "id_task": id_task,
-                    "task": task,
-                    "sd_model_checkpoint": sd_model_checkpoint,
+                    "id": id,
+                    "runtime": runtime,
                     "output_location": f"s3://{s3_output_path}"
                 })
             }
@@ -63,3 +60,19 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': "Unsupported HTTP method"
         }
+
+
+def validate(body: dict) -> str:
+    result = "success"
+    if "metadata" not in body.keys():
+        result = "metadata is missing"
+    else:
+        if "id" not in body["metadata"].keys():
+            result = "id is missing"
+        if "runtime" not in body["metadata"].keys():
+            result = "runtime is missing"
+        if "tasktype" not in body["metadata"].keys():
+            result = "tasktype is missing"
+    if "content" not in body.keys():
+        result = "content is missing"
+    return result

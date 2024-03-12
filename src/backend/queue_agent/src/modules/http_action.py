@@ -23,7 +23,7 @@ retries = Retry(
     allowed_methods=["GET", "POST"])
 apiClient.mount('http://', HTTPAdapter(max_retries=retries))
 
-REQUESTS_TIMEOUT_SECONDS = 60
+REQUESTS_TIMEOUT_SECONDS = 300
 
 cache = CacheBackend(
     cache_name='memory-cache',
