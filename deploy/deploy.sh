@@ -6,8 +6,8 @@ SCRIPTPATH=$(realpath $(dirname "$0"))
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l STACK_NAME=${STACK_NAME:-"sdoneks"}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
-SDWEBUI_IMAGE=600413481647.dkr.ecr.us-west-2.amazonaws.com/sd-web-ui:v1.8.0-20240312
-COMFYUI_IMAGE=docker.io/sdoneks/inference-api:comfyui
+SDWEBUI_IMAGE=docker.io/sdoneks/inference-api:sdwebui-v1.8.0-20240312
+# COMFYUI_IMAGE=docker.io/sdoneks/inference-api:comfyui
 QUEUE_AGENT_IMAGE=docker.io/sdoneks/queue-agent:latest
 
 # Step 1: Install tools
@@ -35,9 +35,9 @@ if [ -z "$SNAPSHOT_ID" ]; then
   if [[ "$RUNTIME_TYPE" == "sdwebui" ]] ; then
     SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q ${SDWEBUI_IMAGE},${QUEUE_AGENT_IMAGE})
   fi
-  if [[ ${RUNTIME_TYPE} == "comfyui" ]]; then
-    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q ${COMFYUI_IMAGE},${QUEUE_AGENT_IMAGE})
-  fi
+#  if [[ ${RUNTIME_TYPE} == "comfyui" ]]; then
+#    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q ${COMFYUI_IMAGE},${QUEUE_AGENT_IMAGE})
+#  fi
 else
   printf "Existing snapshot ID detected, skipping... \n"
 fi

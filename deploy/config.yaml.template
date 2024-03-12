@@ -14,8 +14,8 @@ modelsRuntime:
     runtime:
       inferenceApi:
         image:
-          repository: 600413481647.dkr.ecr.us-west-2.amazonaws.com/sd-web-ui
-          tag: v1.8.0-20240312
+          repository: sdoneks/inference-api
+          tag: sdwebui-v1.8.0-20240312
         modelMountPath: /opt/ml/code/models
     karpenter:
       nodeTemplate:
