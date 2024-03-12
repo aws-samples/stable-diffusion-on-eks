@@ -21,6 +21,8 @@ cd "$tmp_dir"
 
 if which pacapt > /dev/null
   then
+    printf "\n"
+  else
     sudo wget -O /usr/bin/pacapt https://github.com/icy/pacapt/raw/ng/pacapt
     sudo chmod 755 /usr/bin/pacapt
 fi
