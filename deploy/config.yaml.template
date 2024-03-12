@@ -1,11 +1,22 @@
 stackName: ${STACK_NAME}
 modelBucketArn: arn:aws:s3:::${MODEL_BUCKET}
+APIGW:
+  stageName: dev
+  throttle:
+    rateLimit: 30
+    burstLimit: 50
 modelsRuntime:
 - name: "sd1-5"
   namespace: "default"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
   type: ${RUNTIME_TYPE}
   extraValues:
+    runtime:
+      inferenceApi:
+        image:
+          repository: 600413481647.dkr.ecr.us-west-2.amazonaws.com/sd-web-ui
+          tag: v1.8.0-20240312
+        modelMountPath: /opt/ml/code/models
     karpenter:
       nodeTemplate:
         amiFamily: Bottlerocket
@@ -25,9 +36,6 @@ modelsRuntime:
         capacityType:
           onDemand: true
           spot: true
-      persistence:
-        enabled: true
-        existingClaim: "s3-model-storage-pvc"
       scaling:
         queueLength: 10 # Target value for queue length. One new instance will be launched when queue launch reaches the value.
         minReplicaCount: 0 # Minimum number of replicas of SD Runtime.

@@ -71,6 +71,7 @@ export default class DataPlaneStack {
       values: {
         cloudWatchLogs: {
           region: cdk.Aws.REGION,
+          logRetentionDays: 7
         },
         tolerations: [{
           "key": "nvidia.com/gpu",
@@ -129,7 +130,6 @@ export default class DataPlaneStack {
       new blueprints.addons.CoreDnsAddOn(),
       new blueprints.addons.KubeProxyAddOn(),
       new blueprints.addons.AwsLoadBalancerControllerAddOn(),
-      new blueprints.addons.EbsCsiDriverAddOn(),
       new blueprints.addons.KarpenterAddOn({ interruptionHandling: true }),
       new blueprints.addons.KedaAddOn(kedaParams),
       new blueprints.addons.ContainerInsightsAddOn(containerInsightsParams),

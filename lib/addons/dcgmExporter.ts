@@ -12,6 +12,9 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & dcgmExporterAddOnP
   version: '3.4.0',
   repository: 'https://nvidia.github.io/dcgm-exporter/helm-charts',
   values: {
+    serviceMonitor: {
+      enabled: false
+    },
     affinity: {
       nodeAffinity: {
         requiredDuringSchedulingIgnoredDuringExecution: {

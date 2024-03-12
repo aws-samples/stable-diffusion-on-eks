@@ -119,7 +119,9 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         ],
         "mountOptions": [
           "allow-delete",
-          "allow-other"
+          "allow-other",
+          "file-mode=777",
+          "dir-mode=777"
         ],
         "csi": {
           "driver": "s3.csi.aws.com",

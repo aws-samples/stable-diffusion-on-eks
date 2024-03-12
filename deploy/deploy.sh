@@ -6,6 +6,9 @@ SCRIPTPATH=$(realpath $(dirname "$0"))
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l STACK_NAME=${STACK_NAME:-"sdoneks"}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
+SDWEBUI_IMAGE=600413481647.dkr.ecr.us-west-2.amazonaws.com/sd-web-ui:v1.8.0-20240312
+COMFYUI_IMAGE=docker.io/sdoneks/inference-api:comfyui
+QUEUE_AGENT_IMAGE=docker.io/sdoneks/queue-agent:latest
 
 # Step 1: Install tools
 
@@ -30,10 +33,10 @@ if [ -z "$SNAPSHOT_ID" ]; then
   cd "${SCRIPTPATH}"/..
   git submodule update --init --recursive
   if [[ "$RUNTIME_TYPE" == "sdwebui" ]] ; then
-    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q docker.io/sdoneks/inference-api:sdwebui-v1.7.0-20240229,docker.io/sdoneks/queue-agent:latest)
+    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q ${SDWEBUI_IMAGE},${QUEUE_AGENT_IMAGE})
   fi
   if [[ ${RUNTIME_TYPE} == "comfyui" ]]; then
-    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q docker.io/sdoneks/inference-api:comfyui,docker.io/sdoneks/queue-agent:latest)
+    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q ${COMFYUI_IMAGE},${QUEUE_AGENT_IMAGE})
   fi
 else
   printf "Existing snapshot ID detected, skipping... \n"
@@ -49,6 +52,6 @@ sudo npm install
 template="$(cat deploy/config.yaml.template)"
 eval "echo \"${template}\"" > config.yaml
 
-cdk deploy --no-execute --require-approval never
+cdk deploy --no-rollback --require-approval never
 
 printf "Deploy complete. \n"
