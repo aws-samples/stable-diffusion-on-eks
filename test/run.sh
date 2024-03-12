@@ -6,7 +6,7 @@ SCRIPTPATH=$(realpath $(dirname "$0"))
 STACK_NAME=${STACK_NAME:-"sdoneksStack"}
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
-API_VERSION=${STACK_NAME:-"v1alpha1"}
+API_VERSION=${API_VERSION:-"v1alpha1"}
 
 API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name ${STACK_NAME} --output text --query 'Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue')
 
