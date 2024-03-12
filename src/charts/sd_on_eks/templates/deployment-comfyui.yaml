@@ -1,3 +1,4 @@
+{{- if (eq "comfyui" .Values.runtime.type) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,6 +9,7 @@ metadata:
   {{- if .Values.runtime.labels }}
   {{- toYaml .Values.runtime.labels | nindent 4 }}
   {{- end }}
+    runtime-type: comfyui
 
   {{- if .Values.runtime.annotations }}
   annotations:
@@ -33,15 +35,8 @@ spec:
     spec:
       containers:
       - name: inference-api
-        image: {{ .Values.runtime.inferenceApi.image.repository }}:{{  .Values.runtime.inferenceApi.image.tag }}
+        image: {{ .Values.runtime.inferenceApi.image.repository }}:{{ .Values.runtime.inferenceApi.image.tag }}
         env:
-        - name: SD_MODEL_CHECKPOINT
-          valueFrom:
-            configMapKeyRef:
-              name: {{ include "sdchart.fullname" . }}-config
-              key: SD_MODEL_CHECKPOINT
-        - name: API_ONLY
-          value: "true"
         - name: EXTRA_CMD_ARG
           value: {{ .Values.runtime.inferenceApi.commandArguments }}
         {{- if .Values.runtime.inferenceApi.extraEnv }}
@@ -55,14 +50,14 @@ spec:
         imagePullPolicy: {{ .Values.runtime.inferenceApi.imagePullPolicy }}
         startupProbe:
           httpGet:
-            path: /sdapi/v1/memory
+            path: /system_stats
             port: 8080
           failureThreshold: 120
           periodSeconds: 1
       - name: queue-agent
         envFrom:
         - configMapRef:
-            name: {{ include "sdchart.fullname" . }}-config
+            name: {{ include "sdchart.fullname" . }}-queue-agent-config
         env:
         {{- if .Values.runtime.queueAgent.extraEnv }}
         {{- toYaml .Values.runtime.queueAgent.extraEnv | nindent 10 }}
@@ -108,3 +103,4 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
+{{- end }}

@@ -1,0 +1,114 @@
+{{- if (eq "sdwebui" .Values.runtime.type) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sdchart.fullname" . }}-inference-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+  {{- if .Values.runtime.labels }}
+  {{- toYaml .Values.runtime.labels | nindent 4 }}
+  {{- end }}
+
+  {{- if .Values.runtime.annotations }}
+  annotations:
+  {{ toYaml .Values.runtime.annotations | nindent 4 }}
+  {{- end }}
+
+spec:
+  replicas: {{ .Values.runtime.replicas }}
+  selector:
+    matchLabels:
+      app: inference-api
+    {{- include "sdchart.selectorLabels" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: inference-api
+      {{- include "sdchart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: inference-api
+        image: {{ .Values.runtime.inferenceApi.image.repository }}:{{  .Values.runtime.inferenceApi.image.tag }}
+        env:
+        - name: SD_MODEL_CHECKPOINT
+          value: {{ quote .Values.runtime.inferenceApi.modelFilename }}
+        - name: API_ONLY
+          value: "true"
+        - name: CONFIG_FILE
+          value: "/opt/ml/code/config.json"
+        - name: EXTRA_CMD_ARG
+          value: {{ .Values.runtime.inferenceApi.commandArguments }}
+        {{- if .Values.runtime.inferenceApi.extraEnv }}
+        {{- toYaml .Values.runtime.inferenceApi.extraEnv | nindent 10 }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.runtime.inferenceApi.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: {{ .Values.runtime.inferenceApi.modelMountPath }}
+          name: models
+        - mountPath: "/opt/ml/code/config.json"
+          name: config
+          subPath: config.json
+        imagePullPolicy: {{ .Values.runtime.inferenceApi.imagePullPolicy }}
+        startupProbe:
+          httpGet:
+            path: /sdapi/v1/memory
+            port: 8080
+          failureThreshold: 120
+          periodSeconds: 1
+      - name: queue-agent
+        envFrom:
+        - configMapRef:
+            name: {{ include "sdchart.fullname" . }}-queue-agent-config
+        env:
+        {{- if .Values.runtime.queueAgent.extraEnv }}
+        {{- toYaml .Values.runtime.queueAgent.extraEnv | nindent 10 }}
+        {{- end }}
+        {{- if .Values.runtime.queueAgent.XRay.enabled }}
+        - name: AWS_XRAY_DAEMON_ADDRESS
+          value: localhost:2000
+        - name: AWS_XRAY_CONTEXT_MISSING
+          value: IGNORE_ERROR
+        {{- end }}
+        image: {{ .Values.runtime.queueAgent.image.repository }}:{{ .Values.runtime.queueAgent.image.tag }}
+        imagePullPolicy: {{ .Values.runtime.queueAgent.imagePullPolicy }}
+        resources:
+        {{- toYaml .Values.runtime.queueAgent.resources | nindent 10 }}
+      {{- if .Values.runtime.queueAgent.XRay.enabled }}
+      - name: xray-daemon
+        image: public.ecr.aws/xray/aws-xray-daemon:3.3.7
+        ports:
+        - containerPort: 2000
+          protocol: UDP
+      {{- end }}
+      serviceAccountName: {{ .Values.runtime.serviceAccountName }}
+      terminationGracePeriodSeconds: 60
+      tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Exists
+      - effect: NoSchedule
+        key: runtime
+        value: {{ include "sdchart.fullname" . }}
+      volumes:
+      - name: models
+      {{- if .Values.runtime.persistence.enabled }}
+        persistentVolumeClaim:
+          {{- if .Values.runtime.persistence.existingClaim }}
+          claimName: {{ .Values.runtime.persistence.existingClaim }}
+          {{- else }}
+          claimName: {{ include "sdchart.fullname" . }}-model-claim
+          {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      - name: config
+        configMap:
+          name: {{ include "sdchart.fullname" . }}-sdwebui-config
+{{- end }}
