@@ -44,7 +44,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
   deploy(clusterInfo: ClusterInfo): Promise<Construct> {
     const cluster = clusterInfo.cluster;
 
-    const v1alpha1Parser = new lambda.Function(cluster.stack, 'InputLambda', {
+    const v1Alpha1Parser = new lambda.Function(cluster.stack, 'v1Alpha1ParserFunction', {
       code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function/v1alpha1')),
       handler: 'app.lambda_handler',
       runtime: lambda.Runtime.PYTHON_3_11,
@@ -55,7 +55,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
       tracing: lambda.Tracing.ACTIVE
     });
 
-    const v1alpha2Parser = new lambda.Function(cluster.stack, 'InputLambda', {
+    const v1Alpha2Parser = new lambda.Function(cluster.stack, 'v1Alpha2ParserFunction', {
       code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function/v1alpha2')),
       handler: 'app.lambda_handler',
       runtime: lambda.Runtime.PYTHON_3_11,
@@ -66,8 +66,8 @@ export class SharedComponentAddOn implements ClusterAddOn {
       tracing: lambda.Tracing.ACTIVE
     });
 
-    this.options.inputSns.grantPublish(v1alpha1Parser);
-    this.options.inputSns.grantPublish(v1alpha2Parser);
+    this.options.inputSns.grantPublish(v1Alpha1Parser);
+    this.options.inputSns.grantPublish(v1Alpha2Parser);
 
     const api = new apigw.RestApi(cluster.stack, 'FrontAPI', {
       restApiName: 'FrontAPI',
@@ -87,13 +87,13 @@ export class SharedComponentAddOn implements ClusterAddOn {
     });
 
     const v1alpha1Resource = api.root.addResource('v1alpha1');
-    v1alpha1Resource.addMethod('POST', new apigw.LambdaIntegration(v1alpha1Parser), { apiKeyRequired: true });
+    v1alpha1Resource.addMethod('POST', new apigw.LambdaIntegration(v1Alpha1Parser), { apiKeyRequired: true });
 
     const v1alpha2Resource = api.root.addResource('v1alpha2');
-    v1alpha2Resource.addMethod('POST', new apigw.LambdaIntegration(v1alpha2Parser), { apiKeyRequired: true });
+    v1alpha2Resource.addMethod('POST', new apigw.LambdaIntegration(v1Alpha2Parser), { apiKeyRequired: true });
 
-    api.node.addDependency(v1alpha1Parser);
-    api.node.addDependency(v1alpha2Parser);
+    api.node.addDependency(v1Alpha1Parser);
+    api.node.addDependency(v1Alpha2Parser);
 
     //Force override name of generated output to provide a static name
     const urlCfnOutput = api.node.findChild('Endpoint') as cdk.CfnOutput;

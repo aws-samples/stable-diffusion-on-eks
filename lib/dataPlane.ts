@@ -140,8 +140,6 @@ export default class DataPlaneStack {
       new dcgmExporterAddOn({})
     ];
 
-let models: string[] = [];
-
 // Generate SD Runtime Addon for runtime
 dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
   const sdRuntimeParams: SDRuntimeAddOnProps = {
@@ -149,7 +147,7 @@ dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
     outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
     inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
     outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
-    type: val.type,
+    type: val.type.toLowerCase(),
     chartRepository: val.chartRepository,
     chartVersion: val.chartVersion,
     extraValues: val.extraValues,
@@ -157,15 +155,14 @@ dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
   };
 
   //Parameters for SD Web UI
-  if (val.type == "sdwebui") {
+  if (val.type.toLowerCase() == "sdwebui") {
     sdRuntimeParams.sdModelCheckpoint = val.modelFilename,
     sdRuntimeParams.dynamicModel = false
   }
 
-  if (val.type == "comfyui") {}
+  if (val.type.toLowerCase() == "comfyui") {}
 
   addOns.push(new SDRuntimeAddon(sdRuntimeParams, val.name))
-  models.push(val.modelFilename)
 });
 
 // Define initial managed node group for cluster components

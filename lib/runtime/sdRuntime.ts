@@ -36,9 +36,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
       stackName: cdk.Aws.STACK_NAME,
     }
   },
-  type: "sdwebui",
-  sdModelCheckpoint: "",
-  dynamicModel: false
+  type: "sdwebui"
 }
 
 export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
@@ -65,7 +63,6 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
     this.props.name = this.id + 'Addon'
     this.props.release = this.id
-    this.options.type = this.options.type.toLowerCase()
 
     if (this.options.targetNamespace) {
       this.props.namespace = this.options.targetNamespace.toLowerCase()
@@ -160,6 +157,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
     var generatedValues = {
       runtime: {
+        type: this.options.type,
         serviceAccountName: runtimeSA.serviceAccountName,
         queueAgent: {
           s3Bucket: this.options.outputBucket!.bucketName,
@@ -195,15 +193,6 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       }
 
       generatedValues = lodash.merge(generatedValues, sdWebUIgeneratedValues)
-
-      // Legacy routing
-      this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
-        filterPolicy: {
-          sd_model_checkpoint:
-            sns.SubscriptionFilter.stringFilter({
-              allowlist: [this.options.sdModelCheckpoint!]
-            })
-      }}))
     }
 
     if (this.options.type == "comfyui") {
@@ -227,16 +216,30 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       generatedValues = lodash.merge(generatedValues, comfyUIgeneratedValues)
     }
 
-    // New version routing
-    this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
-      filterPolicy: {
-        runtime:
-          sns.SubscriptionFilter.stringFilter({
-            allowlist: [this.id]
-          })
-      }
-    }))
-
+    if (this.options.type == "sdwebui") {
+        // Legacy and new routing
+        this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
+          filterPolicy: {
+            sd_model_checkpoint:
+              sns.SubscriptionFilter.stringFilter({
+                allowlist: [this.options.sdModelCheckpoint!]
+              }),
+            runtime:
+              sns.SubscriptionFilter.stringFilter({
+                allowlist: [this.id]
+              })
+        }}))
+    } else {
+      // New version routing only
+      this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
+        filterPolicy: {
+          runtime:
+            sns.SubscriptionFilter.stringFilter({
+              allowlist: [this.id]
+            })
+        }
+      }))
+    }
 
     const values = lodash.merge(this.props.values, this.options.extraValues, generatedValues)
 
