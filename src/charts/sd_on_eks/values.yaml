@@ -53,7 +53,7 @@ runtime:
     image:
       repository: sdoneks/inference-api
       tag: latest
-    modelFilename: v1-5-pruned-emaonly.safetensors
+    modelFilename: ""
     modelMountPath: /opt/ml/code/models
     commandArguments: ""
     extraEnv: {}

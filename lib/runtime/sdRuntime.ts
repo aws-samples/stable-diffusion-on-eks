@@ -20,7 +20,7 @@ export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProp
   dynamicModel?: boolean,
   chartRepository?: string,
   chartVersion?: string,
-  extraValues?: {}
+  extraValues?: object
 }
 
 export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProps = {
@@ -28,7 +28,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   name: 'sdRuntimeAddOn',
   namespace: 'sdruntime',
   release: 'sdruntime',
-  version: '0.1.1',
+  version: '1.0.0',
   repository: 'https://aws-samples.github.io/stable-diffusion-on-eks/charts',
   values: {
     global: {
@@ -174,9 +174,18 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     }
 
     if (this.options.type == "sdwebui") {
+      var imagerepo: string
+      if (!(lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository"))) {
+        imagerepo = "sdoneks/inference-api-sdwebui"
+      } else {
+        imagerepo = lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository")!
+      }
       var sdWebUIgeneratedValues =  {
         runtime: {
           inferenceApi: {
+            image: {
+              repository: imagerepo
+            },
             modelFilename: this.options.sdModelCheckpoint
           },
           queueAgent: {
@@ -198,8 +207,20 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     }
 
     if (this.options.type == "comfyui") {
+      var imagerepo: string
+      if (!(lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository"))) {
+        imagerepo = "sdoneks/inference-api-comfyui"
+      } else {
+        imagerepo = lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository")!
+      }
+
       var comfyUIgeneratedValues =  {
         runtime: {
+          inferenceApi: {
+            image: {
+              repository: imagerepo
+            },
+          }
         }
       }
 

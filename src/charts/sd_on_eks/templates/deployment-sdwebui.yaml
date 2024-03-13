@@ -9,6 +9,7 @@ metadata:
   {{- if .Values.runtime.labels }}
   {{- toYaml .Values.runtime.labels | nindent 4 }}
   {{- end }}
+    runtime-type: sdwebui
 
   {{- if .Values.runtime.annotations }}
   annotations:
@@ -38,6 +39,8 @@ spec:
         env:
         - name: SD_MODEL_CHECKPOINT
           value: {{ quote .Values.runtime.inferenceApi.modelFilename }}
+        - name: DYNAMIC_SD_MODEL
+          value: {{ quote .Values.runtime.queueAgent.modelFilename }}
         - name: API_ONLY
           value: "true"
         - name: CONFIG_FILE
