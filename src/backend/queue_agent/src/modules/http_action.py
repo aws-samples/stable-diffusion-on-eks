@@ -5,9 +5,8 @@ import logging
 
 import aioboto3
 import requests
-from aiohttp_client_cache import CacheBackend
+from aiohttp_client_cache import CacheBackend, CachedSession
 from requests.adapters import HTTPAdapter, Retry
-from requests_cache import CachedSession
 
 from . import s3_action, time_utils
 
@@ -50,14 +49,11 @@ async def async_get(url: str) -> None:
             async with CachedSession(cache=cache) as session:
                 async with session.get(url) as res:
                     res.raise_for_status()
-                    # todo: need a counter to delete expired responses
-                    # await session.delete_expired_responses()
-                    # logger.info(res.from_cache, res.created_at, res.expires, res.is_expired)
                     return await res.read()
         elif url.startswith("s3://"):
-            bucket, key = s3_action.get_bucket_and_key(url)
+            bucket_name, key = s3_action.get_bucket_and_key(url)
             async with ab3_session.resource("s3") as s3:
-                obj = await s3.Object(bucket, key)
+                obj = await s3.Object(bucket_name, key)
                 res = await obj.get()
                 return await res['Body'].read()
     except Exception as e:

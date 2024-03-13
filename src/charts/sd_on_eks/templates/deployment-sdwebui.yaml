@@ -39,8 +39,10 @@ spec:
         env:
         - name: SD_MODEL_CHECKPOINT
           value: {{ quote .Values.runtime.inferenceApi.modelFilename }}
+        {{- if .Values.runtime.queueAgent.dynamicModel }}
         - name: DYNAMIC_SD_MODEL
-          value: {{ quote .Values.runtime.queueAgent.modelFilename }}
+          value: "true"
+        {{- end }}
         - name: API_ONLY
           value: "true"
         - name: CONFIG_FILE

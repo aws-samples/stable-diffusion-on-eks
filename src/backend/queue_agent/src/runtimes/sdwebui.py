@@ -12,6 +12,7 @@ from aws_xray_sdk.core import xray_recorder
 from modules import http_action, misc
 
 logger = logging.getLogger("queue-agent-sdwebui")
+logger.setLevel(logging.INFO)
 
 ALWAYSON_SCRIPTS_EXCLUDE_KEYS = ['task', 'id_task', 'uid',
                                  'sd_model_checkpoint', 'image_link', 'save_dir', 'sd_vae', 'override_settings']
@@ -57,6 +58,7 @@ def handler(api_base_url: str, task_type: str, task_id: str, payload: dict, dyna
             logger.error(f'Unsupported task type: {task_type}, ignoring')
 
         imgOutputs = post_invocations(task_response)
+        logger.info(f"Received {len(imgOutputs)} images")
         content = json.dumps(succeed(task_id, task_response, taskHeader))
         response["success"] = True
         response["image"] = imgOutputs

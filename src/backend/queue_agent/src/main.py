@@ -143,19 +143,21 @@ def main():
                     response = comfyui.handler(api_base_url, task_id, body)
 
                 result = []
+                rand = str(uuid.uuid4())[0:4]
 
                 if response["success"]:
                     idx = 0
                     if len(response["image"]) > 0:
                         for i in response["image"]:
                             idx += 1
-                            result.append(s3_action.upload_file(i, s3_bucket, prefix, str(task_id)+"-"+str(idx)))
+                            result.append(s3_action.upload_file(i, s3_bucket, prefix, str(task_id)+"-"+rand+"-"+str(idx)))
 
-                result.append(s3_action.upload_file(response, s3_bucket, prefix, str(task_id), ".out"))
+                output_url = s3_action.upload_file(response["content"], s3_bucket, prefix, str(task_id)+"-"+rand, ".out")
 
                 sns_response = {'id': task_id,
                                 'result': response["success"],
                                 'image_url': result,
+                                'output_url': output_url,
                                 'context': context}
 
                 # Put response handler to SNS and delete message
