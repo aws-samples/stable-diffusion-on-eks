@@ -84,7 +84,7 @@ The following table lists the configurable parameters of helm chart and the defa
 | `runtime.persistence.enabled` | Enable presistence of model stroage. | `true` |
 | `runtime.persistence.labels` | Labels applied to presistence volume. Should be in key-values format. | `{}` |
 | `runtime.persistence.annotations` | Annotations applied to presistence volume. Should be in key-values format. | `{}` |
-| `runtime.persistence.storageClass` | Storage class for model storage | `efs-model-storage-sc` |
+| `runtime.persistence.storageClass` | Storage class for model storage | `s3-model-storage-sc` |
 | `runtime.persistence.size` | Size of persistence volume. | `2Ti` |
 | `runtime.persistence.accessModes` | Access mode of persistence volume. | `ReadWriteMany` |
 

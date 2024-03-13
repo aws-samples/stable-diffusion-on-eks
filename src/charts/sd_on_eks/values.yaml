@@ -86,7 +86,7 @@ runtime:
     existingClaim: ""
     labels: {}
     annotations: {}
-    storageClass: efs-model-storage-sc
+    storageClass: s3-model-storage-sc
     size: 2Ti
     accessModes:
     - ReadWriteMany

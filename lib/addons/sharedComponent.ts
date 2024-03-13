@@ -3,24 +3,42 @@ import { Construct } from "constructs";
 import * as cdk from 'aws-cdk-lib';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as efs from 'aws-cdk-lib/aws-efs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as xray from "aws-cdk-lib/aws-xray"
 import * as path from 'path';
 
 export interface SharedComponentAddOnProps {
-  modelstorageEfs: efs.IFileSystem;
   inputSns: sns.ITopic;
   outputSns: sns.ITopic;
   outputBucket: s3.IBucket;
+  apiGWProps?: {
+    stageName?: string,
+    throttle?: {
+      rateLimit?: number,
+      burstLimit?: number
+    }
+  }
+}
+
+export const defaultProps: SharedComponentAddOnProps = {
+  inputSns: undefined!,
+  outputSns: undefined!,
+  outputBucket: undefined!,
+  apiGWProps: {
+    stageName: "prod",
+    throttle: {
+      rateLimit: 10,
+      burstLimit: 2
+    }
+  }
 }
 
 export class SharedComponentAddOn implements ClusterAddOn {
   readonly options: SharedComponentAddOnProps;
 
   constructor(props: SharedComponentAddOnProps) {
-    this.options = props
+    this.options = { ...defaultProps, ...props };
   }
 
   deploy(clusterInfo: ClusterInfo): Promise<Construct> {
@@ -51,7 +69,7 @@ export class SharedComponentAddOn implements ClusterAddOn {
         apiKeyRequired: true
       },
       deployOptions: {
-        stageName: "prod",
+        stageName: this.options.apiGWProps!.stageName,
         tracingEnabled: true,
         metricsEnabled: true,
       }
@@ -73,8 +91,8 @@ export class SharedComponentAddOn implements ClusterAddOn {
         stage: api.deploymentStage
       }],
       throttle: {
-        rateLimit: 10,
-        burstLimit: 2
+        rateLimit: this.options.apiGWProps!.throttle!.rateLimit,
+        burstLimit: this.options.apiGWProps!.throttle!.burstLimit
       }
     });
 
@@ -84,16 +102,6 @@ export class SharedComponentAddOn implements ClusterAddOn {
       value: "aws apigateway get-api-keys --query 'items[?id==`" + apiKey.keyId + "`].value' --include-values --output text",
       description: 'Command to get API Key'
     });
-
-    // Static provisioning EFS filesystem
-    const sc = cluster.addManifest("efs-model-storage-sc", {
-      "apiVersion": "storage.k8s.io/v1",
-      "kind": "StorageClass",
-      "metadata": {
-        "name": "efs-sc"
-      },
-      "provisioner": "efs.csi.aws.com"
-    })
 
     //Xray Access Policy
     new xray.CfnResourcePolicy(cluster.stack, cluster.stack.stackName+'XRayAccessPolicyForSNS', {

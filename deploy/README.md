@@ -1,21 +1,25 @@
-# Stable diffusion on EKS 部署
+# One-key deployment script
 
-## 环境需要:
+This script will work as a quick start for this solution. This script will:
 
-1. 至少一个VPC 的空余.
-2. 至少3个EIP 的空余.
-3. G4dn/G5 按需/spot 实例有足够配额.
+* Install required tools
+* Download Stable Diffusions 1.5 model from HuggingFace and upload to S3 bucket
+* Generate EBS snapshot with prefetched container images
+* Generate a sample config file
+* Deploy SD on EKS solutions
 
+## Usage
 
-## 安装:
+```bash
+cd deploy
+./deploy.sh
+```
 
-1. 导入notebook-deploy.yml堆栈
-2. 按照deploy.ipynb中的说明进行操作.
+## Test after deploy
 
-## 手动配置:
-1. config.yaml:配置参考sample/config.yaml,具体配置参数解释可以参考docs/configuration.md
-2. down.csv:tools/S3uploader目录下的 down.csv文件,编辑模型下载地址
+This script will generate text-to-image and image-to-image request to SD on EKS endpoints.
 
-
-
-
+```bash
+cd ../test
+./run.sh
+```
