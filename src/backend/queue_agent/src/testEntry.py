@@ -3,13 +3,9 @@
 
 import json
 import logging
-import os
-import signal
-import sys
 import uuid
-import boto3
-import time
 
+from modules import s3_action
 from runtimes import comfyui
 
 # Logging configuration
@@ -20,24 +16,18 @@ logger = logging.getLogger("queue-agent")
 logger.propagate = False
 
 ## comfyUI setup
-COMFYUI_ENDPOINT='comfyui-lb-1023792722.us-east-1.elb.amazonaws.com'
+COMFYUI_ENDPOINT='172.31.33.229:8000'
 
 server_address = COMFYUI_ENDPOINT
 client_id = str(uuid.uuid4())
 
 api_base_url = server_address
 
-# Check current runtime type
-runtime_type = os.getenv("RUNTIME_TYPE", "").lower
-s3_bucket = os.getenv("S3_BUCKET")
-
 runtime_type = "comfyui"
-s3_bucket = "s3://"
-
-# For graceful shutdown
-shutdown = False
-
-dynamic_sd_model = False
+s3_bucket = "sdoneksstack-outputs3bucket9fe85b9f-mjpz1dptybka"
+task_id = "test4"
+prefix = "output"
+context = {}
 
 def test_workflow():
     try:
@@ -52,39 +42,39 @@ def test_workflow():
         return None
 
 def main():
-
-    if runtime_type == "comfyui":
-        comfyui.check_readiness(api_base_url)
-
-    task_id = "test"
+    comfyui.check_readiness(api_base_url)
     payload = test_workflow()
-    response = {}
+    response = comfyui.handler(api_base_url, task_id, payload)
+    result = []
+    rand = str(uuid.uuid4())[0:4]
+    if response["success"]:
+        idx = 0
+        if len(response["image"]) > 0:
+            for i in response["image"]:
+                idx += 1
+                result.append(s3_action.upload_file(i, s3_bucket, prefix, str(task_id)+"-"+rand+"-"+str(idx)))
 
-    while True:
-        if shutdown:
-            logger.info('Received SIGTERM, shutting down...')
-            break
+    output_url = s3_action.upload_file(response["content"], s3_bucket, prefix, str(task_id)+"-"+rand, ".out")
 
-        if runtime_type == "comfyui":
-            response = comfyui.handler(api_base_url, task_id, payload)
-            if response["success"]:
-                images = response["image"]
-                idx = 1
-                for image_data in images:
-                        OUTPUT_LOCATION = "./outputs/comfyui/{}_{}.png".format(task_id, idx)
-                        with open(OUTPUT_LOCATION, "wb") as binary_file:
-                            # Write bytes to file
-                            binary_file.write(image_data)
-                        idx = idx + 1
-                        print("{} DONE!!!".format(OUTPUT_LOCATION))
-            break
-        time.sleep(1)
+    sns_response = {'id': task_id,
+                    'result': response["success"],
+                    'image_url': result,
+                    'output_url': output_url,
+                    'context': context}
 
-def signalHandler(signum, frame):
-    global shutdown
-    shutdown = True
+    print(json.dumps(sns_response))
+
+
+"""     if response["success"]:
+        images = response["image"]
+        idx = 1
+        for image_data in images:
+                OUTPUT_LOCATION = "./outputs/comfyui/{}_{}.png".format(task_id, idx)
+                with open(OUTPUT_LOCATION, "wb") as binary_file:
+                    # Write bytes to file
+                    binary_file.write(image_data)
+                idx = idx + 1
+                print("{} DONE!!!".format(OUTPUT_LOCATION)) """
 
 if __name__ == '__main__':
-    for sig in [signal.SIGINT, signal.SIGHUP, signal.SIGTERM]:
-        signal.signal(sig, signalHandler)
     main()
