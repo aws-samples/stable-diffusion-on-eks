@@ -10,14 +10,14 @@ import * as lodash from "lodash";
 import { createNamespace }  from "../utils/namespace"
 
 export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProps {
+  type: string,
   targetNamespace?: string,
   ModelBucketArn?: string,
   outputSns?: sns.ITopic,
   inputSns?: sns.ITopic,
   outputBucket?: s3.IBucket
-  sdModelCheckpoint: string,
-  dynamicModel: boolean,
-  allModels?: string[],
+  sdModelCheckpoint?: string,
+  dynamicModel?: boolean,
   chartRepository?: string,
   chartVersion?: string,
   extraValues?: {}
@@ -36,6 +36,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
       stackName: cdk.Aws.STACK_NAME,
     }
   },
+  type: "sdwebui",
   sdModelCheckpoint: "",
   dynamicModel: false
 }
@@ -64,6 +65,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
     this.props.name = this.id + 'Addon'
     this.props.release = this.id
+    this.options.type = this.options.type.toLowerCase()
 
     if (this.options.targetNamespace) {
       this.props.namespace = this.options.targetNamespace.toLowerCase()
@@ -159,14 +161,10 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     var generatedValues = {
       runtime: {
         serviceAccountName: runtimeSA.serviceAccountName,
-        inferenceApi: {
-          modelFilename: this.options.sdModelCheckpoint
-        },
         queueAgent: {
           s3Bucket: this.options.outputBucket!.bucketName,
           snsTopicArn: this.options.outputSns!.topicArn,
           sqsQueueUrl: inputQueue.queueUrl,
-          dynamicModel: this.options.dynamicModel
         },
         persistence: {
           enabled: true,
@@ -175,27 +173,49 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       }
     }
 
-    if (!this.options.dynamicModel) {
+    if (this.options.type == "sdwebui") {
+      var sdWebUIgeneratedValues =  {
+        runtime: {
+          inferenceApi: {
+            modelFilename: this.options.sdModelCheckpoint
+          },
+          queueAgent: {
+            dynamicModel: this.options.dynamicModel
+          }
+        }
+      }
+
+      generatedValues = lodash.merge(generatedValues, sdWebUIgeneratedValues)
+
+      // Legacy routing
       this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
         filterPolicy: {
           sd_model_checkpoint:
             sns.SubscriptionFilter.stringFilter({
-              allowlist: [this.options.sdModelCheckpoint]
+              allowlist: [this.options.sdModelCheckpoint!]
             })
-        }
-      }))
-      generatedValues.runtime.queueAgent.dynamicModel = false
-    } else {
-      this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
-        filterPolicy: {
-          sd_model_checkpoint:
-            sns.SubscriptionFilter.stringFilter({
-              denylist: this.options.allModels
-            })
-        }
-      }))
-      generatedValues.runtime.queueAgent.dynamicModel = true
+      }}))
     }
+
+    if (this.options.type == "comfyui") {
+      var comfyUIgeneratedValues =  {
+        runtime: {
+        }
+      }
+
+      generatedValues = lodash.merge(generatedValues, comfyUIgeneratedValues)
+    }
+
+    // New version routing
+    this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
+      filterPolicy: {
+        runtime:
+          sns.SubscriptionFilter.stringFilter({
+            allowlist: [this.id]
+          })
+      }
+    }))
+
 
     const values = lodash.merge(this.props.values, this.options.extraValues, generatedValues)
 

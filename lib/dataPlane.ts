@@ -142,48 +142,38 @@ export default class DataPlaneStack {
 
 let models: string[] = [];
 
-// Generate SD Runtime Addon for static runtime
+// Generate SD Runtime Addon for runtime
 dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
   const sdRuntimeParams: SDRuntimeAddOnProps = {
     ModelBucketArn: dataplaneProps.modelBucketArn,
     outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
     inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
     outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
-    sdModelCheckpoint: val.modelFilename,
+    type: val.type,
     chartRepository: val.chartRepository,
     chartVersion: val.chartVersion,
     extraValues: val.extraValues,
     targetNamespace: val.namespace,
-    dynamicModel: false
   };
+
+  //Parameters for SD Web UI
+  if (val.type == "sdwebui") {
+    sdRuntimeParams.sdModelCheckpoint = val.modelFilename,
+    sdRuntimeParams.dynamicModel = false
+  }
+
+  if (val.type == "comfyui") {}
+
   addOns.push(new SDRuntimeAddon(sdRuntimeParams, val.name))
   models.push(val.modelFilename)
 });
-
-// Generate SD Runtime Addon for dynamic runtime
-if (dataplaneProps.dynamicModelRuntime.enabled) {
-  const sdRuntimeParams: SDRuntimeAddOnProps = {
-    ModelBucketArn: dataplaneProps.modelBucketArn,
-    outputSns: blueprints.getNamedResource("outputSNSTopic") as sns.ITopic,
-    inputSns: blueprints.getNamedResource("inputSNSTopic") as sns.ITopic,
-    outputBucket: blueprints.getNamedResource("outputS3Bucket") as s3.IBucket,
-    sdModelCheckpoint: "v1-5-pruned-emaonly.safetensors",
-    dynamicModel: true,
-    targetNamespace: dataplaneProps.dynamicModelRuntime.namespace,
-    chartRepository: dataplaneProps.dynamicModelRuntime.chartRepository,
-    chartVersion: dataplaneProps.dynamicModelRuntime.chartVersion,
-    extraValues: dataplaneProps.dynamicModelRuntime.extraValues,
-    allModels: models
-  };
-  addOns.push(new SDRuntimeAddon(sdRuntimeParams, "dynamicSDRuntime"))
-}
 
 // Define initial managed node group for cluster components
 const MngProps: blueprints.MngClusterProviderProps = {
   minSize: 2,
   maxSize: 2,
   desiredSize: 2,
-  version: eks.KubernetesVersion.V1_27,
+  version: eks.KubernetesVersion.V1_28,
   instanceTypes: [new ec2.InstanceType('m5.large')],
   amiType: eks.NodegroupAmiType.AL2_X86_64,
   enableSsmPermissions: true,
@@ -195,7 +185,7 @@ const MngProps: blueprints.MngClusterProviderProps = {
 
 // Deploy EKS cluster with all add-ons
 const blueprint = blueprints.EksBlueprint.builder()
-  .version(eks.KubernetesVersion.V1_27)
+  .version(eks.KubernetesVersion.V1_28)
   .addOns(...addOns)
   .resourceProvider(
     blueprints.GlobalResources.Vpc,

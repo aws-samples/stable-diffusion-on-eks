@@ -44,8 +44,8 @@ export class SharedComponentAddOn implements ClusterAddOn {
   deploy(clusterInfo: ClusterInfo): Promise<Construct> {
     const cluster = clusterInfo.cluster;
 
-    const lambdaFunction = new lambda.Function(cluster.stack, 'InputLambda', {
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function')),
+    const v1alpha1Parser = new lambda.Function(cluster.stack, 'InputLambda', {
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function/v1alpha1')),
       handler: 'app.lambda_handler',
       runtime: lambda.Runtime.PYTHON_3_11,
       environment: {
@@ -55,11 +55,22 @@ export class SharedComponentAddOn implements ClusterAddOn {
       tracing: lambda.Tracing.ACTIVE
     });
 
-    this.options.inputSns.grantPublish(lambdaFunction);
+    const v1alpha2Parser = new lambda.Function(cluster.stack, 'InputLambda', {
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function/v1alpha2')),
+      handler: 'app.lambda_handler',
+      runtime: lambda.Runtime.PYTHON_3_11,
+      environment: {
+        "SNS_TOPIC_ARN": this.options.inputSns.topicArn,
+        "S3_OUTPUT_BUCKET": this.options.outputBucket.bucketName
+      },
+      tracing: lambda.Tracing.ACTIVE
+    });
 
-    const api = new apigw.LambdaRestApi(cluster.stack, 'FrontApi', {
-      handler: lambdaFunction,
-      proxy: true,
+    this.options.inputSns.grantPublish(v1alpha1Parser);
+    this.options.inputSns.grantPublish(v1alpha2Parser);
+
+    const api = new apigw.RestApi(cluster.stack, 'FrontAPI', {
+      restApiName: 'FrontAPI',
       deploy: true,
       cloudWatchRole: true,
       endpointConfiguration: {
@@ -74,7 +85,15 @@ export class SharedComponentAddOn implements ClusterAddOn {
         metricsEnabled: true,
       }
     });
-    api.node.addDependency(lambdaFunction);
+
+    const v1alpha1Resource = api.root.addResource('v1alpha1');
+    v1alpha1Resource.addMethod('POST', new apigw.LambdaIntegration(v1alpha1Parser), { apiKeyRequired: true });
+
+    const v1alpha2Resource = api.root.addResource('v1alpha2');
+    v1alpha2Resource.addMethod('POST', new apigw.LambdaIntegration(v1alpha2Parser), { apiKeyRequired: true });
+
+    api.node.addDependency(v1alpha1Parser);
+    api.node.addDependency(v1alpha2Parser);
 
     //Force override name of generated output to provide a static name
     const urlCfnOutput = api.node.findChild('Endpoint') as cdk.CfnOutput;
