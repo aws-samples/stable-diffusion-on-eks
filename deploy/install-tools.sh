@@ -107,7 +107,6 @@ if which cdk > /dev/null
   else
     printf "Installing AWS CDK CLI and bootstraping CDK environment...\n"
     sudo npm install -g aws-cdk@$cdk_version
-    cdk bootstrap
 fi
 
 printf "Tools install complete. \n"

@@ -51,7 +51,7 @@ sudo npm install
 
 template="$(cat deploy/config.yaml.template)"
 eval "echo \"${template}\"" > config.yaml
-
+cdk bootstrap
 cdk deploy --no-rollback --require-approval never
 
 printf "Deploy complete. \n"
