@@ -55,9 +55,9 @@ if runtime_type == "sdwebui":
     else:
         dynamic_sd_model = True
 
-# TODO: Add some init for ComfyUI
+# Init for ComfyUI
 if runtime_type == "comfyui":
-    api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080/")
+    api_base_url = os.getenv("API_BASE_URL", "localhost:8080")
     client_id = str(uuid.uuid4())
     # Change here to ComfyUI's base URL
     # You can specify any required environment variable here

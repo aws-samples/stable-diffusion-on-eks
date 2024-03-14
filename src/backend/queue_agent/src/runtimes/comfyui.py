@@ -3,7 +3,7 @@
 
 import json
 import logging
-import sys
+import time
 import traceback
 import urllib.parse
 import urllib.request
@@ -47,7 +47,7 @@ class comfyuiCaller(object):
         try:
             p = {"prompt": prompt, "client_id": self.client_id}
             data = json.dumps(p).encode('utf-8')
-            # print(data)
+            logger.debug(data)
             req =  urllib.request.Request("http://{}/prompt".format(self.api_base_url), data=data)
             output = urllib.request.urlopen(req)
             return json.loads(output.read())
@@ -62,7 +62,7 @@ class comfyuiCaller(object):
             return response.read()
 
     def track_progress(self, prompt, prompt_id):
-        logger.info("prompt_id:" + prompt_id)
+        logger.info("Task received, prompt ID:" + prompt_id)
         node_ids = list(prompt.keys())
         finished_nodes = []
 
@@ -70,21 +70,22 @@ class comfyuiCaller(object):
             out = self.wss.recv()
             if isinstance(out, str):
                 message = json.loads(out)
+                logger.debug(out)
                 if message['type'] == 'progress':
                     data = message['data']
                     current_step = data['value']
-                    logger.info('In K-Sampler -> Step: ', current_step, ' of: ', data['max'])
+                    logger.info(f"In K-Sampler -> Step: {current_step} of: {data['max']}")
                 if message['type'] == 'execution_cached':
                     data = message['data']
                     for itm in data['nodes']:
                         if itm not in finished_nodes:
                             finished_nodes.append(itm)
-                            logger.info('Progess: ', len(finished_nodes), '/', len(node_ids), ' Tasks done')
+                            logger.info(f"Progess: {len(finished_nodes)} / {len(node_ids)} tasks done")
                 if message['type'] == 'executing':
                     data = message['data']
                     if data['node'] not in finished_nodes:
                         finished_nodes.append(data['node'])
-                        logger.info('Progess: ', len(finished_nodes), '/', len(node_ids), ' Tasks done')
+                        logger.info(f"Progess: {len(finished_nodes)} / {len(node_ids)} tasks done")
 
                     if data['node'] is None and data['prompt_id'] == prompt_id:
                         break #Execution is done
@@ -127,11 +128,18 @@ class comfyuiCaller(object):
 
 
 def check_readiness(api_base_url: str) -> bool:
+    cf = comfyuiCaller()
+    cf.setUrl(api_base_url)
+    logger.info("Init health check... ")
     while True:
-        cf = comfyuiCaller()
-        cf.setUrl(api_base_url)
-        cf.wss_connect()
-        break
+        try:
+            logger.info(f"Try to connect to ComfyUI backend {api_base_url} ... ")
+            cf.wss_connect()
+            break
+        except Exception as e:
+            time.sleep(1)
+            continue
+    logger.info(f"ComfyUI backend {api_base_url} connected. ")
     return True
 
 
@@ -139,9 +147,11 @@ def handler(api_base_url: str, task_id: str, payload: dict) -> str:
     response = {}
 
     try:
+        logger.info(f"Processing pipeline task with ID: {task_id}")
         images = invoke_pipeline(api_base_url, payload)
         # write to s3
         imgOutputs = post_invocations(images)
+        logger.info(f"Received {len(imgOutputs)} images")
         content = '{"code": 200}'
         response["success"] = True
         response["image"] = imgOutputs

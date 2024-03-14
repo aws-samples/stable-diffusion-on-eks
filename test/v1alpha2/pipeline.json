@@ -10,6 +10,7 @@
     "content": {
       "3": {
         "inputs": {
+          "seed": 89465186141685,
           "steps": 20,
           "cfg": 8,
           "sampler_name": "euler",

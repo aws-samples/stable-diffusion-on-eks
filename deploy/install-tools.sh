@@ -112,3 +112,4 @@ fi
 printf "Tools install complete. \n"
 
 cd $cur_dir
+rm -rf $tmp_dir
