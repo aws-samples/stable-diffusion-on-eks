@@ -6,11 +6,13 @@ APIGW:
     rateLimit: 30
     burstLimit: 50
 modelsRuntime:
-- name: "sd"
+- name: ${RUNTIME_NAME}
   namespace: "default"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
   dynamicModel: false
   type: ${RUNTIME_TYPE}
+  chartRepository: "oci://public.ecr.aws/bingjiao/charts/sd-on-eks"
+  chartVersion: "1.0.0"
   extraValues:
     karpenter:
       nodeTemplate:
