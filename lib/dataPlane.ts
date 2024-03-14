@@ -28,18 +28,12 @@ export interface dataPlaneProps {
     name: string,
     namespace: string,
     type: string,
-    modelFilename: string,
+    modelFilename?: string,
+    dynamicModel?: boolean,
     chartRepository?: string,
     chartVersion?: string,
     extraValues?: {}
-  }[];
-  dynamicModelRuntime: {
-    enabled: boolean,
-    namespace?: string,
-    chartRepository?: string,
-    chartVersion?: string,
-    extraValues?: {}
-  }
+  }[]
 }
 
 export default class DataPlaneStack {
@@ -156,8 +150,14 @@ dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
 
   //Parameters for SD Web UI
   if (val.type.toLowerCase() == "sdwebui") {
-    sdRuntimeParams.sdModelCheckpoint = val.modelFilename,
-    sdRuntimeParams.dynamicModel = false
+    if (sdRuntimeParams.sdModelCheckpoint) {
+      sdRuntimeParams.sdModelCheckpoint = val.modelFilename
+    }
+    if (val.dynamicModel == true) {
+      sdRuntimeParams.dynamicModel = true
+    } else {
+      sdRuntimeParams.dynamicModel = false
+    }
   }
 
   if (val.type.toLowerCase() == "comfyui") {}

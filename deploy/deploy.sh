@@ -6,9 +6,9 @@ SCRIPTPATH=$(realpath $(dirname "$0"))
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l STACK_NAME=${STACK_NAME:-"sdoneks"}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
-SDWEBUI_IMAGE=docker.io/sdoneks/inference-api-sdwebui:v1.8.0-20240312
-COMFYUI_IMAGE=docker.io/sdoneks/inference-api-comfyui:latest
-QUEUE_AGENT_IMAGE=docker.io/sdoneks/queue-agent:latest
+SDWEBUI_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/sdwebui:latest
+COMFYUI_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/comfyui:latest
+QUEUE_AGENT_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/queue-agent:latest
 
 # Step 1: Install tools
 

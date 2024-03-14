@@ -170,11 +170,11 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         }
       }
     }
-
+    // Temp change: set image repo to ECR Public
     if (this.options.type == "sdwebui") {
       var imagerepo: string
       if (!(lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository"))) {
-        imagerepo = "sdoneks/inference-api-sdwebui"
+        imagerepo = "public.ecr.aws/bingjiao/sd-on-eks/sdwebui"
       } else {
         imagerepo = lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository")!
       }
@@ -198,7 +198,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     if (this.options.type == "comfyui") {
       var imagerepo: string
       if (!(lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository"))) {
-        imagerepo = "sdoneks/inference-api-comfyui"
+        imagerepo = "public.ecr.aws/bingjiao/sd-on-eks/sdwebui"
       } else {
         imagerepo = lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository")!
       }

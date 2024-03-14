@@ -6,17 +6,12 @@ APIGW:
     rateLimit: 30
     burstLimit: 50
 modelsRuntime:
-- name: "sd1-5"
+- name: "sd"
   namespace: "default"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
+  dynamicModel: false
   type: ${RUNTIME_TYPE}
   extraValues:
-    runtime:
-      inferenceApi:
-        image:
-          repository: sdoneks/inference-api
-          tag: sdwebui-v1.8.0-20240312
-        modelMountPath: /opt/ml/code/models
     karpenter:
       nodeTemplate:
         amiFamily: Bottlerocket
@@ -41,6 +36,3 @@ modelsRuntime:
         minReplicaCount: 0 # Minimum number of replicas of SD Runtime.
         maxReplicaCount: 5 # Maxinum number of replicas of SD Runtime.
         cooldownPeriod: 300 # The period (in seconds) to wait after the last message before scaling down.
-
-dynamicModelRuntime:
-  enabled: false
