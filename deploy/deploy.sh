@@ -5,7 +5,7 @@ set -e
 SCRIPTPATH=$(realpath $(dirname "$0"))
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l STACK_NAME=${STACK_NAME:-"sdoneks"}
-RUNTIME_NAME=${STACK_NAME:-"sdruntime"}
+RUNTIME_NAME=${RUNTIME_NAME:-"sdruntime"}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
 SDWEBUI_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/sdwebui:latest
 COMFYUI_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/comfyui:latest
