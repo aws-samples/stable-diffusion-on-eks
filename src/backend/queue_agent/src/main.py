@@ -39,7 +39,7 @@ s3_bucket = os.getenv("S3_BUCKET")
 api_base_url = ""
 
 # Check current runtime type
-runtime_type = os.getenv("RUNTIME_TYPE", "").lower
+runtime_type = os.getenv("RUNTIME_TYPE", "").lower()
 
 # Runtime type should be specified
 if runtime_type == "":
@@ -50,7 +50,7 @@ if runtime_type == "":
 if runtime_type == "sdwebui":
     api_base_url = os.getenv("API_BASE_URL", "http://localhost:8080/sdapi/v1/")
     dynamic_sd_model_str = os.getenv("DYNAMIC_SD_MODEL", "false")
-    if dynamic_sd_model_str.lower == "false":
+    if dynamic_sd_model_str.lower() == "false":
         dynamic_sd_model = False
     else:
         dynamic_sd_model = True
@@ -116,6 +116,8 @@ def main():
                 metadata = payload["metadata"]
                 task_id = metadata["id"]
 
+                logger.info(f"Received task {task_id}, processing")
+
                 if "prefix" in metadata.keys():
                     if metadata["prefix"][-1] == '/':
                         prefix = metadata["prefix"] + str(task_id)
@@ -133,6 +135,7 @@ def main():
                     context = {}
 
                 body = payload["content"]
+                logger.debug(body)
 
                 response = {}
 
@@ -169,6 +172,7 @@ def print_env() -> None:
     logger.info(f'SQS_QUEUE_URL={sqs_queue_url}')
     logger.info(f'SNS_TOPIC_ARN={sns_topic_arn}')
     logger.info(f'S3_BUCKET={s3_bucket}')
+    logger.info(f'RUNTIME_TYPE={runtime_type}')
 
 def signalHandler(signum, frame):
     global shutdown

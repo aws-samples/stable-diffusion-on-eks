@@ -5,14 +5,14 @@ import asyncio
 import base64
 import json
 import logging
+import sys
 import time
 import traceback
 
 from aws_xray_sdk.core import xray_recorder
 from modules import http_action, misc
 
-logger = logging.getLogger("queue-agent-sdwebui")
-logger.setLevel(logging.INFO)
+logger = logging.getLogger("queue-agent")
 
 ALWAYSON_SCRIPTS_EXCLUDE_KEYS = ['task', 'id_task', 'uid',
                                  'sd_model_checkpoint', 'image_link', 'save_dir', 'sd_vae', 'override_settings']

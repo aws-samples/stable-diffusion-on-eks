@@ -3,6 +3,7 @@
 
 import json
 import logging
+import sys
 import traceback
 import urllib.parse
 import urllib.request
@@ -11,7 +12,7 @@ import uuid
 import websocket  # NOTE: websocket-client (https://github.com/websocket-client/websocket-client)
 from aws_xray_sdk.core import xray_recorder
 
-logger = logging.getLogger("queue-agent-comfyui")
+logger = logging.getLogger("queue-agent")
 
 def singleton(cls):
     _instance = {}
