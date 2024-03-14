@@ -15,6 +15,12 @@
 * Queue Agent: `public.ecr.aws/bingjiao/sd-on-eks/queue-agent:latest`
 * Helm Chart: `oci://public.ecr.aws/bingjiao/charts/sd-on-eks:1.0.0`
 
+## 获取测试用代码
+
+```bash
+git clone --branch queue-agent-refactor https://github.com/aws-samples/stable-diffusion-on-eks.git
+```
+
 ## API 格式和地址
 
 ### `v1alpha1`版本（传统SD Web UI版本）
