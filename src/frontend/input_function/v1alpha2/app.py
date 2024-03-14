@@ -12,7 +12,7 @@ sns_client = boto3.client('sns')
 def lambda_handler(event, context):
     if event['httpMethod'] == 'POST':
         try:
-            payload = json.loads(event['body'])
+            payload = json.loads(event['body'])["task"]
             val = validate(payload)
             if val != "success":
                 return {
@@ -31,7 +31,6 @@ def lambda_handler(event, context):
             sns_client.publish(
                 TargetArn=os.environ['SNS_TOPIC_ARN'],
                 Message=json.dumps(payload),
-                MessageStructure='json',
                 MessageAttributes={
                     'runtime': {
                         'DataType': 'String',

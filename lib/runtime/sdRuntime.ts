@@ -217,18 +217,50 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     }
 
     if (this.options.type == "sdwebui") {
-        // Legacy and new routing
-        this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
-          filterPolicy: {
-            sd_model_checkpoint:
-              sns.SubscriptionFilter.stringFilter({
-                allowlist: [this.options.sdModelCheckpoint!]
-              }),
-            runtime:
-              sns.SubscriptionFilter.stringFilter({
-                allowlist: [this.id]
-              })
-        }}))
+      // Legacy and new routing, use CFN as a workaround since L2 construct doesn't support OR
+      const cfnSubscription = new sns.CfnSubscription(cluster.stack, this.id+'CfnSubscription', {
+        protocol: 'sqs',
+        endpoint: inputQueue.queueArn,
+        topicArn: this.options.inputSns!.topicArn,
+        filterPolicy: {
+          "$or": [
+            {
+              "sd_model_checkpoint": [
+                this.options.sdModelCheckpoint!
+              ]
+            }, {
+              "runtime": [
+                this.id
+              ]
+            }]
+        },
+        filterPolicyScope: "MessageAttributes"
+      })
+
+      inputQueue.addToResourcePolicy(new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.ServicePrincipal('sns.amazonaws.com')],
+        actions: ['sqs:SendMessage'],
+        resources: [inputQueue.queueArn],
+        conditions: {
+          'ArnEquals': {
+            'aws:SourceArn': this.options.inputSns!.topicArn
+          }
+        }
+      }))
+
+
+/* It should like this...
+       this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
+        filterPolicy: {
+          : sns.SubscriptionFilter.stringFilter({
+            allowlist: [this.options.sdModelCheckpoint!]
+          }),
+          runtime: sns.SubscriptionFilter.stringFilter({
+            allowlist: [this.id]
+          })
+        }
+      })) */
     } else {
       // New version routing only
       this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {

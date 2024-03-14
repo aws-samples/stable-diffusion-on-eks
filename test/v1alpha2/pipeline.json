@@ -2,8 +2,9 @@
   "task": {
     "metadata": {
       "id": "test-pipeline",
-      "runtime": "sd1-5-comfyui",
+      "runtime": "comfyui",
       "tasktype": "pipeline",
+      "prefix": "output",
       "context": ""
     },
     "content": {
