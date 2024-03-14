@@ -150,7 +150,7 @@ dataplaneProps.modelsRuntime.forEach((val, idx, array) => {
 
   //Parameters for SD Web UI
   if (val.type.toLowerCase() == "sdwebui") {
-    if (sdRuntimeParams.sdModelCheckpoint) {
+    if (val.modelFilename) {
       sdRuntimeParams.sdModelCheckpoint = val.modelFilename
     }
     if (val.dynamicModel == true) {

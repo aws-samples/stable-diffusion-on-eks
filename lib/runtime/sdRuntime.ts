@@ -216,7 +216,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       generatedValues = lodash.merge(generatedValues, comfyUIgeneratedValues)
     }
 
-    if (this.options.type == "sdwebui") {
+    if (this.options.type == "sdwebui" && this.options.sdModelCheckpoint) {
       // Legacy and new routing, use CFN as a workaround since L2 construct doesn't support OR
       const cfnSubscription = new sns.CfnSubscription(cluster.stack, this.id+'CfnSubscription', {
         protocol: 'sqs',
