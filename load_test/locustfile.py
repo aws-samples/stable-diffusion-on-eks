@@ -17,24 +17,29 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(process)s - %(le
 logger = logging.getLogger("processor")
 logger.setLevel(logging.INFO)
 
-API_ENDPOINT="https://8wojjlqpdh.execute-api.us-east-1.amazonaws.com/prod/"
-API_KEY="suK0bJLKpX1UH6UjRq9yZ6Nf9rQNTVQC6jZfqGHJ"
+API_ENDPOINT=""
+API_KEY=""
 
 TEMPLATE=json.loads("""{
-    "alwayson_scripts": {
-        "task": "text-to-image",
-        "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
-        "id_task": "768",
-        "uid": "768",
-        "save_dir": "outputs"
+  "task": {
+    "metadata": {
+      "id": "test-t2i",
+      "runtime": "sdwebui",
+      "tasktype": "text-to-image",
+      "prefix": "output",
+      "context": ""
     },
-    "prompt": "A dog",
-    "steps": 16,
-    "width": 512,
-    "height": 512
+    "content": {
+      "alwayson_scripts": {},
+      "prompt": "A dog",
+      "steps": 16,
+      "width": 512,
+      "height": 512
+    }
+  }
 }""")
 
-OUTPUT_SQS_URL="https://sqs.us-east-1.amazonaws.com/600413481647/SDonEKSOutputQueue"
+OUTPUT_SQS_URL=""
 
 stats = {}
 
