@@ -1,18 +1,18 @@
-stackName: "SdOnEKS" # Name of stack
-modelBucketArn: 'arn:aws:s3:::dummy-bucket' # ARN of S3 bucket for model storage. Models file should be manual populated into the bucket.
+stackName: sdoneks
+modelBucketArn: arn:aws:s3:::sdoneks-model-bucket-1806
 APIGW:
-  stageName: prod
+  stageName: dev
   throttle:
     rateLimit: 30
     burstLimit: 50
 modelsRuntime:
-- name: "sdruntime1" # Name of runtime, should be unique
-  namespace: "default"  # Namespace of runtime, suggest deploy different runtimes on seperate namespaces
-  modelFilename: "" # (SD Web UI only) Model for this runtime. Model should be stored in /stable-diffusion of S3 bucket. Request will be routed by model filename.
-  dynamicModel: false # (SD Web UI only) Enable dynamic model. This runtime will accept all requests. Then, the runtime will load model by request.
-  type: "sdwebui" # Specify type of runtime. Different type of runtime represents different API Spec.
-#  chartRepository: "" # Path of Helm chart if you choose to bring your own charts. Protocol (oci:// or https:// )should be added as a prefix of repository.
-#  chartVersion: "" # Version of Helm chart.
+- name: sdoneks
+  namespace: default
+  modelFilename: v1-5-pruned-emaonly.safetensors
+  dynamicModel: false
+  type: sdwebui
+  chartRepository: oci://public.ecr.aws/bingjiao/charts/sd-on-eks
+  chartVersion: 1.0.0
   extraValues:
     karpenter:
       nodeTemplate:
@@ -23,25 +23,18 @@ modelsRuntime:
           deleteOnTermination: true
           iops: 4000
           throughput: 1000
-#          snapshotID: # EBS Snapshot ID with format snap-<snapshotid>
+          snapshotID: snap-01c8aebc78fa4dc23
       provisioner:
         instanceType:
-        - "g5.xlarge" # List of allowed instance type for Karpenter provisioning.
-        - "g5.2xlarge"
-        capacityType: # Allowed purchase mode for instances
+        - g5.xlarge
+        - g4dn.xlarge
+        - g5.2xlarge
+        - g4dn.2xlarge
+        capacityType:
           onDemand: true
-          spot: false
-    runtime:
-#      inferenceApi:
-#        image:
-#          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/inference-api # Image Repository of stable diffusion runtime.
-#          tag: latest
-#      queueAgent:
-#        image:
-#          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/queue-agent # Image Repository of queue agent.
-#          tag: latest
+          spot: true
       scaling:
         queueLength: 10 # Target value for queue length. One new instance will be launched when queue launch reaches the value.
         minReplicaCount: 0 # Minimum number of replicas of SD Runtime.
         maxReplicaCount: 5 # Maxinum number of replicas of SD Runtime.
-        cooldownPeriod: 60 # The period (in seconds) to wait after the last message before scaling down.
+        cooldownPeriod: 300 # The period (in seconds) to wait after the last message before scaling down.
