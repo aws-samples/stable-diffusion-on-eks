@@ -1,6 +1,26 @@
 # API 调用规则
 
-在部署解决方案后，您可以通过Amazon API Gateway的API端点，向Stable Diffusion运行时发送请求。发送请求时，请遵循以下规则：
+在部署解决方案后，您可以通过Amazon API Gateway的API端点，向Stable Diffusion运行时发送请求。
+
+发送请求时，请遵循以下规则：
+
+## API 请求示例
+
+您可以使用测试脚本验证解决方案是否部署成功。运行以下命令以进行测试：
+
+```bash
+cd test
+STACK_NAME=sdoneksStack RUNTIME_TYPE=sdwebui ./run.sh
+```
+
+如您修改了解决方案堆栈名称，或运行时类型，请将`sdoneksStack`和`sdwebui`替换成对应内容。
+
+该脚本会自动查找API Gateway端点，获取API Key，并发送测试请求。
+
+* 对SD Web UI运行时，会发送一个文生图和图生图请求。
+* 对ComfyUI运行时，会发送一个Pipeline请求。
+
+在数秒至数分钟（取决于是否启用了镜像缓存，和最小实例副本数量）后，您可以在`output_location`的位置找到生成的图像。
 
 ## 请求端点和格式
 
@@ -22,7 +42,23 @@
     aws cloudformation describe-stacks --stack-name SdOnEKSStack --output text --query 'Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue'
     ```
 
+您需要在端点后附加API版本。目前我们支持`v1alpha1`和`v1alpha2`版本。当您使用`v1alpha2`版本API时，请求应发送至：
+
+```
+https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/v1alpha2
+```
+
 该端点仅接收JSON格式的POST请求，需要包含`Content-Type: application/json`请求头。
+
+
+## 请求类型
+
+根据运行时类型不同，每种运行时只接受特定类型的请求：
+
+* 对于SD Web UI运行时，只接受[文生图](./text-to-image.md)和[图生图](./image-to-image.md)请求。
+* 对于ComfyUI运行时，只接受[Pipeline](./pipeline.md)请求。
+
+具体请求格式请参见各类型请求的详细文档。
 
 ## API Key
 
@@ -54,49 +90,12 @@
 
 默认设置为:
 
-* 每秒10个请求
-* 可突增2个请求
+* 每秒30个请求
+* 可突增50个请求
 
 关于限流的原理详细信息，请参考[Throttle API requests for better throughput](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html)
 
-如您需要修改该设置，请在API Gateway中修改对应Usage Plan。
-
-## API 请求示例
-
-您可以使用下方的测试请求验证解决方案是否部署成功。将下方内容存储为`test.json`:
-
-```json
-{
-    "alwayson_scripts": {
-        "task": "text-to-image",
-        "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
-        "id_task": "123",
-        "uid": "123",
-        "save_dir": "outputs"
-    },
-    "prompt": "A dog",
-    "steps": 16,
-    "width": 512,
-    "height": 512
-}
-```
-
-运行以下命令，将`1234567890abcdefghij` 替换为 API Key，将 `https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/` 替换为API端点。
-
-```bash
-curl -X POST https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/ \
-    -H 'Content-Type: application/json' \
-    -H 'x-api-key: 1234567890abcdefghij' \
-    -d @test.json
-```
-
-如果部署正确，您会立即获得以下返回:
-
-```json
-{"id_task": "123", "task": "text-to-image", "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors", "output_location": "s3://sdoneksdataplanestack-outputs3bucket/123"}
-```
-
-在数秒至数分钟（取决于是否启用了镜像缓存，和最小实例副本数量）后，您可以在`output_location`的位置找到生成的图像。
+如您需要修改该设置，请在`config.yaml`中修改`APIGW`段的相关内容。您也可以在API Gateway中修改对应Usage Plan。
 
 ## 下一步
 
