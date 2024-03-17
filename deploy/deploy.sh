@@ -21,6 +21,7 @@ do
           printf "  -s, --snapshot               EBS snapshot ID with container image. If not specified, EBS snapshot will be automatically generated. \n"
           printf "  -r, --runtime-name           Runtime name. (Default: sdruntime) \n"
           printf "  -t, --runtime-type           Runtime type. Only 'sdwebui' and 'comfyui' is accepted. (Default: sdwebui) \n"
+          exit 0
           shift
           ;;
         -n|--stack-name)
@@ -49,6 +50,10 @@ do
           ;;
         -t|--runtime-type)
           RUNTIME_TYPE=$2
+          if [[ "$RUNTIME_TYPE" != "sdwebui" && "$RUNTIME_TYPE" != "comfyui" ]] ; then
+            printf "Runtime type should be 'sdwebui' or 'comfyui'. \n"
+            exit 1
+          fi
           shift 2
           ;;
         --)
