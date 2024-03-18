@@ -4,7 +4,7 @@ You can use the `kubectl` command to connect to the cluster created by the solut
 
 ## Install kubectl
 
-Refer to the [Installing or updating kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html) documentation to install the `kubectl` command-line tool. Install a version of kubectl that is compatible with Kubernetes 1.27.
+Refer to the [Installing or updating kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html) documentation to install the `kubectl` command-line tool. Install a version of kubectl that is compatible with Kubernetes 1.28.
 
 ## Log in to the Kubernetes Cluster
 
