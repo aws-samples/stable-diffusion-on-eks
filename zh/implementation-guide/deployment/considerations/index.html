@@ -11,14 +11,14 @@
         <link rel="canonical" href="https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/considerations/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../../architecture/services-in-this-solution/">
       
       
-        <link rel="next" href="../models/">
+        <link rel="next" href="../">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.14">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e359304.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.10ba22f1.min.css">
       
       
 
@@ -558,27 +558,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    概览
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -688,74 +667,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    步骤1：模型存储
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../image-building/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    步骤2：镜像构建
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ebs-snapshot/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    步骤3：镜像缓存构建
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../deploy/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    步骤4：开始部署
+    快速开始
   </span>
   
 
@@ -859,6 +775,44 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_2" id="__nav_1_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SD Web UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            SD Web UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../usage/text-to-image/" class="md-nav__link">
         
@@ -895,22 +849,9 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/controlnet/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    使用ControlNet
-  </span>
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -922,16 +863,62 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_3" id="__nav_1_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ComfyUI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            ComfyUI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../usage/lora/" class="md-nav__link">
+      <a href="../../usage/pipeline/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    使用LoRA
+    Pipeline
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1440,7 +1427,7 @@
 <div class="admonition danger">
 <p class="admonition-title">中国区域网络限制</p>
 <p>近期，我们发现在中国区部署该解决方案时，出现EBS无法部署，报错信息显示 <code>Waiter has timed out</code> 或 <code>Unexpected EOF</code>. 详情请参考对应<a href="https://github.com/aws-samples/stable-diffusion-on-eks/issues/53">Issue</a>.</p>
-<p>该问题的根因是部分组件的Helm Chart位于Github上，在中国区部署时，负责部署自定义资源的Lambda无法获取Helm Chart，导致报错。目前我们正在积极处理该问题，后续会将需要的Helm Chart和容器镜像复制到中国区域。该过程预计在2024年Q1完成。</p>
+<p>该问题的根因是部分组件的Helm Chart位于Github上，在中国区部署时，负责部署自定义资源的Lambda无法获取Helm Chart，导致报错。目前我们正在积极处理该问题，后续会将需要的Helm Chart和容器镜像复制到中国区域。</p>
 <p>如您在部署过程中遇到该问题，请暂时切换到海外区域进行测试，或自行搭建Helm Repo以临时解决此问题。</p>
 </div>
 <p>该解决方案可以在亚马逊云科技中国区域部署。</p>
@@ -1463,7 +1450,7 @@
 <li>中国区域不支持默认的<code>g5</code>实例类型。您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
 </ul>
 <h2 id="iam">IAM 权限</h2>
-<p>部署该解决方案需要管理员或与之相当的权限。</p>
+<p>部署该解决方案需要管理员或与之相当的权限。由于组件较多，我们暂不提供最小权限列表。</p>
 <h2 id="_3">服务配额</h2>
 <p>每个AWS区域的每个AWS账户都有关于可以创建的资源数量的配额，您可以在AWS控制台中使用 <a href="https://console.aws.amazon.com/servicequotas/home/">Service Quota</a> 工具了解服务配额。如该服务配额可提升，您可以通过该工具并自助式开立工单提升服务配额。</p>
 <p>与该解决方案相关的主要服务配额为：</p>
@@ -1552,33 +1539,42 @@
 <td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
 </tr>
 <tr>
-<td>InvokeAI</td>
-<td><a href="https://github.com/invoke-ai/InvokeAI">GitHub</a></td>
-<td></td>
-</tr>
-<tr>
 <td>ComfyUI</td>
 <td><a href="https://github.com/comfyanonymous/ComfyUI">GitHub</a></td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>InvokeAI</td>
+<td><a href="https://github.com/invoke-ai/InvokeAI">GitHub</a></td>
 <td></td>
 </tr>
 </tbody>
 </table>
 <p>您也可以选择其他运行时，或构建自己的运行时。您需要将运行时打包为容器镜像，以便在 EKS 上运行。</p>
 <p>您需要充分了解并遵守您所使用的 Stable Diffusion 运行时的许可证条款。</p>
-<div class="admonition info">
-<p class="admonition-title">运行时支持</p>
-<p>在现阶段，该解决方案只支持Stable Diffusion Web UI的API规范。</p>
-<p>如您选择其他运行时，您需要修改<a href="https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/src/backend/queue_agent/main.py">Queue Agent的源代码</a>以适配其他运行时的API地址和语法。</p>
-<p>如您自行构建运行时，请确保运行时的API规范符合<a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API">Stable Diffusion Web UI的API规范</a>。</p>
-<p>默认情况下，该解决方案会将模型加载至<code>/tmp/models</code>目录，请确保您的运行时被配置成从该目录读取模型。</p>
-</div>
 <div class="admonition example">
 <p class="admonition-title">示例运行时</p>
-<p>您可以使用社区提供的<a href="https://github.com/yubingjiaocn/stable-diffusion-webui-docker">示例 Dockerfile</a> 构建 <em>Stable Diffusion Web UI</em> 的运行时容器镜像。请注意，该镜像仅用于技术评估和测试用途，请勿将该镜像部署至生产环境。</p>
+<p>您可以使用社区提供的<a href="https://github.com/yubingjiaocn/stable-diffusion-webui-docker">示例 Dockerfile</a> 构建 <em>Stable Diffusion Web UI</em> 和 <em>ComfyUI</em> 的运行时容器镜像。请注意，该镜像仅用于技术评估和测试用途，请勿将该镜像部署至生产环境。</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">模型存储</p>
+<p>默认情况下，该解决方案会将模型加载至<code>/opt/ml/code/models</code>目录，请确保您的运行时被配置成从该目录读取模型。</p>
+<p>您需要将运行时的mmap关闭以获得最高性能。</p>
+<ul>
+<li>对于SD Web UI，您需要在<code>config.json</code>中设置<code>disable_mmap_load_safetensors: true</code></li>
+<li>对于ComfyUI，您需要依照<a href="https://github.com/comfyanonymous/ComfyUI/issues/2288">社区Issue</a>中的指导，手工修改源代码。</li>
+</ul>
+</div>
+<div class="admonition info">
+<p class="admonition-title">SD Web UI运行时注意事项</p>
+<p>对于SD Web UI运行时，根据运行模型的不同，运行时分为静态运行时（预加载模型）和动态运行时（按需加载模型）。</p>
+<ul>
+<li>静态运行时使用的模型需要在<code>modelFilename</code>中预先指定。该模型会在启动时加载到显存中。</li>
+<li>动态运行时需要指定<code>dynamicModel: true</code>。此时无需预先指定模型，运行时会根据请求中使用的模型，从Amazon S3中加载模型并进行模型推理。</li>
+</ul>
 </div>
 <h2 id="_4">其他重要提示和限制</h2>
 <ul>
-<li>一个区域中只能有一个活动的Stable Diffusion on Amazon EKS解决方案堆栈。如果您的部署失败，请确保在重试部署之前已删除失败的堆栈。</li>
 <li>
 <p>在当前版本，该解决方案部署时会自动创建一个新的VPC。该VPC包含：</p>
 <ul>
@@ -1592,7 +1588,7 @@
 <p>目前该VPC的参数无法自定义。</p>
 </li>
 <li>
-<p>在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为<code>1.27</code>。我们会随着Amazon EKS版本发布更新集群版本。</p>
+<p>在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为<code>1.28</code>。我们会随着Amazon EKS版本发布更新集群版本。</p>
 </li>
 </ul>
 
@@ -1639,7 +1635,7 @@
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.bd41221c.min.js"></script>
       
     
   </body>

@@ -11,22 +11,22 @@
         <link rel="canonical" href="https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/">
       
       
-        <link rel="prev" href="../architecture/services-in-this-solution/">
+        <link rel="prev" href="considerations/">
       
       
-        <link rel="next" href="considerations/">
+        <link rel="next" href="configuration/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.14">
     
     
       
-        <title>概览 - Stable Diffusion on Amazon EKS</title>
+        <title>快速开始 - Stable Diffusion on Amazon EKS</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e359304.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.10ba22f1.min.css">
       
       
 
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              概览
+              快速开始
             
           </span>
         </div>
@@ -558,6 +558,27 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="considerations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    计划部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -574,7 +595,7 @@
           
   
   <span class="md-ellipsis">
-    概览
+    快速开始
   </span>
   
 
@@ -585,7 +606,7 @@
         
   
   <span class="md-ellipsis">
-    概览
+    快速开始
   </span>
   
 
@@ -622,12 +643,45 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="部署步骤">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       获取源代码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      一键部署
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      部署参数
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      手动部署
     </span>
   </a>
   
@@ -637,111 +691,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="considerations/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    计划部署
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="models/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    步骤1：模型存储
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="image-building/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    步骤2：镜像构建
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="ebs-snapshot/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    步骤3：镜像缓存构建
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="deploy/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    步骤4：开始部署
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -841,6 +790,44 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_2" id="__nav_1_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SD Web UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            SD Web UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../usage/text-to-image/" class="md-nav__link">
         
@@ -877,22 +864,9 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../usage/controlnet/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    使用ControlNet
-  </span>
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -904,16 +878,62 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_3" id="__nav_1_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ComfyUI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            ComfyUI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../usage/lora/" class="md-nav__link">
+      <a href="../usage/pipeline/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    使用LoRA
+    Pipeline
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1344,12 +1364,45 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="部署步骤">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       获取源代码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      一键部署
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      部署参数
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      手动部署
     </span>
   </a>
   
@@ -1378,19 +1431,43 @@
 <h2 id="_2">前提条件</h2>
 <p>根据<a href="considerations/">计划部署</a>文档检查所有的考虑因素是否满足。</p>
 <h2 id="_3">部署步骤</h2>
-<p>使用以下步骤在 AWS 上部署此解决方案。</p>
+<p>我们提供了一键部署脚本以快速开始。总部署时间约为 30 分钟。</p>
+<h3 id="_4">获取源代码</h3>
+<p>运行以下命令以获取源代码和部署脚本：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/aws-samples/stable-diffusion-on-eks
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>stable-diffusion-on-eks
+</span></code></pre></div>
+<h3 id="_5">一键部署</h3>
+<p>运行以下命令以使用最简设置快速部署：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span>deploy
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./deploy.sh<span class="w"> </span>--deploy
+</span></code></pre></div>
+<p>该脚本将：
+* 安装必要的运行时和工具
+* 创建S3存储桶，从<a href="https://huggingface.co/runwayml/stable-diffusion-v1-5">HuggingFace</a>中下载Stable Diffusion 1.5的基础模型，放置在存储桶中
+* 使用我们提供的示例镜像，创建包含SD Web UI镜像的EBS快照
+* 创建一个含SD Web UI运行时的Stable Diffusion解决方案</p>
+<h3 id="_6">部署参数</h3>
+<p>该脚本提供一些参数，以便您自定义部署的解决方案：</p>
+<ul>
+<li><code>-h, --help</code>: 显示帮助信息</li>
+<li><code>-n, --stack-name</code>: 自定义部署的解决方案名称，影响生成的资源命名。默认为<code>sdoneks</code>.</li>
+<li><code>-R, --region</code>: 解决方案部署到的区域。默认为当前AWS配置文件所在区域。</li>
+<li><code>-d, --dry-run</code>: 仅生成配置文件，不执行部署。</li>
+<li><code>-b, --bucket</code>: 指定保存模型的现有S3桶名称，该S3桶必须已存在，且与解决方案在相同区域。您可以根据<a href="models/">此文档</a>手动创建S3存储桶。</li>
+<li><code>-s, --snapshot</code>: 指定现有的EBS快照ID。您可以根据<a href="ebs-snapshot/">此文档</a>自行构建EBS快照。</li>
+<li><code>-r, --runtime-name</code>: 指定部署的运行时名称，影响API调用时使用的名称。默认为<code>sdruntime</code>。</li>
+<li><code>-t, --runtime-type</code>: 指定部署的运行时类型，只接受<code>sdwebui</code>和<code>comfyui</code>。默认为<code>sdwebui</code>。</li>
+</ul>
+<p>如您需要部署多个运行时，或有其他参数需求（如自定义镜像），您可先使用<code>--dry-run</code>参数，使用脚本生成基础配置文件后再行修改。</p>
+<h2 id="_7">手动部署</h2>
+<p>您也可以不适用脚本，使用以下步骤手动在 AWS 上部署此解决方案。</p>
 <ol>
 <li><a href="models/">创建 Amazon S3 模型存储桶</a>，并将所需要的模型存储到桶中</li>
 <li><em>（可选）</em> <a href="image-building/">构建容器镜像</a></li>
 <li><em>（可选）</em> <a href="ebs-snapshot/">将容器镜像存储到EBS缓存中以加速启动</a></li>
 <li><a href="deploy/">部署并启动解决方案堆栈</a></li>
 </ol>
-<p>总部署时间约为 30 分钟。</p>
-<h2 id="_4">获取源代码</h2>
-<p>运行以下命令以获取源代码和部署脚本：</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/aws-samples/stable-diffusion-on-eks
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>stable-diffusion-on-eks
-</span></code></pre></div>
 
 
 
@@ -1435,7 +1512,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bd41221c.min.js"></script>
       
     
   </body>
