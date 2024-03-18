@@ -15,19 +15,18 @@ nav:
       - 架构概览: implementation-guide/architecture/architecture.md
       - AWS 服务: implementation-guide/architecture/services-in-this-solution.md
     - 开始部署:
-      - 概览: implementation-guide/deployment/index.md
       - 计划部署: implementation-guide/deployment/considerations.md
-      - 步骤1：模型存储: implementation-guide/deployment/models.md
-      - 步骤2：镜像构建: implementation-guide/deployment/image-building.md
-      - 步骤3：镜像缓存构建: implementation-guide/deployment/ebs-snapshot.md
-      - 步骤4：开始部署: implementation-guide/deployment/deploy.md
+      - 快速开始: implementation-guide/deployment/index.md
       - 配置项: implementation-guide/deployment/configuration.md
     - 使用指南:
       - API 调用规则: implementation-guide/usage/index.md
-      - 文生图: implementation-guide/usage/text-to-image.md
-      - 图生图: implementation-guide/usage/image-to-image.md
-      - 使用ControlNet: implementation-guide/usage/controlnet.md
-      - 使用LoRA: implementation-guide/usage/lora.md
+      - SD Web UI:
+        - 文生图: implementation-guide/usage/text-to-image.md
+        - 图生图: implementation-guide/usage/image-to-image.md
+      - ComfyUI:
+        - Pipeline: implementation-guide/usage/pipeline.md
+      # - 使用ControlNet: implementation-guide/usage/controlnet.md
+      # - 使用LoRA: implementation-guide/usage/lora.md
       - 通知和回调: implementation-guide/usage/callback.md
     - 运维指南:
       - Kubernetes 集群管理: implementation-guide/operation/kubernetes-cluster.md

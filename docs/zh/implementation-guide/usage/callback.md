@@ -2,6 +2,8 @@
 
 Stable Diffusion on Amazon EKS方案采用异步推理模式，当图片生成或报错后，会通过Amazon SNS通知用户。用户应用可以通过订阅 SNS 主题以获取图片生成完成的通知。
 
+## 添加订阅
+
 请参考 [Amazon SNS文档](https://docs.aws.amazon.com/sns/latest/dg/sns-event-destinations.html) 以了解 SNS 支持的消息目标类型。
 
 您可以从CloudFormation的输出中找到生成的 SNS 主题 ARN：
@@ -37,3 +39,21 @@ Stable Diffusion on Amazon EKS方案采用异步推理模式，当图片生成�
 === "AWS CLI"
 
     请参考[Use Amazon SNS with the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-sns.html#cli-subscribe-sns-topic) 添加对该主题的订阅。
+
+## 回调消息格式
+
+解决方案会通过以下格式向SNS发送任务完成通知，此通知与请求时所使用的的API版本无关：
+
+```json
+{
+    "id": "task_id", // 任务ID
+    "result": true, // true为成功完成，false为未成功完成
+    "image_url": [ // 生成图像的S3 URL，格式为 任务ID+4位随机码+图片序号，如有多张图片则所有图片链接均会附上
+        "s3://outputbucket/output/test-t2i/test-t2i-abcd-1.png"
+    ],
+    "output_url": "s3://outputbucket/output/test-t2i/test-t2i-abcd.out", // 任务返回的S3 URL，包含运行时的完整返回
+    "context": { // 请求时附带的Context内容
+        "abc": 123
+    }
+}
+```

@@ -1,0 +1,18 @@
+{
+  "task": {
+    "metadata": {
+      "id": "test-t2i",
+      "runtime": "sdwebui",
+      "tasktype": "text-to-image",
+      "prefix": "output",
+      "context": ""
+    },
+    "content": {
+      "alwayson_scripts": {},
+      "prompt": "A dog",
+      "steps": 16,
+      "width": 512,
+      "height": 512
+    }
+  }
+}

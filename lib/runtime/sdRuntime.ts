@@ -10,17 +10,17 @@ import * as lodash from "lodash";
 import { createNamespace }  from "../utils/namespace"
 
 export interface SDRuntimeAddOnProps extends blueprints.addons.HelmAddOnUserProps {
+  type: string,
   targetNamespace?: string,
   ModelBucketArn?: string,
   outputSns?: sns.ITopic,
   inputSns?: sns.ITopic,
   outputBucket?: s3.IBucket
-  sdModelCheckpoint: string,
-  dynamicModel: boolean,
-  allModels?: string[],
+  sdModelCheckpoint?: string,
+  dynamicModel?: boolean,
   chartRepository?: string,
   chartVersion?: string,
-  extraValues?: {}
+  extraValues?: object
 }
 
 export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProps = {
@@ -28,7 +28,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   name: 'sdRuntimeAddOn',
   namespace: 'sdruntime',
   release: 'sdruntime',
-  version: '0.1.1',
+  version: '1.0.0',
   repository: 'https://aws-samples.github.io/stable-diffusion-on-eks/charts',
   values: {
     global: {
@@ -36,8 +36,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
       stackName: cdk.Aws.STACK_NAME,
     }
   },
-  sdModelCheckpoint: "",
-  dynamicModel: false
+  type: "sdwebui"
 }
 
 export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
@@ -119,7 +118,9 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         ],
         "mountOptions": [
           "allow-delete",
-          "allow-other"
+          "allow-other",
+          "file-mode=777",
+          "dir-mode=777"
         ],
         "csi": {
           "driver": "s3.csi.aws.com",
@@ -156,48 +157,128 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
 
     var generatedValues = {
       runtime: {
+        type: this.options.type,
         serviceAccountName: runtimeSA.serviceAccountName,
-        inferenceApi: {
-          modelFilename: this.options.sdModelCheckpoint
-        },
         queueAgent: {
           s3Bucket: this.options.outputBucket!.bucketName,
           snsTopicArn: this.options.outputSns!.topicArn,
           sqsQueueUrl: inputQueue.queueUrl,
-          dynamicModel: this.options.dynamicModel
         },
-        // Temp add static provisioning values here
         persistence: {
+          enabled: true,
           existingClaim: this.id+"-s3-model-storage-pvc"
         }
       }
     }
+    // Temp change: set image repo to ECR Public
+    if (this.options.type == "sdwebui") {
+      var imagerepo: string
+      if (!(lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository"))) {
+        imagerepo = "public.ecr.aws/bingjiao/sd-on-eks/sdwebui"
+      } else {
+        imagerepo = lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository")!
+      }
+      var sdWebUIgeneratedValues =  {
+        runtime: {
+          inferenceApi: {
+            image: {
+              repository: imagerepo
+            },
+            modelFilename: this.options.sdModelCheckpoint
+          },
+          queueAgent: {
+            dynamicModel: this.options.dynamicModel
+          }
+        }
+      }
 
-    if (!this.options.dynamicModel) {
-      this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
+      generatedValues = lodash.merge(generatedValues, sdWebUIgeneratedValues)
+    }
+
+    if (this.options.type == "comfyui") {
+      var imagerepo: string
+      if (!(lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository"))) {
+        imagerepo = "public.ecr.aws/bingjiao/sd-on-eks/sdwebui"
+      } else {
+        imagerepo = lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository")!
+      }
+
+      var comfyUIgeneratedValues =  {
+        runtime: {
+          inferenceApi: {
+            image: {
+              repository: imagerepo
+            },
+          }
+        }
+      }
+
+      generatedValues = lodash.merge(generatedValues, comfyUIgeneratedValues)
+    }
+
+    if (this.options.type == "sdwebui" && this.options.sdModelCheckpoint) {
+      // Legacy and new routing, use CFN as a workaround since L2 construct doesn't support OR
+      const cfnSubscription = new sns.CfnSubscription(cluster.stack, this.id+'CfnSubscription', {
+        protocol: 'sqs',
+        endpoint: inputQueue.queueArn,
+        topicArn: this.options.inputSns!.topicArn,
         filterPolicy: {
-          sd_model_checkpoint:
-            sns.SubscriptionFilter.stringFilter({
-              allowlist: [this.options.sdModelCheckpoint]
-            })
+          "$or": [
+            {
+              "sd_model_checkpoint": [
+                this.options.sdModelCheckpoint!
+              ]
+            }, {
+              "runtime": [
+                this.id
+              ]
+            }]
+        },
+        filterPolicyScope: "MessageAttributes"
+      })
+
+      inputQueue.addToResourcePolicy(new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.ServicePrincipal('sns.amazonaws.com')],
+        actions: ['sqs:SendMessage'],
+        resources: [inputQueue.queueArn],
+        conditions: {
+          'ArnEquals': {
+            'aws:SourceArn': this.options.inputSns!.topicArn
+          }
         }
       }))
-      generatedValues.runtime.queueAgent.dynamicModel = false
+
+
+/* It should like this...
+       this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
+        filterPolicy: {
+          : sns.SubscriptionFilter.stringFilter({
+            allowlist: [this.options.sdModelCheckpoint!]
+          }),
+          runtime: sns.SubscriptionFilter.stringFilter({
+            allowlist: [this.id]
+          })
+        }
+      })) */
     } else {
+      // New version routing only
       this.options.inputSns!.addSubscription(new aws_sns_subscriptions.SqsSubscription(inputQueue, {
         filterPolicy: {
-          sd_model_checkpoint:
+          runtime:
             sns.SubscriptionFilter.stringFilter({
-              denylist: this.options.allModels
+              allowlist: [this.id]
             })
         }
       }))
-      generatedValues.runtime.queueAgent.dynamicModel = true
     }
 
     const values = lodash.merge(this.props.values, this.options.extraValues, generatedValues)
 
     const chart = this.addHelmChart(clusterInfo, values, true);
+
+    chart.node.addDependency(pv)
+    chart.node.addDependency(pvc)
 
     return Promise.resolve(chart);
   }

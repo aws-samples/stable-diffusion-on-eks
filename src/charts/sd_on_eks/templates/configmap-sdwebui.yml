@@ -1,0 +1,20 @@
+{{- if (eq "sdwebui" .Values.runtime.type) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "sdchart.fullname" . }}-sdwebui-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+  {{- if .Values.runtime.labels }}
+  {{- toYaml .Values.runtime.labels | nindent 4 }}
+  {{- end }}
+
+  {{- if .Values.runtime.annotations }}
+  annotations:
+  {{ toYaml .Values.runtime.annotations | nindent 4 }}
+  {{- end }}
+data:
+  config.json: |
+    {"disable_mmap_load_safetensors": true}
+{{- end }}

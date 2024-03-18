@@ -22,7 +22,7 @@
 
     近期，我们发现在中国区部署该解决方案时，出现EBS无法部署，报错信息显示 `Waiter has timed out` 或 `Unexpected EOF`. 详情请参考对应[Issue](https://github.com/aws-samples/stable-diffusion-on-eks/issues/53).
 
-    该问题的根因是部分组件的Helm Chart位于Github上，在中国区部署时，负责部署自定义资源的Lambda无法获取Helm Chart，导致报错。目前我们正在积极处理该问题，后续会将需要的Helm Chart和容器镜像复制到中国区域。该过程预计在2024年Q1完成。
+    该问题的根因是部分组件的Helm Chart位于Github上，在中国区部署时，负责部署自定义资源的Lambda无法获取Helm Chart，导致报错。目前我们正在积极处理该问题，后续会将需要的Helm Chart和容器镜像复制到中国区域。
 
     如您在部署过程中遇到该问题，请暂时切换到海外区域进行测试，或自行搭建Helm Repo以临时解决此问题。
 
@@ -39,7 +39,7 @@
 
 ## IAM 权限
 
-部署该解决方案需要管理员或与之相当的权限。
+部署该解决方案需要管理员或与之相当的权限。由于组件较多，我们暂不提供最小权限列表。
 
 ## 服务配额
 
@@ -71,28 +71,35 @@
 | 运行时名称           | 链接 |  验证  |
 |----------------|-----------------|----------------------|
 | Stable Diffusion Web UI  | [GitHub](https://github.com/AUTOMATIC1111/stable-diffusion-webui) | :material-check-bold:{ .icon_check }  |
+| ComfyUI     | [GitHub](https://github.com/comfyanonymous/ComfyUI) | :material-check-bold:{ .icon_check }  |
 | InvokeAI     | [GitHub](https://github.com/invoke-ai/InvokeAI) |   |
-| ComfyUI     | [GitHub](https://github.com/comfyanonymous/ComfyUI) |   |
 
 您也可以选择其他运行时，或构建自己的运行时。您需要将运行时打包为容器镜像，以便在 EKS 上运行。
 
 您需要充分了解并遵守您所使用的 Stable Diffusion 运行时的许可证条款。
 
-!!! info "运行时支持"
-    在现阶段，该解决方案只支持Stable Diffusion Web UI的API规范。
-
-    如您选择其他运行时，您需要修改[Queue Agent的源代码](https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/src/backend/queue_agent/main.py)以适配其他运行时的API地址和语法。
-
-    如您自行构建运行时，请确保运行时的API规范符合[Stable Diffusion Web UI的API规范](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API)。
-
-    默认情况下，该解决方案会将模型加载至`/tmp/models`目录，请确保您的运行时被配置成从该目录读取模型。
-
 !!! example "示例运行时"
-    您可以使用社区提供的[示例 Dockerfile](https://github.com/yubingjiaocn/stable-diffusion-webui-docker) 构建 *Stable Diffusion Web UI* 的运行时容器镜像。请注意，该镜像仅用于技术评估和测试用途，请勿将该镜像部署至生产环境。
+
+    您可以使用社区提供的[示例 Dockerfile](https://github.com/yubingjiaocn/stable-diffusion-webui-docker) 构建 *Stable Diffusion Web UI* 和 *ComfyUI* 的运行时容器镜像。请注意，该镜像仅用于技术评估和测试用途，请勿将该镜像部署至生产环境。
+
+!!! info "模型存储"
+
+    默认情况下，该解决方案会将模型加载至`/opt/ml/code/models`目录，请确保您的运行时被配置成从该目录读取模型。
+
+    您需要将运行时的mmap关闭以获得最高性能。
+
+    * 对于SD Web UI，您需要在`config.json`中设置`disable_mmap_load_safetensors: true`
+    * 对于ComfyUI，您需要依照[社区Issue](https://github.com/comfyanonymous/ComfyUI/issues/2288)中的指导，手工修改源代码。
+
+!!! info "SD Web UI运行时注意事项"
+
+    对于SD Web UI运行时，根据运行模型的不同，运行时分为静态运行时（预加载模型）和动态运行时（按需加载模型）。
+
+    * 静态运行时使用的模型需要在`modelFilename`中预先指定。该模型会在启动时加载到显存中。
+    * 动态运行时需要指定`dynamicModel: true`。此时无需预先指定模型，运行时会根据请求中使用的模型，从Amazon S3中加载模型并进行模型推理。
 
 ## 其他重要提示和限制
 
-- 一个区域中只能有一个活动的Stable Diffusion on Amazon EKS解决方案堆栈。如果您的部署失败，请确保在重试部署之前已删除失败的堆栈。
 - 在当前版本，该解决方案部署时会自动创建一个新的VPC。该VPC包含：
     - CIDR为`10.0.0.0/16`
     - 分布在不同可用区的3个公有子网，子网大小为`/19`
@@ -103,4 +110,4 @@
 
     目前该VPC的参数无法自定义。
 
-- 在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为`1.27`。我们会随着Amazon EKS版本发布更新集群版本。
+- 在当前版本，该解决方案只能在新建的EKS集群上部署，且版本固定为`1.28`。我们会随着Amazon EKS版本发布更新集群版本。

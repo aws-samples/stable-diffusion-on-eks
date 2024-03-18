@@ -1,0 +1,39 @@
+{
+  "alwayson_scripts": {
+    "task": "text-to-image",
+    "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
+    "id_task": "gif1",
+    "uid": "gif1",
+    "save_dir": "outputs",
+    "AnimateDiff": {
+      "args": [
+        {
+          "batch_size": 16,
+          "closed_loop": "N",
+          "enable": true,
+          "format": [
+            "GIF"
+          ],
+          "fps": 8,
+          "interp": "Off",
+          "interp_x": 10,
+          "last_frame": null,
+          "latent_power": 1,
+          "latent_scale": 32,
+          "loop_number": 0,
+          "model": "mm_sd15_v3.safetensors",
+          "overlap": -1,
+          "stride": 1,
+          "video_length": 32
+        }
+      ]
+    }
+  },
+  "batch_size": 32,
+  "cfg_scale": 7,
+  "height": 512,
+  "negative_prompt": "(worst quality:1.2), (low quality:1.2), (lowres:1.1), (monochrome:1.1), (greyscale), multiple views, comic, sketch, (((bad anatomy))), (((deformed))), (((disfigured))), watermark, multiple_views, mutation hands, mutation fingers, extra fingers, missing fingers, watermark, nude, nsfw",
+  "prompt": "masterpiece, 30 year old women, cleavage, red hair, bun, ponytail, medium breast, desert, cactus vibe, sensual pose, (looking in the camera:1.2), (front view:1.2), facing the camera, close up, upper body",
+  "steps": 20,
+  "width": 512
+}

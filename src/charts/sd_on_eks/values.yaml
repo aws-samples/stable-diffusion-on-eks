@@ -35,6 +35,7 @@ karpenter:
       throughput: 1000
     userData: ""
 runtime:
+  type: "sdwebui"
   labels: {}
   annotations: {}
   serviceAccountName: runtime-sa
@@ -52,8 +53,8 @@ runtime:
     image:
       repository: sdoneks/inference-api
       tag: latest
-    modelFilename: v1-5-pruned-emaonly.safetensors
-    modelMountPath: /tmp/models
+    modelFilename: ""
+    modelMountPath: /opt/ml/code/models
     commandArguments: ""
     extraEnv: {}
     imagePullPolicy: IfNotPresent

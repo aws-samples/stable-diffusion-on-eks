@@ -4,7 +4,7 @@
 
 ## 安装kubectl
 
-您可以参考 [Installing or updating kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html) 文档安装`kubectl`命令行工具。请安装适用于Kubernetes 1.27的kubectl。
+您可以参考 [Installing or updating kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html) 文档安装`kubectl`命令行工具。请安装适用于Kubernetes 1.28的kubectl。
 
 ## 登录到 Kubernetes 集群
 

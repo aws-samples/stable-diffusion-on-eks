@@ -1,18 +1,16 @@
-stackName: sdoneks
-modelBucketArn: arn:aws:s3:::sdoneks-model-bucket-1806
+stackName: ${STACK_NAME}
+modelBucketArn: arn:aws:s3:::${MODEL_BUCKET}
 APIGW:
   stageName: dev
   throttle:
     rateLimit: 30
     burstLimit: 50
 modelsRuntime:
-- name: sdoneks
-  namespace: default
-  modelFilename: v1-5-pruned-emaonly.safetensors
+- name: ${RUNTIME_NAME}
+  namespace: "default"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
   dynamicModel: false
-  type: sdwebui
-  chartRepository: oci://public.ecr.aws/bingjiao/charts/sd-on-eks
-  chartVersion: 1.0.0
+  type: ${RUNTIME_TYPE}
   extraValues:
     karpenter:
       nodeTemplate:
@@ -23,13 +21,13 @@ modelsRuntime:
           deleteOnTermination: true
           iops: 4000
           throughput: 1000
-          snapshotID: snap-01c8aebc78fa4dc23
+          snapshotID: ${SNAPSHOT_ID}
       provisioner:
         instanceType:
-        - g5.xlarge
-        - g4dn.xlarge
-        - g5.2xlarge
-        - g4dn.2xlarge
+        - "g5.xlarge"
+        - "g4dn.xlarge"
+        - "g5.2xlarge"
+        - "g4dn.2xlarge"
         capacityType:
           onDemand: true
           spot: true

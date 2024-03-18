@@ -12,20 +12,40 @@ export interface SharedComponentAddOnProps {
   inputSns: sns.ITopic;
   outputSns: sns.ITopic;
   outputBucket: s3.IBucket;
+  apiGWProps?: {
+    stageName?: string,
+    throttle?: {
+      rateLimit?: number,
+      burstLimit?: number
+    }
+  }
+}
+
+export const defaultProps: SharedComponentAddOnProps = {
+  inputSns: undefined!,
+  outputSns: undefined!,
+  outputBucket: undefined!,
+  apiGWProps: {
+    stageName: "prod",
+    throttle: {
+      rateLimit: 10,
+      burstLimit: 2
+    }
+  }
 }
 
 export class SharedComponentAddOn implements ClusterAddOn {
   readonly options: SharedComponentAddOnProps;
 
   constructor(props: SharedComponentAddOnProps) {
-    this.options = props
+    this.options = { ...defaultProps, ...props };
   }
 
   deploy(clusterInfo: ClusterInfo): Promise<Construct> {
     const cluster = clusterInfo.cluster;
 
-    const lambdaFunction = new lambda.Function(cluster.stack, 'InputLambda', {
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function')),
+    const v1Alpha1Parser = new lambda.Function(cluster.stack, 'v1Alpha1ParserFunction', {
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function/v1alpha1')),
       handler: 'app.lambda_handler',
       runtime: lambda.Runtime.PYTHON_3_11,
       environment: {
@@ -35,11 +55,22 @@ export class SharedComponentAddOn implements ClusterAddOn {
       tracing: lambda.Tracing.ACTIVE
     });
 
-    this.options.inputSns.grantPublish(lambdaFunction);
+    const v1Alpha2Parser = new lambda.Function(cluster.stack, 'v1Alpha2ParserFunction', {
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../src/frontend/input_function/v1alpha2')),
+      handler: 'app.lambda_handler',
+      runtime: lambda.Runtime.PYTHON_3_11,
+      environment: {
+        "SNS_TOPIC_ARN": this.options.inputSns.topicArn,
+        "S3_OUTPUT_BUCKET": this.options.outputBucket.bucketName
+      },
+      tracing: lambda.Tracing.ACTIVE
+    });
 
-    const api = new apigw.LambdaRestApi(cluster.stack, 'FrontApi', {
-      handler: lambdaFunction,
-      proxy: true,
+    this.options.inputSns.grantPublish(v1Alpha1Parser);
+    this.options.inputSns.grantPublish(v1Alpha2Parser);
+
+    const api = new apigw.RestApi(cluster.stack, 'FrontAPI', {
+      restApiName: 'FrontAPI',
       deploy: true,
       cloudWatchRole: true,
       endpointConfiguration: {
@@ -49,12 +80,20 @@ export class SharedComponentAddOn implements ClusterAddOn {
         apiKeyRequired: true
       },
       deployOptions: {
-        stageName: "prod",
+        stageName: this.options.apiGWProps!.stageName,
         tracingEnabled: true,
         metricsEnabled: true,
       }
     });
-    api.node.addDependency(lambdaFunction);
+
+    const v1alpha1Resource = api.root.addResource('v1alpha1');
+    v1alpha1Resource.addMethod('POST', new apigw.LambdaIntegration(v1Alpha1Parser), { apiKeyRequired: true });
+
+    const v1alpha2Resource = api.root.addResource('v1alpha2');
+    v1alpha2Resource.addMethod('POST', new apigw.LambdaIntegration(v1Alpha2Parser), { apiKeyRequired: true });
+
+    api.node.addDependency(v1Alpha1Parser);
+    api.node.addDependency(v1Alpha2Parser);
 
     //Force override name of generated output to provide a static name
     const urlCfnOutput = api.node.findChild('Endpoint') as cdk.CfnOutput;
@@ -71,8 +110,8 @@ export class SharedComponentAddOn implements ClusterAddOn {
         stage: api.deploymentStage
       }],
       throttle: {
-        rateLimit: 10,
-        burstLimit: 2
+        rateLimit: this.options.apiGWProps!.throttle!.rateLimit,
+        burstLimit: this.options.apiGWProps!.throttle!.burstLimit
       }
     });
 
