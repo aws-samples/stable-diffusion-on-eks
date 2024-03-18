@@ -1,5 +1,5 @@
 site_name: Stable Diffusion on Amazon EKS
-site_url: https://yubingjiaocn.github.io/stable-diffusion-on-eks/
+site_url: https://aws-samples.github.io/stable-diffusion-on-eks/
 repo_url: https://github.com/aws-samples/stable-diffusion-on-eks/
 repo_name: aws-samples/stable-diffusion-on-eks
 docs_dir: .
