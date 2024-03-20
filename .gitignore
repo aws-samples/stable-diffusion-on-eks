@@ -362,3 +362,4 @@ poetry.toml
 pyrightconfig.json
 
 manual.md
+config.yaml
