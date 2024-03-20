@@ -11,5 +11,5 @@ aws s3api create-bucket --bucket <bucket name> --region us-east-1
 You can upload model to newly created S3 bucket by running the following command:
 
 ```bash
-aws s3 cp <model name> s3://<bucket name>/stable-diffusion/
+aws s3 cp <model name> s3://<bucket name>/Stable-diffusion/
 ```
