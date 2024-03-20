@@ -3,7 +3,6 @@
         "task": "text-to-image",
         "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
         "id_task": "test-t2i",
-        "uid": "123",
         "save_dir": "outputs"
     },
     "prompt": "A dog",

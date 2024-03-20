@@ -42,7 +42,14 @@ def check_readiness(api_base_url: str, dynamic_sd_model: bool) -> bool:
 def handler(api_base_url: str, task_type: str, task_id: str, payload: dict, dynamic_sd_model: bool) -> dict:
     response = {}
     try:
-        taskHeader = payload['alwayson_scripts']
+        try:
+            taskHeader = payload['alwayson_scripts']
+        except KeyError:
+            logger.error(f"Invalid request, skipping")
+            response["success"] = False
+            response["content"] = json.dumps({"error": "Invalid request, skipping"})
+            return response
+
         logger.info(f"Start process {task_type} task with ID: {task_id}")
 
         if dynamic_sd_model and taskHeader['sd_model_checkpoint']:

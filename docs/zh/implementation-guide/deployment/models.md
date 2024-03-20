@@ -28,7 +28,7 @@
 
 ```
 └── /
-    ├── stable-diffusion
+    ├── Stable-diffusion
     ├── controlnet
     └── lora
 ```
@@ -56,7 +56,7 @@
 === "AWS CLI"
     运行以下命令以将模型文件上传至存储桶。将`<model name>`替换成为您的模型文件名，`<bucket name>`替换为您希望的存储桶名称：
     ```bash
-    aws s3 cp <model name> s3://<bucket name>/stable-diffusion/
+    aws s3 cp <model name> s3://<bucket name>/Stable-diffusion/
     ```
     !!! note "提示"
         采用AWS CLI上传时，无需预先创建目录结构。

@@ -4,7 +4,6 @@
         "image_link": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png",
         "id_task": "test-i2i",
         "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
-        "uid": "123",
         "save_dir": "outputs"
     },
     "prompt": "cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",

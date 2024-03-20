@@ -2,8 +2,8 @@
 
 set -e
 
-SHORTOPTS="h,n:,R:,d,b:,s:,r:,t:"
-LONGOPTS="help,stack-name:,region:,dry-run,bucket:,snapshot:,runtime-name:,runtime-type:"
+SHORTOPTS="h,n:,R:,d,b:,s:,r:,t:,T"
+LONGOPTS="help,stack-name:,region:,dry-run,bucket:,snapshot:,runtime-name:,runtime-type:,skip-tools"
 ARGS=$(getopt --options $SHORTOPTS --longoptions $LONGOPTS -- "$@" )
 
 eval set -- "$ARGS"
@@ -14,6 +14,7 @@ do
           printf "Usage: deploy.sh [options] \n"
           printf "Options: \n"
           printf "  -h, --help                   Print this help message \n"
+          printf "  -T, --skip-tools             Skip tools installation \n"
           printf "  -n, --stack-name             Name of the stack to be created (Default: sdoneks) \n"
           printf "  -R, --region                 AWS region to be used \n"
           printf "  -d, --dry-run                Don't deploy the stack. You can manually deploy the stack using generated config file.\n"
@@ -26,6 +27,10 @@ do
         -n|--stack-name)
           STACK_NAME=$2
           shift 2
+          ;;
+        -T|--skip-tools)
+          INSTALL_TOOLS=false
+          shift
           ;;
         -R|--region)
           AWS_DEFAULT_REGION=$2
@@ -69,10 +74,11 @@ done
 
 
 SCRIPTPATH=$(realpath $(dirname "$0"))
-AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
+export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l STACK_NAME=${STACK_NAME:-"sdoneks"}
 RUNTIME_NAME=${RUNTIME_NAME:-"sdruntime"}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
+INSTALL_TOOLS=${INSTALL_TOOLS:-true}
 DEPLOY=${DEPLOY:-true}
 SDWEBUI_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/sdwebui:latest
 COMFYUI_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/comfyui:latest
@@ -81,7 +87,9 @@ QUEUE_AGENT_IMAGE=public.ecr.aws/bingjiao/sd-on-eks/queue-agent:latest
 # Step 1: Install tools
 
 printf "Step 1: Install tools... \n"
-"${SCRIPTPATH}"/install-tools.sh
+if [ ${INSTALL_TOOLS} = true ] ; then
+  "${SCRIPTPATH}"/install-tools.sh
+fi
 
 # Step 2: Create S3 bucket and upload model
 
@@ -101,10 +109,10 @@ if [ -z "$SNAPSHOT_ID" ]; then
   cd "${SCRIPTPATH}"/..
   git submodule update --init --recursive
   if [[ "$RUNTIME_TYPE" == "sdwebui" ]] ; then
-    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q ${SDWEBUI_IMAGE},${QUEUE_AGENT_IMAGE})
+    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -r "${AWS_DEFAULT_REGION}" -q ${SDWEBUI_IMAGE},${QUEUE_AGENT_IMAGE})
   fi
   if [[ ${RUNTIME_TYPE} == "comfyui" ]]; then
-    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -q ${COMFYUI_IMAGE},${QUEUE_AGENT_IMAGE})
+    SNAPSHOT_ID=$(utils/bottlerocket-images-cache/snapshot.sh -r "${AWS_DEFAULT_REGION}" -q ${COMFYUI_IMAGE},${QUEUE_AGENT_IMAGE})
   fi
 else
   printf "Existing snapshot ID detected, skipping... \n"
@@ -121,7 +129,7 @@ template="$(cat deploy/config.yaml.template)"
 eval "echo \"${template}\"" > config.yaml
 cdk bootstrap
 if [ ${DEPLOY} = true ] ; then
-  cdk deploy --no-rollback --require-approval never
+  CDK_DEFAULT_REGION=${AWS_DEFAULT_REGION} cdk deploy --no-rollback --require-approval never
   printf "Deploy complete. \n"
 else
   printf "Please revise config.yaml and run 'cdk deploy --no-rollback --require-approval never' to deploy. \n"
