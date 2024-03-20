@@ -2,7 +2,7 @@
   "task": {
     "metadata": {
       "id": "test-t2i",
-      "runtime": "sdwebui",
+      "runtime": "sdruntime",
       "tasktype": "text-to-image",
       "prefix": "output",
       "context": ""
