@@ -112,31 +112,38 @@ def main():
                 segment.sampled = sqsTraceHeader.sampled
 
                 # Process received message
-                payload = json.loads(json.loads(message.body)['Message'])
-                metadata = payload["metadata"]
-                task_id = metadata["id"]
+                try:
+                    payload = json.loads(json.loads(message.body)['Message'])
+                    metadata = payload["metadata"]
+                    task_id = metadata["id"]
 
-                logger.info(f"Received task {task_id}, processing")
+                    logger.info(f"Received task {task_id}, processing")
 
-                if "prefix" in metadata.keys():
-                    if metadata["prefix"][-1] == '/':
-                        prefix = metadata["prefix"] + str(task_id)
+                    if "prefix" in metadata.keys():
+                        if metadata["prefix"][-1] == '/':
+                            prefix = metadata["prefix"] + str(task_id)
+                        else:
+                            prefix = metadata["prefix"] + "/" + str(task_id)
                     else:
-                        prefix = metadata["prefix"] + "/" + str(task_id)
-                else:
-                    prefix = str(task_id)
+                        prefix = str(task_id)
 
-                if "tasktype" in metadata.keys():
-                    tasktype = metadata["tasktype"]
+                    if "tasktype" in metadata.keys():
+                        tasktype = metadata["tasktype"]
 
-                if "context" in metadata.keys():
-                    context = metadata["context"]
-                else:
-                    context = {}
+                    if "context" in metadata.keys():
+                        context = metadata["context"]
+                    else:
+                        context = {}
 
-                body = payload["content"]
-                logger.debug(body)
+                    body = payload["content"]
+                    logger.debug(body)
+                except Exception as e:
+                    logger.error(f"Error parsing message: {e}, skipping")
+                    logger.debug(payload)
+                    sqs_action.delete_message(message)
+                    continue
 
+                # Start handling message
                 response = {}
 
                 if runtime_type == "sdwebui":
