@@ -12,12 +12,12 @@ sns_client = boto3.client('sns')
 def lambda_handler(event, context):
     if event['httpMethod'] == 'POST':
         try:
-            payload = json.loads(event['body'])["task"]
+            payload = json.loads(event['body'])
             val = validate(payload)
             if (val != "success"):
                 return {
                     'statusCode': 400,
-                    'body': "Incorrect payload structure, {val}"
+                    'body': f"Incorrect payload structure, {val}"
                 }
 
             task = payload['alwayson_scripts']['task']
