@@ -24,7 +24,7 @@ cd stable-diffusion-on-eks
 
 ```bash
 cd deploy
-./deploy.sh --deploy
+./deploy.sh
 ```
 
 该脚本将：

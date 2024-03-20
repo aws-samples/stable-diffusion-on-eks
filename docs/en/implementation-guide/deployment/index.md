@@ -24,7 +24,7 @@ Run the following command to quickly deploy with minimal settings:
 
 ```bash
 cd deploy
-./deploy.sh --deploy
+./deploy.sh
 ```
 
 The script will:
