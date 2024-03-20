@@ -51,7 +51,7 @@ runtime:
     extraHPAConfig: {}
   inferenceApi:
     image:
-      repository: sdoneks/inference-api
+      repository: public.ecr.aws/bingjiao/sd-on-eks/sdwebui
       tag: latest
     modelFilename: ""
     modelMountPath: /opt/ml/code/models
@@ -67,7 +67,7 @@ runtime:
         memory: 6Gi
   queueAgent:
     image:
-      repository: sdoneks/queue-agent
+      repository: public.ecr.aws/bingjiao/sd-on-eks/queue-agent
       tag: latest
     extraEnv: {}
     dynamicModel: false
