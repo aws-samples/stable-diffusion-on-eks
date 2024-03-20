@@ -74,7 +74,7 @@ done
 
 
 SCRIPTPATH=$(realpath $(dirname "$0"))
-AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
+export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')}
 declare -l STACK_NAME=${STACK_NAME:-"sdoneks"}
 RUNTIME_NAME=${RUNTIME_NAME:-"sdruntime"}
 declare -l RUNTIME_TYPE=${RUNTIME_TYPE:-"sdwebui"}
@@ -127,7 +127,7 @@ sudo npm install
 
 template="$(cat deploy/config.yaml.template)"
 eval "echo \"${template}\"" > config.yaml
-AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} cdk bootstrap
+cdk bootstrap
 if [ ${DEPLOY} = true ] ; then
   CDK_DEFAULT_REGION=${AWS_DEFAULT_REGION} cdk deploy --no-rollback --require-approval never
   printf "Deploy complete. \n"
