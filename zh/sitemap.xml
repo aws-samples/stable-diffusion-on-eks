@@ -1,148 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/faq/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/faq/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/release-notes/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/release-notes/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/troubleshooting/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/troubleshooting/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/uninstall/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/uninstall/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/architecture/architecture/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/architecture/architecture/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/architecture/services-in-this-solution/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/architecture/services-in-this-solution/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/configuration/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/configuration/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/considerations/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/considerations/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/deploy/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/deploy/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/ebs-snapshot/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/ebs-snapshot/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/image-building/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/image-building/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/models/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/models/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/developer/api-spec/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/developer/api-spec/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/developer/source/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/developer/source/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/observability/logging/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/observability/logging/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/observability/monitoring/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/observability/monitoring/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/observability/tracing/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/observability/tracing/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/operation/kubernetes-cluster/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/operation/kubernetes-cluster/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/operation/update-config/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/operation/update-config/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/solution-overview/cost/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/solution-overview/cost/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/usage/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/usage/callback/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/callback/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/usage/controlnet/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/controlnet/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/usage/image-to-image/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/image-to-image/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/usage/lora/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/lora/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/usage/pipeline/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/pipeline/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/usage/text-to-image/</loc>
-         <lastmod>2024-03-18</lastmod>
+         <loc>https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/text-to-image/</loc>
+         <lastmod>2024-03-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

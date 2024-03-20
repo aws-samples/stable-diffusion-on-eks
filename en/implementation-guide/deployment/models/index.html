@@ -8,13 +8,9 @@
       
       
       
-        <link rel="canonical" href="https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/models/">
+        <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/models/">
       
       
-        <link rel="prev" href="../considerations/">
-      
-      
-        <link rel="next" href="../image-building/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +18,7 @@
     
     
       
-        <title>(Step 1) Model storage - Stable Diffusion on Amazon EKS</title>
+        <title>Create S3 bucket and store model - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -100,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              (Step 1) Model storage
+              Create S3 bucket and store model
             
           </span>
         </div>
@@ -205,20 +201,16 @@
         
   
   
-    
-  
   
     
     
       
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../../.." class="md-tabs__link">
           
   
@@ -299,28 +291,23 @@
       
   
   
-    
   
   
-  
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
         
           
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -331,7 +318,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             Implementation Guide
@@ -518,8 +505,6 @@
                 
   
   
-    
-  
   
   
     
@@ -529,11 +514,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
         
           
           <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
@@ -547,7 +532,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_1_3">
             <span class="md-nav__icon md-icon"></span>
             Deployment
@@ -561,84 +546,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Overview
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../considerations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Plan your deployment
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    (Step 1) Model storage
-  </span>
-  
-
-      </a>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../image-building/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    (Step 2) Image building
+    Deployment considerations
   </span>
   
 
@@ -655,32 +567,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../ebs-snapshot/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    (Step 3) EBS Snapshot
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../deploy/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    (Step 4) Deploy
+    Quick start
   </span>
   
 
@@ -764,11 +655,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/index.md" class="md-nav__link">
+      <a href="../../usage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Overview
+    API Usage
   </span>
   
 
@@ -784,12 +675,50 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_2" id="__nav_1_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SD Web UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            SD Web UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../usage/text-to-image/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Text to image
+    Text-to-Image
   </span>
   
 
@@ -810,11 +739,19 @@
         
   
   <span class="md-ellipsis">
-    Image to image
+    Image-to-Image
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -826,12 +763,50 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_3" id="__nav_1_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ComfyUI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            ComfyUI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../usage/controlnet/" class="md-nav__link">
+      <a href="../../usage/pipeline/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Using ControlNet
+    Pipeline
   </span>
   
 
@@ -841,22 +816,9 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/lora/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Using LoRA
-  </span>
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 

@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/">
+        <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/">
       
       
         <link rel="prev" href="considerations/">
@@ -1440,13 +1440,15 @@
 <h3 id="_5">一键部署</h3>
 <p>运行以下命令以使用最简设置快速部署：</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span>deploy
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./deploy.sh<span class="w"> </span>--deploy
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./deploy.sh
 </span></code></pre></div>
-<p>该脚本将：
-* 安装必要的运行时和工具
-* 创建S3存储桶，从<a href="https://huggingface.co/runwayml/stable-diffusion-v1-5">HuggingFace</a>中下载Stable Diffusion 1.5的基础模型，放置在存储桶中
-* 使用我们提供的示例镜像，创建包含SD Web UI镜像的EBS快照
-* 创建一个含SD Web UI运行时的Stable Diffusion解决方案</p>
+<p>该脚本将：</p>
+<ul>
+<li>安装必要的运行时和工具</li>
+<li>创建S3存储桶，从<a href="https://huggingface.co/runwayml/stable-diffusion-v1-5">HuggingFace</a>中下载Stable Diffusion 1.5的基础模型，放置在存储桶中</li>
+<li>使用我们提供的示例镜像，创建包含SD Web UI镜像的EBS快照</li>
+<li>创建一个含SD Web UI运行时的Stable Diffusion解决方案</li>
+</ul>
 <h3 id="_6">部署参数</h3>
 <p>该脚本提供一些参数，以便您自定义部署的解决方案：</p>
 <ul>

@@ -8,25 +8,25 @@
       
       
       
-        <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/architecture/architecture/">
+        <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/">
       
       
-        <link rel="prev" href="../../solution-overview/cost/">
+        <link rel="prev" href="../deployment/configuration/">
       
       
-        <link rel="next" href="../services-in-this-solution/">
+        <link rel="next" href="text-to-image/">
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.14">
     
     
       
-        <title>Architecture overview - Stable Diffusion on Amazon EKS</title>
+        <title>API Usage - Stable Diffusion on Amazon EKS</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.10ba22f1.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.10ba22f1.min.css">
       
       
 
@@ -45,9 +45,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#architecture-overview" class="md-skip">
+        <a href="#use-api" class="md-skip">
           Skip to content
         </a>
       
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Stable Diffusion on Amazon EKS" class="md-header__button md-logo" aria-label="Stable Diffusion on Amazon EKS" data-md-component="logo">
+    <a href="../.." title="Stable Diffusion on Amazon EKS" class="md-header__button md-logo" aria-label="Stable Diffusion on Amazon EKS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Architecture overview
+              API Usage
             
           </span>
         </div>
@@ -219,7 +219,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../.." class="md-tabs__link">
+        <a href="../.." class="md-tabs__link">
           
   
   Implementation Guide
@@ -272,7 +272,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Stable Diffusion on Amazon EKS" class="md-nav__button md-logo" aria-label="Stable Diffusion on Amazon EKS" data-md-component="logo">
+    <a href="../.." title="Stable Diffusion on Amazon EKS" class="md-nav__button md-logo" aria-label="Stable Diffusion on Amazon EKS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -383,7 +383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -404,7 +404,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../solution-overview/cost/" class="md-nav__link">
+      <a href="../solution-overview/cost/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -430,8 +430,6 @@
                 
   
   
-    
-  
   
   
     
@@ -441,11 +439,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
         
           
           <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
@@ -459,7 +457,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_1_2">
             <span class="md-nav__icon md-icon"></span>
             Architecture
@@ -470,30 +468,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Architecture overview
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../architecture/architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -502,77 +480,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#architecture-diagram" class="md-nav__link">
-    <span class="md-ellipsis">
-      Architecture Diagram
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#components" class="md-nav__link">
-    <span class="md-ellipsis">
-      Components
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Components">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#task-scheduling-and-dispatching" class="md-nav__link">
-    <span class="md-ellipsis">
-      Task Scheduling and Dispatching
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stable-diffusion-runtime" class="md-nav__link">
-    <span class="md-ellipsis">
-      Stable Diffusion Runtime
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#management-and-maintenance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Management and Maintenance
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -585,7 +492,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../services-in-this-solution/" class="md-nav__link">
+      <a href="../architecture/services-in-this-solution/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -652,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment/considerations/" class="md-nav__link">
+      <a href="../deployment/considerations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -673,7 +580,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment/" class="md-nav__link">
+      <a href="../deployment/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -694,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment/configuration/" class="md-nav__link">
+      <a href="../deployment/configuration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -720,6 +627,8 @@
                 
   
   
+    
+  
   
   
     
@@ -729,11 +638,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" checked>
         
           
           <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
@@ -747,7 +656,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1_4">
             <span class="md-nav__icon md-icon"></span>
             User Guide
@@ -758,10 +667,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../usage/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API Usage
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -770,6 +699,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#api-request-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Request Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-endpoint-and-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Endpoint and Format
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Key
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#throttling-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Throttling Rules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -820,7 +823,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/text-to-image/" class="md-nav__link">
+      <a href="text-to-image/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -841,7 +844,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/image-to-image/" class="md-nav__link">
+      <a href="image-to-image/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -908,7 +911,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/pipeline/" class="md-nav__link">
+      <a href="pipeline/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -937,7 +940,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/callback/" class="md-nav__link">
+      <a href="callback/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1004,7 +1007,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operation/kubernetes-cluster/" class="md-nav__link">
+      <a href="../operation/kubernetes-cluster/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1071,7 +1074,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/monitoring/" class="md-nav__link">
+      <a href="../observability/monitoring/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1092,7 +1095,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/logging/" class="md-nav__link">
+      <a href="../observability/logging/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1113,7 +1116,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../observability/tracing.md" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1142,7 +1145,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../faq/" class="md-nav__link">
+      <a href="../faq/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1163,7 +1166,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../uninstall/" class="md-nav__link">
+      <a href="../uninstall/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1222,7 +1225,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/source/" class="md-nav__link">
+      <a href="../developer/source/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1243,7 +1246,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../developer/api-spec/" class="md-nav__link">
+      <a href="../developer/api-spec/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1272,7 +1275,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release-notes/" class="md-nav__link">
+      <a href="../release-notes/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1340,53 +1343,56 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#architecture-diagram" class="md-nav__link">
+  <a href="#api-request-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Architecture Diagram
+      API Request Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#components" class="md-nav__link">
+  <a href="#request-endpoint-and-format" class="md-nav__link">
     <span class="md-ellipsis">
-      Components
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Components">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#task-scheduling-and-dispatching" class="md-nav__link">
-    <span class="md-ellipsis">
-      Task Scheduling and Dispatching
+      Request Endpoint and Format
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#stable-diffusion-runtime" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#request-types" class="md-nav__link">
     <span class="md-ellipsis">
-      Stable Diffusion Runtime
+      Request Types
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#management-and-maintenance" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#api-key" class="md-nav__link">
     <span class="md-ellipsis">
-      Management and Maintenance
+      API Key
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#throttling-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Throttling Rules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
   
 </li>
       
@@ -1408,40 +1414,87 @@
   
 
 
-<h1 id="architecture-overview">Architecture Overview</h1>
-<h2 id="architecture-diagram">Architecture Diagram</h2>
-<p><img alt="Architecture Diagram" src="../../../images/architecture-diagram.png" /></p>
-<h2 id="components">Components</h2>
-<p>This solution has 3 main components:</p>
+<h1 id="use-api">Use API</h1>
+<p>After deploying the solution, you can send requests to the Stable Diffusion runtime through the API endpoint of Amazon API Gateway.</p>
+<p>When sending requests, please follow these rules:</p>
+<h2 id="api-request-example">API Request Example</h2>
+<p>You can use the test script to verify if the solution is deployed successfully. Run the following command to test:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span><span class="nb">test</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">STACK_NAME</span><span class="o">=</span>sdoneksStack<span class="w"> </span><span class="nv">RUNTIME_TYPE</span><span class="o">=</span>sdwebui<span class="w"> </span>./run.sh
+</span></code></pre></div>
+<p>If you modified the solution stack name or runtime type, replace <code>sdoneksStack</code> and <code>sdwebui</code> accordingly.</p>
+<p>The script will automatically find the API Gateway endpoint, get the API Key, and send a test request.</p>
 <ul>
-<li>Serverless task scheduling and dispatching</li>
-<li>Stable Diffusion runtime based on Amazon EKS and Amazon EC2</li>
-<li>Management and maintenance components</li>
+<li>For SD Web UI runtime, it will send a text-to-image and image-to-image request.</li>
+<li>For ComfyUI runtime, it will send a Pipeline request.</li>
 </ul>
-<h3 id="task-scheduling-and-dispatching">Task Scheduling and Dispatching</h3>
-<p>This component has an API endpoint based on Amazon API Gateway. It also has a task dispatching part based on Amazon SNS and Amazon SQS.</p>
+<p>After a few seconds to a few minutes (depending on whether image caching is enabled and the minimum number of instance replicas), you can find the generated images at the <code>output_location</code>.</p>
+<h2 id="request-endpoint-and-format">Request Endpoint and Format</h2>
+<p>You can get the solution's API endpoint from the CloudFormation outputs:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">AWS Management Console</label><label for="__tabbed_1_2">AWS CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <ul>
-<li>The user sends requests (model, prompt, etc.) to the API endpoint provided by Amazon API Gateway.</li>
-<li>Requests are validated by Amazon Lambda and sent to an Amazon SNS topic.</li>
-<li>Amazon SNS sends the requests to the corresponding runtime's SQS queue based on the runtime name in the request.</li>
+<li>Go to the <a href="https://console.aws.amazon.com/cloudformation/home">AWS CloudFormation Console</a></li>
+<li>Select <strong>Stacks</strong></li>
+<li>In the list, select <strong>SdOnEKSStack</strong> (or your custom name)</li>
+<li>Select <strong>Output</strong></li>
+<li>Note the value of <strong>FrontApiEndpoint</strong> (in the format <code>https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/</code>)</li>
 </ul>
-<h3 id="stable-diffusion-runtime">Stable Diffusion Runtime</h3>
-<p>This component is a Stable Diffusion runtime based on Amazon EKS. It can scale elastically based on requests.</p>
-<p>For each runtime:</p>
+</div>
+<div class="tabbed-block">
+<p>Run the following command to get the API endpoint:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>aws<span class="w"> </span>cloudformation<span class="w"> </span>describe-stacks<span class="w"> </span>--stack-name<span class="w"> </span>SdOnEKSStack<span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span>--query<span class="w"> </span><span class="s1">&#39;Stacks[0].Outputs[?OutputKey==`FrontApiEndpoint`].OutputValue&#39;</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>You need to append the API version to the endpoint. Currently, we support <code>v1alpha1</code> and <code>v1alpha2</code> versions. When using the <code>v1alpha2</code> version API, requests should be sent to:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/v1alpha2
+</span></code></pre></div>
+<p>The endpoint only accepts JSON formatted POST requests with the <code>Content-Type: application/json</code> request header.</p>
+<h2 id="request-types">Request Types</h2>
+<p>Depending on the runtime type, each runtime only accepts specific types of requests:</p>
 <ul>
-<li>During deployment, each runtime has its own Amazon SQS queue to receive requests.</li>
-<li>The Queue Agent receives tasks from the SQS queue and sends them to the Stable Diffusion runtime to generate images.</li>
-<li>The generated images are stored in an Amazon S3 bucket by the Queue Agent. A completion notification is sent to an Amazon SNS topic.</li>
-<li>When there are too many messages in the SQS queue, KEDA increases the number of runtime replicas based on the queue length. Karpenter starts new GPU instances to host the new replicas.</li>
-<li>When there are no more messages queued, KEDA reduces the number of replicas. Karpenter shuts down unnecessary GPU instances to save costs.</li>
+<li>For SD Web UI runtime, it only accepts <a href="text-to-image/">text-to-image</a> and <a href="image-to-image/">image-to-image</a> requests.</li>
+<li>For ComfyUI runtime, it only accepts <a href="pipeline/">Pipeline</a> requests.</li>
 </ul>
-<h3 id="management-and-maintenance">Management and Maintenance</h3>
-<p>This solution provides complete observability and management components:</p>
+<p>Please refer to the detailed documentation for each request type for the specific request format.</p>
+<h2 id="api-key">API Key</h2>
+<p>For security reasons, all requests need to include an API Key. Follow these steps to get the API Key:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">AWS Management Console</label><label for="__tabbed_2_2">AWS CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <ul>
-<li>Metrics monitoring and logging based on CloudWatch</li>
-<li>End-to-end tracing based on AWS X-Ray</li>
-<li>Infrastructure as code deployment using AWS CDK</li>
+<li>Go to the <a href="https://console.aws.amazon.com/apigateway">Amazon API Gateway Console</a></li>
+<li>Select <strong>API Keys</strong></li>
+<li>In the list, select the API Key with a name similar to <code>SdOnEK-defau-abcdefghij</code> (or your custom name)</li>
+<li>Note the value of the <strong>API key</strong></li>
 </ul>
+</div>
+<div class="tabbed-block">
+<p>Run the following command to get the API Key:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">echo</span><span class="w"> </span><span class="k">$(</span>aws<span class="w"> </span>cloudformation<span class="w"> </span>describe-stacks<span class="w"> </span>--stack-name<span class="w"> </span>SdOnEKSStack<span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span>--query<span class="w"> </span><span class="s1">&#39;Stacks[0].Outputs[?OutputKey==`GetAPIKeyCommand`].OutputValue&#39;</span><span class="k">)</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>When sending requests, you need to include the <code>x-api-key</code> request header with the value being the API Key obtained above.</p>
+<div class="admonition danger">
+<p class="admonition-title">Unverified Requests</p>
+<p>Requests without an API Key will directly return a <code>401</code> error.</p>
+</div>
+<h2 id="throttling-rules">Throttling Rules</h2>
+<p>To protect the backend API, API Gateway will throttle excessive requests sent using the same API Key.</p>
+<p>The default setting is:</p>
+<ul>
+<li>30 requests per second</li>
+<li>Burst of 50 requests</li>
+</ul>
+<p>For detailed information about throttling principles, please refer to <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html">Throttle API requests for better throughput</a></p>
+<p>If you need to modify this setting, please change the relevant content in the <code>APIGW</code> section of <code>config.yaml</code>. You can also modify the corresponding Usage Plan in API Gateway.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>Based on the different use cases in the right-side menu, send requests to Stable Diffusion.</p>
 
 
 
@@ -1483,10 +1536,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.bd41221c.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bd41221c.min.js"></script>
       
     
   </body>

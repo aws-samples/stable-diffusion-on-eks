@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://yubingjiaocn.github.io/stable-diffusion-on-eks/implementation-guide/deployment/considerations/">
+        <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/considerations/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../../architecture/services-in-this-solution/">
       
       
-        <link rel="next" href="../models/">
+        <link rel="next" href="../">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Plan your deployment - Stable Diffusion on Amazon EKS</title>
+        <title>Deployment considerations - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#considerations" class="md-skip">
+        <a href="#deployment-consideration" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Plan your deployment
+              Deployment considerations
             
           </span>
         </div>
@@ -558,27 +558,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Overview
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -595,7 +574,7 @@
           
   
   <span class="md-ellipsis">
-    Plan your deployment
+    Deployment considerations
   </span>
   
 
@@ -606,7 +585,7 @@
         
   
   <span class="md-ellipsis">
-    Plan your deployment
+    Deployment considerations
   </span>
   
 
@@ -646,18 +625,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#choose-your-stable-diffusion-runtime" class="md-nav__link">
+  <a href="#service-quotas" class="md-nav__link">
     <span class="md-ellipsis">
-      Choose your Stable Diffusion Runtime
+      Service Quotas
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#important-note" class="md-nav__link">
+  <a href="#choose-stable-diffusion-runtime" class="md-nav__link">
     <span class="md-ellipsis">
-      Important Note
+      Choose Stable Diffusion Runtime
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-important-notes-and-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Important Notes and Limitations
     </span>
   </a>
   
@@ -679,74 +667,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    (Step 1) Model storage
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../image-building/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    (Step 2) Image building
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ebs-snapshot/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    (Step 3) EBS Snapshot
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../deploy/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    (Step 4) Deploy
+    Quick start
   </span>
   
 
@@ -830,11 +755,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/index.md" class="md-nav__link">
+      <a href="../../usage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Overview
+    API Usage
   </span>
   
 
@@ -850,12 +775,50 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_2" id="__nav_1_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SD Web UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            SD Web UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../usage/text-to-image/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Text to image
+    Text-to-Image
   </span>
   
 
@@ -876,11 +839,19 @@
         
   
   <span class="md-ellipsis">
-    Image to image
+    Image-to-Image
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -892,12 +863,50 @@
   
   
   
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4_3" id="__nav_1_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ComfyUI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            ComfyUI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../usage/controlnet/" class="md-nav__link">
+      <a href="../../usage/pipeline/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Using ControlNet
+    Pipeline
   </span>
   
 
@@ -907,22 +916,9 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/lora/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Using LoRA
-  </span>
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1356,18 +1352,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#choose-your-stable-diffusion-runtime" class="md-nav__link">
+  <a href="#service-quotas" class="md-nav__link">
     <span class="md-ellipsis">
-      Choose your Stable Diffusion Runtime
+      Service Quotas
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#important-note" class="md-nav__link">
+  <a href="#choose-stable-diffusion-runtime" class="md-nav__link">
     <span class="md-ellipsis">
-      Important Note
+      Choose Stable Diffusion Runtime
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-important-notes-and-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Important Notes and Limitations
     </span>
   </a>
   
@@ -1391,9 +1396,10 @@
   
 
 
-<h1 id="considerations">Considerations</h1>
+<h1 id="deployment-consideration">Deployment Consideration</h1>
+<p>Please check the following considerations before deployment:</p>
 <h2 id="deployable-regions">Deployable Regions</h2>
-<p>The services used by this solution or the EC2 instance types may not be available in all AWS regions. Please launch this solution in an AWS region that provides the required services.</p>
+<p>The services or Amazon EC2 instance types used in this solution may not be available in all AWS regions. Launch this solution in an AWS region that provides the required services.</p>
 <p><strong>Verified Deployable Regions</strong></p>
 <table>
 <thead>
@@ -1404,33 +1410,186 @@
 </thead>
 <tbody>
 <tr>
-<td>us-east-1</td>
+<td>US East (N. Virginia)</td>
 <td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
 </tr>
 <tr>
-<td>us-west-2</td>
+<td>US West (Oregon)</td>
 <td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
 </tr>
 </tbody>
 </table>
-<p>If you deploy in an unverified region, you may need to take the following actions or face potential issues:</p>
+<p>If deploying in an unverified region, you may need to:</p>
 <ul>
-<li>When deploying in a region that does not support the g5 instance type, you may need to manually specify the instance type used by Karpenter as <code>g4dn</code> or another GPU instance type.</li>
+<li>Manually specify the instance type used by Karpenter as <code>g4dn</code> or other GPU instance types when deploying in regions that do not support <code>g5</code> instances.</li>
+</ul>
+<p><strong>Deploying in AWS China Regions</strong></p>
+<div class="admonition danger">
+<p class="admonition-title">Network Restrictions in China Regions</p>
+<p>Recently, we found issues when deploying this solution in China regions. The EBS failed to deploy, with error messages like <code>Waiter has timed out</code> or <code>Unexpected EOF</code>. See <a href="https://github.com/aws-samples/stable-diffusion-on-eks/issues/53">this issue</a> for details.</p>
+<p>The root cause is that some Helm Charts are hosted on Github. When deploying in China regions, the Lambda function responsible for deploying custom resources cannot retrieve the Helm Charts, causing failures. We are actively working on this issue and will copy the required Helm Charts and container images to China regions.</p>
+<p>If you encounter this issue during deployment, please switch to a non-China region for testing, or set up your own Helm repo as a temporary solution.</p>
+</div>
+<p>This solution can be deployed in AWS China regions.</p>
+<table>
+<thead>
+<tr>
+<th>Region Name</th>
+<th>Verified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>China (Ningxia), operated by NWCD</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+</tbody>
+</table>
+<p>When deploying in China regions, due to environment limitations, you may need to:</p>
+<ul>
+<li>China regions do not support the default <code>g5</code> instance type. You need to manually specify the instance type used by Karpenter as <code>g4dn</code> or other GPU instance types.</li>
 </ul>
 <h2 id="iam-permissions">IAM Permissions</h2>
-<p>Deploying this solution requires administrator or equivalent permissions.</p>
-<h2 id="choose-your-stable-diffusion-runtime">Choose your Stable Diffusion Runtime</h2>
-<p>You need runtimes to deploy the Stable Diffusion model and provide API access. Several community Stable Diffusion runtimes are available, and you can build your own runtime. Package the runtime as a container image to run it on EKS.</p>
-<p>Here are some examples:</p>
+<p>Deploying this solution requires administrator or equivalent permissions. Due to the number of components, we do not provide a minimal permissions list.</p>
+<h2 id="service-quotas">Service Quotas</h2>
+<p>Each AWS account has quotas on the number of resources that can be created in each AWS region. You can view service quotas in the AWS console using the <a href="https://console.aws.amazon.com/servicequotas/home/">Service Quotas</a> tool. If a service quota can be increased, you can open a case through this tool to request an increase.</p>
+<p>The main service quotas related to this solution are:</p>
+<table>
+<thead>
+<tr>
+<th>AWS Service</th>
+<th>Quota Entry</th>
+<th>Estimated Usage</th>
+<th>Adjustable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amazon EC2</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-DB2E81BA">Running On-Demand G and VT instances</a></td>
+<td>Based on max concurrent GPU instances</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon EC2</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-3819A6DF">All G and VT Spot Instance Requests</a></td>
+<td>Based on max concurrent GPU instances</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon SNS</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/sns/quotas/L-F8E2BA85">Messages Published per Second</a></td>
+<td>Based on max concurrent requests</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, consider the following service quotas during deployment:</p>
+<table>
+<thead>
+<tr>
+<th>AWS Service</th>
+<th>Quota Entry</th>
+<th>Estimated Usage</th>
+<th>Adjustable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amazon VPC</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/vpc/quotas/L-F678F1CE">VPCs per Region</a></td>
+<td>1</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon VPC</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/vpc/quotas/L-FE5A380F">NAT gateways per Availability Zone</a></td>
+<td>1</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon EC2</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-0263D0A3">EC2-VPC Elastic IPs</a></td>
+<td>1</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>Amazon S3</td>
+<td><a href="https://console.aws.amazon.com/servicequotas/home/services/s3/quotas/L-DC2B2D3D">General purpose buckets</a></td>
+<td>1 per queue</td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="choose-stable-diffusion-runtime">Choose Stable Diffusion Runtime</h2>
+<p>You need a runtime to deploy the Stable Diffusion model and provide API access.</p>
+<p>Currently, there are multiple community Stable Diffusion runtimes available:</p>
+<table>
+<thead>
+<tr>
+<th>Runtime Name</th>
+<th>Link</th>
+<th>Verified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stable Diffusion Web UI</td>
+<td><a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">GitHub</a></td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>ComfyUI</td>
+<td><a href="https://github.com/comfyanonymous/ComfyUI">GitHub</a></td>
+<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td>InvokeAI</td>
+<td><a href="https://github.com/invoke-ai/InvokeAI">GitHub</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>You can also choose other runtimes or build your own. You need to package the runtime as a container image to run on EKS.</p>
+<p>You need to fully understand and comply with the license terms of the Stable Diffusion runtime you use.</p>
+<div class="admonition example">
+<p class="admonition-title">Example Runtime</p>
+<p>You can use the community-provided <a href="https://github.com/yubingjiaocn/stable-diffusion-webui-docker">example Dockerfile</a> to build runtime container images for <em>Stable Diffusion Web UI</em> and <em>ComfyUI</em>. Note that these images are for technical evaluation and testing purposes only, and should not be deployed to production environments.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Model Storage</p>
+<p>By default, this solution will load models to the <code>/opt/ml/code/models</code> directory. Ensure your runtime is configured to read models from this directory.</p>
+<p>You need to disable mmap to achieve the highest performance.</p>
 <ul>
-<li><a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111's Stable Diffusion Web UI</a></li>
-<li><a href="https://github.com/invoke-ai/InvokeAI">InvokeAI</a></li>
-<li><a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a></li>
+<li>For SD Web UI, set <code>disable_mmap_load_safetensors: true</code> in <code>config.json</code></li>
+<li>For ComfyUI, manually modify the source code as guided in <a href="https://github.com/comfyanonymous/ComfyUI/issues/2288">this community issue</a>.</li>
 </ul>
-<p>For your convenience, you can use this <a href="https://github.com/antman2008/stable-diffusion-webui-dockerfile">sample Dockerfile</a> to build a container image of <em>AUTOMATIC1111's Stable Diffusion Web UI</em>.</p>
-<h2 id="important-note">Important Note</h2>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Notes on SD Web UI Runtime</p>
+<p>For the SD Web UI runtime, there are static runtimes (pre-load models) and dynamic runtimes (load models on-demand) depending on the model being run.</p>
 <ul>
-<li>Only one active Stable Diffusion on Amazon EKS solution stack is allowed in a region. If your deployment fails, ensure that the failed stack is deleted before attempting to redeploy.</li>
+<li>Static runtimes use models specified in <code>modelFilename</code>. The model is loaded into GPU memory at startup.</li>
+<li>Dynamic runtimes need to set <code>dynamicModel: true</code>. No model needs to be specified. The runtime will load the model from Amazon S3 and perform inference based on the model used in the request.</li>
+</ul>
+</div>
+<h2 id="other-important-notes-and-limitations">Other Important Notes and Limitations</h2>
+<ul>
+<li>
+<p>In the current version, this solution will automatically create a new VPC when deployed. The VPC includes:</p>
+<ul>
+<li>CIDR <code>10.0.0.0/16</code></li>
+<li>3 public subnets in different availability zones, with size <code>/19</code></li>
+<li>3 private subnets in different availability zones, with size <code>/19</code></li>
+<li>3 NAT gateways (placed in public subnets)</li>
+<li>1 Internet gateway</li>
+<li>Corresponding route tables and security groups</li>
+</ul>
+<p>Currently, the parameters of this VPC cannot be customized.</p>
+</li>
+<li>
+<p>In the current version, this solution can only be deployed on a new EKS cluster with a fixed version of <code>1.28</code>. We will update the cluster version as new Amazon EKS versions are released.</p>
+</li>
 </ul>
 
 
