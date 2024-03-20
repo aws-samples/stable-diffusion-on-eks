@@ -198,7 +198,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     if (this.options.type == "comfyui") {
       var imagerepo: string
       if (!(lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository"))) {
-        imagerepo = "public.ecr.aws/bingjiao/sd-on-eks/sdwebui"
+        imagerepo = "public.ecr.aws/bingjiao/sd-on-eks/comfyui"
       } else {
         imagerepo = lodash.get(this.options, "extraValues.runtime.inferenceApi.image.repository")!
       }
