@@ -1,42 +1,75 @@
-# Image-to-Image
+# Image-to-Image (SD Web UI)
 
-The basic usage of Stable Diffusion involves providing a prompt and a reference image to generate an image similar to the reference.
+!!! info
+    This request type is only applicable to the SD Web UI runtime.
+
+The basic usage of Stable Diffusion is to input a prompt and a reference image, and it can generate an image similar to the reference image.
 
 ## Request Format
 
-```json
-{
-    "alwayson_scripts": {
-        // Required, task type
-        "task": "image-to-image",
-        // Required, URL of the input image
-        "image_link": "https://www.segmind.com/sd-img2img-input.jpeg",
-        // Required, task ID, used for uploading result images and returning responses
-        "id_task": "31311",
-        // Required, base model name, associated with queue distribution or model switching
-        "sd_model_checkpoint": "revAnimated_v122.safetensors",
-        // Optional, user ID
-        "uid": "456"
-    },
-    // All following are official parameters, use default values or pass them directly
-    "prompt": "A fantasy landscape, trending on artstation, mystical sky",
-    "steps": 16,
-    "width": 512,
-    "height": 512
-}
-```
+=== "v1alpha2"
+    ```json
+    {
+      "task": {
+        "metadata": {
+          "id": "test-i2i", // Required, task ID
+          "runtime": "sdruntime", // Required, runtime name used for the task
+          "tasktype": "image-to-image", // Required, task type
+          "prefix": "output", // Optional, prefix (directory name) for output files in the S3 bucket
+          "context": "" // Optional, can include any information, will be included in the callback
+        },
+        "content": { // Same specification as the SD Web UI image-to-image interface
+          "alwayson_scripts": {
+            "image_link": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png" // Place the image link here, the image will be downloaded, base64 encoded, and stored in the image parameter
+          },
+          "prompt": "cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",
+          "steps": 16,
+          "width": 512,
+          "height": 512
+        }
+      }
+    }
+    ```
+
+=== "v1alpha1"
+    ```json
+    {
+        "alwayson_scripts": {
+            "task": "image-to-image", // Required, task type
+            "image_link": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png", // Required, URL of the input image
+            "id_task": "test-i2i", // Required, task ID, will be used when uploading the result image and returning the response
+            "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors", // Required, base model name, associated with queue distribution or model switching
+        },
+        // The following are official parameters, use the default values or pass them in directly
+        "prompt": "cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",
+        "steps": 16,
+        "width": 512,
+        "height": 512
+    }
+    ```
 
 ## Response Format
 
-```json
-{
-  "id_task": "123",
-  "task": "image-to-image",
-  "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
-  "output_location": "s3://sdoneks-pdxstack-outputs3bucket9fe85b9f-s6khzv238u4a/123"
-}
-```
+=== "v1alpha2"
+    ```json
+    {
+      "id_task": "test-i2i",
+      "runtime": "sdruntime",
+      "output_location": "s3://outputbucket/output/test-t2i"
+    }
+    ```
 
-## Image Retrieval
+=== "v1alpha1"
+    ```json
+    {
+      "id_task": "test-i2i",
+      "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
+      "output_location": "s3://outputbucket/output/test-t2i"
+    }
+    ```
 
-After the image is generated, it will be stored in the S3 bucket path specified by `output_location`.
+## Getting the Image
+
+After the image is generated, it will be stored in the S3 bucket path specified by `output_location`. If `batch_size` or other parameters for generating multiple images are set, each image will be automatically numbered and stored.
+
+The default storage format is lossless PNG, but if special formats (such as GIF) are involved, the system will automatically recognize and add the extension.

@@ -24,10 +24,11 @@ cd stable-diffusion-on-eks
 
 ```bash
 cd deploy
-./deploy.sh --deploy
+./deploy.sh
 ```
 
 该脚本将：
+
 * 安装必要的运行时和工具
 * 创建S3存储桶，从[HuggingFace](https://huggingface.co/runwayml/stable-diffusion-v1-5)中下载Stable Diffusion 1.5的基础模型，放置在存储桶中
 * 使用我们提供的示例镜像，创建包含SD Web UI镜像的EBS快照
