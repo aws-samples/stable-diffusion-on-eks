@@ -68,11 +68,6 @@ export default class DataPlaneStack {
           logRetentionDays: 7
         },
         tolerations: [{
-          "key": "nvidia.com/gpu",
-          "operator": "Exists",
-          "effect": "NoSchedule"
-        }, {
-          "key": "runtime",
           "operator": "Exists",
           "effect": "NoSchedule"
         }]
@@ -85,11 +80,6 @@ export default class DataPlaneStack {
         adotCollector: {
           daemonSet: {
             tolerations: [{
-              "key": "nvidia.com/gpu",
-              "operator": "Exists",
-              "effect": "NoSchedule"
-            }, {
-              "key": "runtime",
               "operator": "Exists",
               "effect": "NoSchedule"
             }],
