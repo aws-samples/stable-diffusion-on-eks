@@ -28,7 +28,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   name: 'sdRuntimeAddOn',
   namespace: 'sdruntime',
   release: 'sdruntime',
-  version: '1.0.0',
+  version: '1.0.1',
   repository: 'https://aws-samples.github.io/stable-diffusion-on-eks/charts',
   values: {
     global: {

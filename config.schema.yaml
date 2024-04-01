@@ -1,0 +1,102 @@
+stackName: str()
+modelBucketArn: str(starts_with="arn")
+APIGW:
+  stageName: str()
+  throttle:
+    rateLimit: int()
+    burstLimit: int()
+modelsRuntime: list(include('runtime'), min=1)
+---
+runtime:
+  name: str()
+  namespace: str()
+  modelFilename: str(required=False)
+  dynamicModel: bool(required=False)
+  type: enum('sdwebui', 'comfyui')
+  extraValues:
+    karpenter:
+      provisioner:
+        labels: map(str(), str(), required=False)
+        capacityType:
+          onDemand: bool(required=False)
+          spot: bool(required=False)
+        instanceType: list(str(), required=False)
+        extraRequirements: list(any(), required=False)
+        extraTaints: list(any(), required=False)
+        resourceLimits:
+          nvidia.com/gpu: int(min=1)
+        consolidation: bool(required=False)
+      nodeTemplate:
+        securityGroupSelector: map(str(), str(), required=False)
+        subnetSelector: map(str(), str(), required=False)
+        tags: map(str(), str(), required=False)
+        amiFamily: enum('Bottlerocket', required=False)
+        osVolume:
+          volumeSize: str()
+          volumeType: str()
+          deleteOnTermination: bool()
+          iops: int()
+          throughput: int()
+        dataVolume:
+          volumeSize: str()
+          volumeType: str()
+          deleteOnTermination: bool()
+          iops: int()
+          throughput: int()
+        userData: str()
+
+    runtime:
+      type: str()
+      labels: map(str(), str())
+      annotations: map(str(), str())
+      serviceAccountName: str()
+      replicas: int()
+      scaling:
+        enabled: bool()
+        queueLength: int()
+        cooldownPeriod: int()
+        maxReplicaCount: int()
+        minReplicaCount: int()
+        pollingInterval: int()
+        scaleOnInFlight: bool()
+        extraHPAConfig: map(str(), any())
+      inferenceApi:
+        image:
+          repository: str()
+          tag: str()
+        modelFilename: str()
+        modelMountPath: str()
+        commandArguments: str()
+        extraEnv: map(str(), str())
+        imagePullPolicy: str()
+        resources:
+          limits:
+            nvidia.com/gpu: str()
+          requests:
+            nvidia.com/gpu: str()
+            cpu: str()
+            memory: str()
+      queueAgent:
+        image:
+          repository: str()
+          tag: str()
+        extraEnv: map(str(), str())
+        dynamicModel: bool()
+        imagePullPolicy: str()
+        s3Bucket: str()
+        snsTopicArn: str()
+        sqsQueueUrl: str()
+        resources:
+          requests:
+            cpu: str()
+            memory: str()
+        XRay:
+          enabled: bool()
+      persistence:
+        enabled: bool()
+        existingClaim: str()
+        labels: map(str(), str())
+        annotations: map(str(), str())
+        storageClass: str()
+        size: str()
+        accessModes: list(str())
