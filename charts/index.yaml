@@ -3,9 +3,9 @@ entries:
   sd-on-eks:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-03-31T03:00:41.630092665Z"
+    created: "2024-04-02T10:46:58.675103532Z"
     description: Stable Diffusion on EKS
-    digest: e7f0b3d9c152a4e48fece85f4d97b5ee12849ac92c7d85db2be4070bfb01e984
+    digest: 1d042490bff94492014614f23c109c77a4db96300b25fde553213c34ccd5bd72
     name: sd-on-eks
     type: application
     urls:
@@ -31,4 +31,4 @@ entries:
     urls:
     - https://aws-samples.github.io/stable-diffusion-on-eks/charts/sd-on-eks-0.1.0.tgz
     version: 0.1.0
-generated: "2024-03-31T03:00:41.629417624Z"
+generated: "2024-04-02T10:46:58.674446049Z"
