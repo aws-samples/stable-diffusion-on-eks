@@ -33,6 +33,13 @@ if [[ ${RUNTIME_TYPE} == "sdwebui" ]]
         -H "Content-Type: application/json" \
         -H "x-api-key: ${API_KEY}" \
         -d @${SCRIPTPATH}/${API_VERSION}/i2i.json
+
+    printf "\nGenerating image upscaling request... \n"
+
+    curl -X POST ${API_ENDPOINT}/${API_VERSION}/ \
+        -H "Content-Type: application/json" \
+        -H "x-api-key: ${API_KEY}" \
+        -d @${SCRIPTPATH}/${API_VERSION}/extra-single-image.json
 fi
 
 if [[ ${RUNTIME_TYPE} == "comfyui" ]]

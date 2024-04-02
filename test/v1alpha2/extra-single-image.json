@@ -1,0 +1,27 @@
+{
+  "task": {
+    "metadata": {
+      "id": "test-extra",
+      "runtime": "sdruntime",
+      "tasktype": "extra-single-image",
+      "prefix": "output",
+      "context": ""
+    },
+    "content": {
+      "resize_mode":0,
+      "show_extras_results":false,
+      "gfpgan_visibility":0,
+      "codeformer_visibility":0,
+      "codeformer_weight":0,
+      "upscaling_resize":4,
+      "upscaling_resize_w":512,
+      "upscaling_resize_h":512,
+      "upscaling_crop":false,
+      "upscaler_1":"R-ESRGAN 4x+",
+      "upscaler_2":"None",
+      "extras_upscaler_2_visibility":0,
+      "upscale_first":false,
+      "image":"https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png"
+    }
+  }
+}
