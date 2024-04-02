@@ -1,15 +1,14 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
-import asyncio
 import base64
 import json
 import logging
-import sys
 import time
 import traceback
 
 from aws_xray_sdk.core import xray_recorder
+from jsonpath_ng import parse
 from modules import http_action, misc
 
 logger = logging.getLogger("queue-agent")
@@ -18,6 +17,7 @@ ALWAYSON_SCRIPTS_EXCLUDE_KEYS = ['task', 'id_task', 'uid',
                                  'sd_model_checkpoint', 'image_link', 'save_dir', 'sd_vae', 'override_settings']
 
 def check_readiness(api_base_url: str, dynamic_sd_model: bool) -> bool:
+    """Check if SD Web UI is ready by invoking /option endpoint"""
     while True:
         try:
             logger.info('Checking service readiness...')
@@ -40,55 +40,125 @@ def check_readiness(api_base_url: str, dynamic_sd_model: bool) -> bool:
     return True
 
 def handler(api_base_url: str, task_type: str, task_id: str, payload: dict, dynamic_sd_model: bool) -> dict:
+    """Main handler for SD Web UI request"""
     response = {}
     try:
-        try:
-            taskHeader = payload['alwayson_scripts']
-        except KeyError:
-            logger.error(f"Invalid request, skipping")
-            response["success"] = False
-            response["content"] = json.dumps({"error": "Invalid request, skipping"})
-            return response
-
         logger.info(f"Start process {task_type} task with ID: {task_id}")
+        match task_type:
+            case 'text-to-image':
+                # Compatiability for v1alpha1: Ensure there is an alwayson_scripts
+                if 'alwayson_scripts' in payload:
+                    # Switch model if necessery
+                    if dynamic_sd_model and payload['alwayson_scripts']['sd_model_checkpoint']:
+                        new_model = payload['alwayson_scripts']['sd_model_checkpoint']
+                        logger.info(f'Try to switching model to: {new_model}.')
+                        current_model_name = switch_model(api_base_url, new_model)
+                        logger.info(f'Current model is: {current_model_name}.')
+                else:
+                    payload.update({'alwayson_scripts': {}})
 
-        if dynamic_sd_model and taskHeader['sd_model_checkpoint']:
-            logger.info(f'Try to switching model to: {taskHeader["sd_model_checkpoint"]}.')
-            current_model_name = switch_model(api_base_url, taskHeader['sd_model_checkpoint'])
-            logger.info(f'Current model is: {current_model_name}.')
+                task_response = invoke_txt2img(api_base_url, payload)
 
-        if task_type == 'text-to-image':
-            task_response = invoke_txt2img(api_base_url, payload, taskHeader)
-        elif task_type == 'image-to-image':
-            task_response = invoke_img2img(api_base_url, payload, taskHeader)
-        else:
-            logger.error(f'Unsupported task type: {task_type}, ignoring')
+            case 'image-to-image':
+                # Compatiability for v1alpha1: Ensure there is an alwayson_scripts
+                if 'alwayson_scripts' in payload:
+                    # Switch model if necessery
+                    if dynamic_sd_model and payload['alwayson_scripts']['sd_model_checkpoint']:
+                        new_model = payload['alwayson_scripts']['sd_model_checkpoint']
+                        logger.info(f'Try to switching model to: {new_model}.')
+                        current_model_name = switch_model(api_base_url, new_model)
+                        logger.info(f'Current model is: {current_model_name}.')
+                else:
+                    payload.update({'alwayson_scripts': {}})
+
+                task_response = invoke_img2img(api_base_url, payload)
+            case 'extra-single-image':
+                # There is no alwayson_script in API spec
+                task_response = invoke_extra_single_image(api_base_url, payload)
+            case 'extra-batch-image':
+                task_response = invoke_extra_batch_images(api_base_url, payload)
+            case _:
+                # Catch all
+                logger.error(f'Unsupported task type: {task_type}, ignoring')
 
         imgOutputs = post_invocations(task_response)
         logger.info(f"Received {len(imgOutputs)} images")
-        content = json.dumps(succeed(task_id, task_response, taskHeader))
+        content = json.dumps(succeed(task_id, task_response))
         response["success"] = True
         response["image"] = imgOutputs
         response["content"] = content
         logger.info(f"End process {task_type} task with ID: {task_id}")
     except Exception as e:
-        content = json.dumps(failed(task_id, taskHeader, e))
+        content = json.dumps(failed(task_id, e))
         logger.error(f"{task_type} task with ID: {task_id} finished with error")
         traceback.print_exc()
         response["success"] = False
         response["content"] = content
     return response
 
-
-
-
 @xray_recorder.capture('text-to-image')
-def invoke_txt2img(api_base_url: str, body, header) -> str:
-    return http_action.do_invocations(api_base_url+"txt2img", prepare_payload(body, header))
+def invoke_txt2img(api_base_url: str, body) -> str:
+    # Compatiability for v1alpha1: Move override_settings from header to body
+    override_settings = {}
+    if 'override_settings' in body['alwayson_scripts']:
+        override_settings.update(body['alwayson_scripts']['override_settings'])
+    if override_settings:
+        if 'override_settings' in body:
+            body['override_settings'].update(override_settings)
+        else:
+            body.update({'override_settings': override_settings})
+
+    # Compatiability for v1alpha1: Remove header used for routing in v1alpha1 API request
+    body.update({'alwayson_scripts': misc.exclude_keys(body['alwayson_scripts'], ALWAYSON_SCRIPTS_EXCLUDE_KEYS)})
+
+    # Process image link in elsewhere in body
+    body = download_image(body)
+
+    response = http_action.do_invocations(api_base_url+"txt2img", body)
+    return response
 
 @xray_recorder.capture('image-to-image')
-def invoke_img2img(api_base_url: str, body, header: dict) -> str:
-    return http_action.do_invocations(api_base_url+"img2img", prepare_payload(body, header))
+def invoke_img2img(api_base_url: str, body: dict) -> str:
+    """Image-to-Image request"""
+    # Process image link
+    body = download_image(body)
+
+    # Compatiability for v1alpha1: Move override_settings from header to body
+    override_settings = {}
+    if 'override_settings' in body['alwayson_scripts']:
+        override_settings.update(body['alwayson_scripts']['override_settings'])
+    if override_settings:
+        if 'override_settings' in body:
+            body['override_settings'].update(override_settings)
+        else:
+            body.update({'override_settings': override_settings})
+
+    # Compatiability for v1alpha2: Process image link in "Alwayson_scripts"
+    # Plan to remove in next release
+    if 'image_link' in body['alwayson_scripts']:
+        body.update({"init_images": [body['alwayson_scripts']['image_link']]})
+
+    # Compatiability for v1alpha1: Remove header used for routing in v1alpha1 API request
+    body.update({'alwayson_scripts': misc.exclude_keys(body['alwayson_scripts'], ALWAYSON_SCRIPTS_EXCLUDE_KEYS)})
+
+    response = http_action.do_invocations(api_base_url+"img2img", body)
+    return response
+
+@xray_recorder.capture('extra-single-image')
+def invoke_extra_single_image(api_base_url: str, body) -> str:
+
+    body = download_image(body)
+
+    response = http_action.do_invocations(api_base_url+"extra-single-image", body)
+    return response
+
+@xray_recorder.capture('extra-batch-images')
+def invoke_extra_batch_images(api_base_url: str, body) -> str:
+
+    body = download_image(body)
+
+    response = http_action.do_invocations(api_base_url+"extra-batch-images", body)
+    return response
 
 def invoke_set_options(api_base_url: str, options: dict) -> str:
     return http_action.do_invocations(api_base_url+"options", options)
@@ -145,12 +215,18 @@ def switch_model(api_base_url: str, name: str, find_closest=False) -> str:
     return current_model_name
 
 # Customizable for success responses
-def succeed(task_id, response, header):
-    parameters = response['parameters']
-    parameters['id_task'] = task_id
-    parameters['image_seed'] = ','.join(
-        str(x) for x in json.loads(response['info'])['all_seeds'])
-    parameters['error_msg'] = ''
+def succeed(task_id, response):
+    parameters = {}
+    if 'parameters' in response: # text-to-image and image-to-image
+        parameters = response['parameters']
+        parameters['id_task'] = task_id
+        parameters['image_seed'] = ','.join(
+            str(x) for x in json.loads(response['info'])['all_seeds'])
+        parameters['error_msg'] = ''
+    elif 'html_info' in response: # extra-single-image and extra-batch-images
+        parameters['html_info'] = response['html_info']
+        parameters['id_task'] = task_id
+        parameters['error_msg'] = ''
     return {
         'images': [''],
         'parameters': parameters,
@@ -159,11 +235,10 @@ def succeed(task_id, response, header):
 
 
 # Customizable for failure responses
-def failed(task_id, header, exception):
+def failed(task_id, exception):
     parameters = {}
     parameters['id_task'] = task_id
     parameters['status'] = 0
-    parameters['image_seed'] = []
     parameters['error_msg'] = repr(exception)
     parameters['reason'] = exception.response.json() if hasattr(exception, "response") else None
     return {
@@ -172,54 +247,23 @@ def failed(task_id, header, exception):
         'info': ''
     }
 
+def download_image(body: dict) -> dict:
+    """Search URL in object, and replace all URL with content of URL"""
+    jsonpath_expr = parse('$..*')
+    for match in jsonpath_expr.find(body):
+        value = match.value
+        if isinstance(value, str) and (value.startswith('http') or value.startswith('s3://')):
+            try:
+                # Get the JSONPath of the replaced value
+                jsonpath = str(match.full_path)
+                logger.info(f"Found URL {value} in {jsonpath}, replacing... ")
 
-# Customizable for request payload
-def prepare_payload(body, header):
-    try:
-        urls = []
-        offset = 0
-        # img2img image link
-        if 'image_link' in header:
-            urls.extend(header['image_link'].split(','))
-            offset = len(urls)
-        # ControlNet image link
-        if 'controlnet' in header:
-            for x in header['controlnet']['args']:
-                if 'image_link' in x:
-                    urls.append(x['image_link'])
-        # Generate payload including ControlNet units
-        if len(urls) > 0:
-            loop = asyncio.get_event_loop()
-            tasks = [loop.create_task(http_action.async_get(u)) for u in urls]
-            results = loop.run_until_complete(asyncio.gather(*tasks))
-            if offset > 0:
-                init_images = [misc.encode_to_base64(x) for x in results[:offset]]
-                body.update({"init_images": init_images})
-
-            if 'controlnet' in header:
-                for x in header['controlnet']['args']:
-                    if 'image_link' in x:
-                        x['input_image'] = misc.encode_to_base64(results[offset])
-                        offset += 1
-
-        # dbt compatible for override_settings
-        override_settings = {}
-        if 'sd_vae' in header:
-            override_settings.update({'sd_vae': header['sd_vae']})
-        if 'override_settings' in header:
-            override_settings.update(header['override_settings'])
-        if override_settings:
-            if 'override_settings' in body:
-                body['override_settings'].update(override_settings)
-            else:
-                body.update({'override_settings': override_settings})
-
-        # dbt compatible for alwayson_scripts
-        body.update({'alwayson_scripts': misc.exclude_keys(
-            header, ALWAYSON_SCRIPTS_EXCLUDE_KEYS)})
-    except Exception as e:
-        raise e
-
+                image_byte = http_action.get(value)
+                match.full_path.update(body, misc.encode_to_base64(image_byte))
+                logger.info(f"{jsonpath} replaced with content. ")
+            except Exception as e:
+                print(f"Error fetching URL: {value}")
+                print(f"Error: {str(e)}")
     return body
 
 def post_invocations(response):
@@ -230,7 +274,6 @@ def post_invocations(response):
             img_bytes.append(base64.b64decode(i))
 
     elif "image" in response.keys():
-        for i in response["image"]:
-            img_bytes.append(base64.b64decode(i))
+        img_bytes.append(base64.b64decode(response["image"]))
 
     return img_bytes

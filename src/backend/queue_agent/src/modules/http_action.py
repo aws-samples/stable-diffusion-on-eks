@@ -4,13 +4,16 @@
 import logging
 
 import aioboto3
+import boto3
 import requests
+import requests_cache
 from aiohttp_client_cache import CacheBackend, CachedSession
 from requests.adapters import HTTPAdapter, Retry
 
 from . import s3_action, time_utils
 
 logger = logging.getLogger("queue-agent")
+
 
 ab3_session = aioboto3.Session()
 
@@ -43,14 +46,31 @@ def do_invocations(url: str, body:str=None) -> str:
     logger.debug(response.text)
     return response.json()
 
+def get(url: str) -> bytes:
+    logger.debug(f"Downloading {url}")
+    try:
+        if url.lower().startswith("http://") or url.lower().startswith("https://"):
+            with requests_cache.CachedSession('demo_cache') as session:
+                with session.get(url) as res:
+                    res.raise_for_status()
+                    return res.content
+        elif url.lower().startswith("s3://"):
+            bucket_name, key = s3_action.get_bucket_and_key(url)
+            with boto3.client('s3') as s3:
+                obj = s3.get_object(Bucket=bucket_name, Key=key)
+                data = obj['Body'].read()
+                return data
+    except Exception as e:
+        raise e
+
 async def async_get(url: str) -> None:
     try:
-        if url.startswith("http://") or url.startswith("https://"):
+        if url.lower().startswith("http://") or url.lower().startswith("https://"):
             async with CachedSession(cache=cache) as session:
                 async with session.get(url) as res:
                     res.raise_for_status()
                     return await res.read()
-        elif url.startswith("s3://"):
+        elif url.lower().startswith("s3://"):
             bucket_name, key = s3_action.get_bucket_and_key(url)
             async with ab3_session.resource("s3") as s3:
                 obj = await s3.Object(bucket_name, key)

@@ -57,9 +57,10 @@ spec:
         volumeMounts:
         - mountPath: {{ .Values.runtime.inferenceApi.modelMountPath }}
           name: models
-        - mountPath: "/opt/ml/code/config.json"
-          name: config
-          subPath: config.json
+        # Temporary disable config.json mount for dynamic runtime
+        #- mountPath: "/opt/ml/code/config.json"
+        #  name: config
+        #  subPath: config.json
         imagePullPolicy: {{ .Values.runtime.inferenceApi.imagePullPolicy }}
         startupProbe:
           httpGet:
