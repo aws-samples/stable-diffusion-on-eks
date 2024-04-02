@@ -8,9 +8,8 @@ import time
 import traceback
 
 from aws_xray_sdk.core import xray_recorder
-from modules import http_action, misc
 from jsonpath_ng import parse
-
+from modules import http_action, misc
 
 logger = logging.getLogger("queue-agent")
 
