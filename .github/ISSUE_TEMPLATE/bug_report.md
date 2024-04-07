@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: "[BUG]"
-labels: bug
+labels: kind/bug
 assignees: ''
 
 ---
@@ -11,9 +11,6 @@ assignees: ''
 <!--
  Include log lines if possible
  -->
-
-**To Reproduce**
-Steps to reproduce the behavior:
 
 **Attach logs**
 
