@@ -53,6 +53,8 @@ def handler(api_base_url: str, task_type: str, task_id: str, payload: dict, dyna
                         new_model = payload['alwayson_scripts']['sd_model_checkpoint']
                         logger.info(f'Try to switching model to: {new_model}.')
                         current_model_name = switch_model(api_base_url, new_model)
+                        if current_model_name is None:
+                            raise Exception(f'Failed to switch model to {new_model}')
                         logger.info(f'Current model is: {current_model_name}.')
                 else:
                     payload.update({'alwayson_scripts': {}})
@@ -67,6 +69,8 @@ def handler(api_base_url: str, task_type: str, task_id: str, payload: dict, dyna
                         new_model = payload['alwayson_scripts']['sd_model_checkpoint']
                         logger.info(f'Try to switching model to: {new_model}.')
                         current_model_name = switch_model(api_base_url, new_model)
+                        if current_model_name is None:
+                            raise Exception(f'Failed to switch model to {new_model}')
                         logger.info(f'Current model is: {current_model_name}.')
                 else:
                     payload.update({'alwayson_scripts': {}})
@@ -172,45 +176,28 @@ def invoke_get_model_names(api_base_url: str) -> str:
 def invoke_refresh_checkpoints(api_base_url: str) -> str:
     return http_action.do_invocations(api_base_url+"refresh-checkpoints", {})
 
-def switch_model(api_base_url: str, name: str, find_closest=False) -> str:
+def invoke_unload_checkpoints(api_base_url: str) -> str:
+    return http_action.do_invocations(api_base_url+"unload-checkpoint", {})
+
+def switch_model(api_base_url: str, name: str) -> str:
     opts = invoke_get_options(api_base_url)
     current_model_name = opts['sd_model_checkpoint']
 
-    if find_closest:
-        name = name.lower()
-        current = current_model_name.lower()
-        if name in current:
-            return current_model_name
+    if current_model_name == name:
+        logger.info(f"Model {current_model_name} is currently loaded, ignore switch.")
     else:
-        if name == current_model_name:
-            return current_model_name
-
-    # refresh then check from model list
-    invoke_refresh_checkpoints(api_base_url)
-    models = invoke_get_model_names(api_base_url)
-    found_model = None
-
-    # exact matching
-    if name in models:
-        found_model = name
-    # find closest
-    elif find_closest:
-        max_sim = 0.0
-        max_model = None
-        for model in models:
-            sim = misc.str_simularity(name, model.lower())
-            if sim > max_sim:
-                max_sim = sim
-                max_model = model
-        found_model = max_model
-
-    if not found_model:
-        raise RuntimeError(f'Model not found: {name}')
-    elif found_model != current_model_name:
-        options = {}
-        options["sd_model_checkpoint"] = found_model
-        invoke_set_options(api_base_url, options)
-        current_model_name = found_model
+        # refresh then check from model list
+        invoke_refresh_checkpoints(api_base_url)
+        models = invoke_get_model_names(api_base_url)
+        invoke_unload_checkpoints(api_base_url)
+        if name in models:
+            options = {}
+            options["sd_model_checkpoint"] = name
+            invoke_set_options(api_base_url, options)
+            current_model_name = name
+        else:
+            logger.error(f"Model {name} not found.")
+            return None
 
     return current_model_name
 
