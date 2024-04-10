@@ -1,4 +1,4 @@
-# 步骤1：模型存储
+# 模型存储
 
 该解决方案所需要的模型应提前存储在S3存储桶中。
 
@@ -28,12 +28,26 @@
 
 ```
 └── /
+    ├── CLIP
+    ├── Codeformer
+    ├── ControlNet
+    ├── ESRGAN
+    ├── GFPGAN
+    ├── LDSR
+    ├── Lora
+    ├── RealESRGAN
+    ├── ScuNET
     ├── Stable-diffusion
-    ├── controlnet
-    └── lora
+    ├── SwinIR
+    ├── VAE
+    ├── VAE-approx
+    ├── embeddings
+    └── hypernetworks
 ```
 
-请将模型放入对应的目录中。目前支持 `.safetensors` 和 `.ckpt` 格式。如您从[Civitai](https://civitai.com/)下载的模型不带扩展名，请添加 `.ckpt` 扩展名。
+请将模型放入对应的目录中。其中 `Stable-diffusion` 目录必须存在且存有Stable Diffusion模型。其余目录如无模型可不创建。
+
+目前支持 `.safetensors` 和 `.ckpt` 格式的模型。如您从[Civitai](https://civitai.com/)下载的模型不带扩展名，请添加 `.ckpt` 扩展名。
 
 请按以下步骤将模型上传至S3存储桶中：
 
@@ -43,9 +57,9 @@
     * 打开 [Amazon S3 控制台](https://console.aws.amazon.com/s3/)。
     * 在左侧导航窗格中，选择 **Buckets**（桶）。
     * 选择上一步创建的存储桶，并进入所需的文件夹。
-    * 如果是首次上传：
+    * 如果对应的文件夹不存在：
         * 选择 **Create Folder**（创建文件夹）
-        * 在 **Folder Name**（文件夹名称）中，输入 *stable-diffusion*
+        * 在 **Folder Name**（文件夹名称）中，输入文件夹名称
         * 选择 **Create folder**（创建文件夹）
         * 重复以上操作，直到文件夹符合以上目录结构。
     * 选择 **Upload**（上传）
@@ -54,9 +68,9 @@
 
 
 === "AWS CLI"
-    运行以下命令以将模型文件上传至存储桶。将`<model name>`替换成为您的模型文件名，`<bucket name>`替换为您希望的存储桶名称：
+    运行以下命令以将模型文件上传至存储桶。将`<model name>`替换成为您的模型文件名，`<folder>`替换为模型类型， `<bucket name>`替换为您希望的存储桶名称：
     ```bash
-    aws s3 cp <model name> s3://<bucket name>/Stable-diffusion/
+    aws s3 cp <model name> s3://<bucket name>/<folder>/
     ```
     !!! note "提示"
         采用AWS CLI上传时，无需预先创建目录结构。

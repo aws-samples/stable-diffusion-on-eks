@@ -5,11 +5,11 @@
 应在部署解决方案前创建 EBS 快照。我们提供了用于构建 EBS 快照的脚本。
 
 ===  "使用自定义镜像"
-    如您在[步骤2](./image-building.md)自行构建镜像并推送到Amazon ECR，则运行下列命令。将 `us-east-1`替换成解决方案所在区域，将 `123456789012` 替换为您的12位AWS账号:
+    如您自行构建镜像并推送到Amazon ECR，则运行下列命令。将 `us-east-1`替换成解决方案所在区域，将 `123456789012` 替换为您的12位AWS账号:
 
     ```bash
     cd utils/bottlerocket-images-cache
-    ./snapshot.sh 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/inference-api:latest,123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
+    ./snapshot.sh 123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/sdwebui:latest,123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
     ```
 
 === "使用预构建镜像"
@@ -17,9 +17,9 @@
 
     ```bash
     cd utils/bottlerocket-images-cache
-    ./snapshot.sh docker.io/sdoneks/inference-api:latest,docker.io/sdoneks/queue-agent:latest
+    ./snapshot.sh public.ecr.aws/bingjiao/sd-on-eks/sdwebui:latest,public.ecr.aws/bingjiao/sd-on-eks/comfyui:latest,public.ecr.aws/bingjiao/sd-on-eks/queue-agent:latest
     ```
 
-脚本运行完成后，会输出EBS快照ID（格式类似于`snap-0123456789`）。您可以在[配置运行时](./deploy.md#设置基于-ebs-快照的镜像缓存可选)中应用该快照。
+脚本运行完成后，会输出EBS快照ID（格式类似于`snap-0123456789`）。您可以在部署时应用该快照。
 
 有关该脚本的详细信息，请参考[GitHub仓库](https://github.com/aws-samples/bottlerocket-images-cache)

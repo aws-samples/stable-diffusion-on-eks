@@ -5,6 +5,8 @@
 
 Stable Diffusion的基本用法，输入Prompt和参考图像，可以生成与参考图像类似的图像。
 
+请求中的内容将会直接传入SD Web UI，但如有链接（HTTP或S3 URL），则会将链接内容转为base64编码后的内容填入对应项。
+
 ## 请求格式
 
 === "v1alpha2"
@@ -66,6 +68,20 @@ Stable Diffusion的基本用法，输入Prompt和参考图像，可以生成与�
       "output_location": "s3://outputbucket/output/test-t2i"
     }
     ```
+
+## 模型切换
+
+如对应运行时设置了 `dynamicModel: true`，则需要在请求的`alwayson_scripts` 中加入如下内容：
+
+```json
+        "content": {
+          "alwayson_scripts": {
+            "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors" //此处放入模型名称
+          },
+        }
+```
+
+在接收到请求后，SD Web UI会卸载当前模型，并从内存/S3存储桶中加载对应的模型。如指定的模型不存在，则该请求直接返回错误。
 
 ## 图片获取
 

@@ -34,6 +34,21 @@ cd deploy
 * 使用我们提供的示例镜像，创建包含SD Web UI镜像的EBS快照
 * 创建一个含SD Web UI运行时的Stable Diffusion解决方案
 
+!!! warning
+
+    该脚本生成的配置文件仅为最简单的配置，只包含1个运行时，且无法进行自定义（如弹性伸缩阈值，自定义模型，自定义镜像等）。如需自定义配置，请运行以下命令：
+
+    ```bash
+    ./deploy.sh -d
+    ```
+
+    该参数会使得部署脚本只完成部署前准备，但不真正进行部署。您可以根据[配置项](./configuration.md)修改配置后，运行以下命令进行部署：
+
+    ```bash
+    cdk deploy --no-rollback --require-approval never
+    ```
+
+
 ### 部署参数
 
 该脚本提供一些参数，以便您自定义部署的解决方案：
@@ -46,8 +61,6 @@ cd deploy
 * `-s, --snapshot`: 指定现有的EBS快照ID。您可以根据[此文档](./ebs-snapshot.md)自行构建EBS快照。
 * `-r, --runtime-name`: 指定部署的运行时名称，影响API调用时使用的名称。默认为`sdruntime`。
 * `-t, --runtime-type`: 指定部署的运行时类型，只接受`sdwebui`和`comfyui`。默认为`sdwebui`。
-
-如您需要部署多个运行时，或有其他参数需求（如自定义镜像），您可先使用`--dry-run`参数，使用脚本生成基础配置文件后再行修改。
 
 ## 手动部署
 
