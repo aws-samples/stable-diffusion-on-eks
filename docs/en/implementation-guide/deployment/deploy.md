@@ -1,108 +1,127 @@
-# Quick start
+# Manual Deployment
 
-## Provision infrastructure and runtime
+Follow these steps to deploy this solution:
 
-Required infrastructure and application is deployed via AWS CDK. We provide default configuration and image for quick start.
+## Install Prerequisites
 
-Run the following command to clone the code:
+Please install the following runtimes before deployment:
 
-```bash
-git clone --recursive <repo path>
-cd stable-diffusion-on-eks
-```
+* [Node.js](https://nodejs.org/en) version 18 or later
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+* [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
+* [git](https://git-scm.com/downloads)
 
-Before deploy, you need to edit `config.yaml` and set parameters of runtimes.
+## Edit Configuration File
 
-### Define Model Bucket
+The configuration for this solution is stored in the `config.yaml` file. We provide a configuration file template that you can customize according to your actual needs.
 
-Set `modelBucketArn` to the S3 bucket created on previous section.
+### Set Model Bucket (Required)
+
+Replace `<bucket name>` in `modelBucketArn` with the name of the S3 bucket where you store the models.
 
 ```yaml
 modelBucketArn: arn:aws:s3:::<bucket name>
 ```
 
-If you are deploying in AWS China region:
-```yaml
-modelBucketArn: arn:aws-cn:s3:::<bucket name>
-```
+!!! warning "China Regions"
 
-### Define Runtime
+    If you are using an AWS China Region, ensure that the partition in the ARN is `aws-cn`.
 
-You need to specify each runtime in `modelsRuntime` section. For each runtime, specify the following value:
+    ```yaml
+    modelBucketArn: arn:aws-cn:s3:::<bucket name>
+    ```
+
+### Set Stable Diffusion Runtime (Required)
+
+You need to specify the parameters for the runtime. The runtime is defined in `modelsRuntime` as follows:
 
 ```yaml
 modelsRuntime:
-- name: "sdruntime" # Name of runtime, should be unique
-  namespace: "default" # Namespace of runtime, suggest deploy different runtimes on seperate namespaces
-  modelFilename: "v1-5-pruned-emaonly.safetensors" # Model for this runtime, request will be routed by model filename.
-  type: "SDWebUI" # Specify type of runtime. Different type of runtime represents different API Spec.
-  extraValues:
+- name: "sdruntime" # Required parameter, the name of the runtime, cannot be the same as other runtimes
+  namespace: "default" # Required parameter, the Kubernetes namespace where the runtime is located, it is not recommended to place it in the same namespace as other runtimes.
+  type: "sdwebui" # Required parameter, the type of this runtime, currently only "sdwebui" and "comfyui" are supported
+  modelFilename: "v1-5-pruned-emaonly.safetensors" # (SD Web UI) The name of the model used by this runtime, cannot be the same as other runtimes.
+  dynamicModel: false # (SD Web UI) Whether this runtime allows dynamic model loading.
+```
+
+You can configure multiple runtimes in the `modelsRuntime` section.
+
+### Set Custom Image (Optional)
+
+If you have [built your own image and/or Helm Chart](./image-building.md), you need to specify the image in the corresponding runtime as follows:
+
+```yaml
+modelsRuntime:
+- name: "sdruntime"
+  namespace: "default"
+  type: "sdwebui"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
+  dynamicModel: false
+  chartRepository: "" # Optional parameter, if you have built a Helm Chart, you need to fill in the address where the Chart is located. It should include the protocol prefix (oci:// or https://)
+  chartVersion: "" # Optional parameter, if you have built a Helm Chart, you need to fill in the version of the Chart
+  extraValues: # Add the following
     runtime:
       inferenceApi:
         image:
-          repository: sdoneks/inference-api # Image repository of your runtime
-          tag: latest # Image tag of your runtime
-    queueAgent:
-      image:
-        repository: sdoneks/queue-agent # Image repository for queue agent
-        tag: latest # Image tag of queue agent
-
+          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/sdwebui # The address of the Stable Diffusion runtime image.
+          tag: latest # The tag of the image
+      queueAgent:
+        image:
+          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/queue-agent # The address of the Queue agent image.
+          tag: latest # The tag of the image
 ```
 
-### Deploy
+### Set EBS Snapshot-based Image Cache (Optional)
 
-Run the following command to deploy the stack:
+If you have built an [EBS snapshot-based image cache](./ebs-snapshot.md), you need to specify the snapshot ID in the corresponding runtime as follows:
+
+```yaml
+modelsRuntime:
+- name: "sdruntime"
+  namespace: "default"
+  type: "sdwebui"
+  modelFilename: "v1-5-pruned-emaonly.safetensors"
+  extraValues:
+    karpenter: # Add the following
+      nodeTemplate:
+        amiFamily: Bottlerocket
+        dataVolume:
+          volumeSize: 80Gi # Do not modify to a value less than 80Gi
+          volumeType: gp3 # Do not modify
+          deleteOnTermination: true # Do not modify
+          iops: 4000 # Do not modify
+          throughput: 1000 # Do not modify
+          snapshotID: snap-0123456789 # Replace with the EBS snapshot ID
+```
+
+### Other Detailed Settings (Optional)
+
+If you need to configure the runtime in detail, please refer to the [configuration options](./configuration.md).
+
+## Start Deployment
+
+After completing the configuration, run the following commands to deploy:
 
 ```bash
 npm install
-cdk synth
-cdk deploy --all
+cdk deploy  --no-rollback --require-approval never
 ```
 
-Deployment requires 20-30 minutes.
+The deployment generally takes 15-20 minutes. Since the deployment is performed on the AWS side through CloudFormation, you do not need to redeploy if the CDK CLI is accidentally closed.
 
-## Usage
+## Next Steps
 
-After deployment completes, you can get endpoint and key of API on CDK output:
+After the deployment is complete, you will see the following output:
 
 ```bash
 Outputs:
-SdOnEksDataPlaneStack.APIKey = 1234567890abcdefghij
-SdOnEksDataPlaneStack.FrontApiEndpoint = https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/
+sdoneksStack.GetAPIKeyCommand = aws apigateway get-api-keys --query 'items[?id==`abcdefghij`].value' --include-values --output text
+sdoneksStack.FrontApiEndpoint = https://abcdefghij.execute-api.us-east-1.amazonaws.com/prod/
+sdoneksStack.ConfigCommand = aws eks update-kubeconfig --name sdoneksStack --region us-east-1 --role-arn arn:aws:iam::123456789012:role/sdoneksStack-sdoneksStackAccessRole
 ...
 ```
 
-You can try it out by making API call with prompt. Your request should follow API Spec of corresponding runtime. For Stable Diffusion Web UI, save the following content as a JSON file:
+Now, you can:
 
-```json
-{
-    "alwayson_scripts": {
-        "task": "text-to-image",
-        "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors",
-        "id_task": "123",
-        "uid": "123",
-        "save_dir": "outputs"
-    },
-    "prompt": "A dog",
-    "steps": 16,
-    "width": 512,
-    "height": 512
-}
-```
-
-Now you can use `curl` to test the solutions. Copy the following cURL command and paste it into the terminal window, replacing `1234567890abcdefghij` with content of `SdOnEksDataPlaneStack.APIKey`, `https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/` with the content of `SdOnEksDataPlaneStack.FrontApiEndpoint`, and `test.json` of filename you just created.
-
-```bash
-curl -X POST https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/ \
-    -H 'Content-Type: application/json' \
-    -H 'x-api-key: 1234567890abcdefghij' \
-    -d @test.json
-```
-
-You should get a successful response with a payload similar to the following:
-
-```json
-{"id_task": "123", "task": "text-to-image", "sd_model_checkpoint": "v1-5-pruned-emaonly.safetensors", "output_location": "s3://sdoneksdataplanestack-outputs3bucket/123"}
-```
-
-You may need to wait for several minutes for instance launching and container starting without EBS snapshot. Once container launched and task is proceed, you can find generated image on `output_location`.
+* [Send API requests](../usage/index.md) to use Stable Diffusion to generate images
+* [Log in to the Kubernetes cluster](../operation/kubernetes-cluster.md) for maintenance operations
