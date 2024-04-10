@@ -6,36 +6,36 @@
 
 ## Components
 
-This solution has 3 main components:
+The solution consists of 3 main components:
 
-- Serverless task scheduling and dispatching
-- Stable Diffusion runtime based on Amazon EKS and Amazon EC2
-- Management and maintenance components
+* Serverless task scheduling and dispatching
+* Stable Diffusion runtime based on Amazon EKS and Amazon EC2
+* Management and maintenance components
 
 ### Task Scheduling and Dispatching
 
-This component has an API endpoint based on Amazon API Gateway. It also has a task dispatching part based on Amazon SNS and Amazon SQS.
+This component includes an API endpoint based on Amazon API Gateway, and a task dispatching part based on Amazon SNS and Amazon SQS.
 
-- The user sends requests (model, prompt, etc.) to the API endpoint provided by Amazon API Gateway.
-- Requests are validated by Amazon Lambda and sent to an Amazon SNS topic.
-- Amazon SNS sends the requests to the corresponding runtime's SQS queue based on the runtime name in the request.
+* Users send requests (model, prompt, etc.) to the API endpoint provided by Amazon API Gateway
+* Requests are validated by Amazon Lambda and published to an Amazon SNS topic
+* Amazon SNS publishes the requests to the corresponding SQS queue based on the runtime name specified in the request
 
 ### Stable Diffusion Runtime
 
-This component is a Stable Diffusion runtime based on Amazon EKS. It can scale elastically based on requests.
+This component includes a Stable Diffusion runtime based on Amazon EKS, which supports elastic scaling based on requests.
 
 For each runtime:
 
-- During deployment, each runtime has its own Amazon SQS queue to receive requests.
-- The Queue Agent receives tasks from the SQS queue and sends them to the Stable Diffusion runtime to generate images.
-- The generated images are stored in an Amazon S3 bucket by the Queue Agent. A completion notification is sent to an Amazon SNS topic.
-- When there are too many messages in the SQS queue, KEDA increases the number of runtime replicas based on the queue length. Karpenter starts new GPU instances to host the new replicas.
-- When there are no more messages queued, KEDA reduces the number of replicas. Karpenter shuts down unnecessary GPU instances to save costs.
+* Upon deployment, each runtime has a dedicated Amazon SQS queue to receive requests
+* The Queue Agent receives tasks from the Amazon SQS queue and sends them to the Stable Diffusion runtime to generate images
+* The generated images are stored by the Queue Agent in an Amazon S3 bucket, and a completion notification is published to an Amazon SNS topic
+* When there are too many messages queued in the Amazon SQS queue, KEDA will scale out the runtime replicas based on the number of messages in the queue, and Karpenter will launch new GPU instances to host the new replicas.
+* When there are no more messages queued in the Amazon SQS queue, KEDA will scale in the replicas, and Karpenter will terminate unnecessary GPU instances to save costs.
 
 ### Management and Maintenance
 
-This solution provides complete observability and management components:
+This solution provides comprehensive observability and management components:
 
-- Metrics monitoring and logging based on CloudWatch
-- End-to-end tracing based on AWS X-Ray
-- Infrastructure as code deployment using AWS CDK
+* Metrics monitoring and logging based on CloudWatch
+* End-to-end tracing based on AWS X-Ray
+* Infrastructure as Code deployment using AWS CDK

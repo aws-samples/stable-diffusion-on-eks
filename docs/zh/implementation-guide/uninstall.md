@@ -34,7 +34,7 @@
 
     * 进入 [AWS CloudFormation 控制台](https://console.aws.amazon.com/cloudformation/home)
     * 选择 **Stacks** （堆栈）
-    * 在列表中，选择 **SdOnEKSStack** （或您自定义的名称）
+    * 在列表中，选择 **sdoneksStack** （或您自定义的名称）
     * 选择 **Delete** （删除），在弹出的对话框中选择 **Delete** （删除）
 
 === "AWS CDK"

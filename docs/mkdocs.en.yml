@@ -15,12 +15,19 @@ nav:
       - Deployment:
           - Deployment considerations: implementation-guide/deployment/considerations.md
           - Quick start: implementation-guide/deployment/index.md
-          - Configuration: implementation-guide/deployment/configuration.md
+          - Deploy on AWS China regions: implementation-guide/deployment/aws-cn.md
+          - Manual deployment:
+            - Build image: implementation-guide/deployment/image-building.md
+            - Model store: implementation-guide/deployment/models.md
+            - EBS snapshot building: implementation-guide/deployment/ebs-snapshot.md
+            - Configuration: implementation-guide/deployment/configuration.md
+            - Manual deploy: implementation-guide/deployment/deploy.md
       - User Guide:
           - API Usage: implementation-guide/usage/index.md
           - SD Web UI:
             - Text-to-Image: implementation-guide/usage/text-to-image.md
             - Image-to-Image: implementation-guide/usage/image-to-image.md
+            - Image Super-Resolution: implementation-guide/usage/extra-single-image.md
           - ComfyUI:
             - Pipeline: implementation-guide/usage/pipeline.md
           - Notification and callback: implementation-guide/usage/callback.md

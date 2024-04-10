@@ -1,0 +1,50 @@
+name: Auto Approve document-related PR
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get PR author
+        id: get-author
+        run: |
+          PR_AUTHOR=$(jq -r '.pull_request.user.login' "$GITHUB_EVENT_PATH")
+          echo "PR author: $PR_AUTHOR"
+          echo "pr-author=$PR_AUTHOR" >> $GITHUB_OUTPUT
+      - name: Check author permission
+        id: author-permission
+        uses: actions-cool/check-user-permission@v2
+        with:
+          username: ${{ steps.get-author.outputs.pr-author }}
+          require: admin
+      - name: Auto-approve if author is admin
+        if: steps.author-permission.outputs.require-result == 'true'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            })
+
+            const onlyDocChanges = files.every(file => file.filename.startsWith('docs/'))
+
+            if (onlyDocChanges) {
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                event: 'APPROVE'
+              })
+              console.log('Auto-approved PR by admin author')
+            } else {
+              console.log('PR does not meet auto-approval criteria')
+            }

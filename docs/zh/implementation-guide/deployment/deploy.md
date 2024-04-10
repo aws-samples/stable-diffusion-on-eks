@@ -1,4 +1,4 @@
-# 开始部署
+# 手动部署
 
 根据以下步骤部署本解决方案：
 
@@ -17,7 +17,7 @@
 
 ### 设置模型存储桶（必需）
 
-将 `modelBucketArn` 中的 `<bucket name>` 修改为在[步骤1](./models.md)中创建的S3存储桶名称。
+将 `modelBucketArn` 中的 `<bucket name>` 修改为放置模型的S3存储桶名称。
 
 ```yaml
 modelBucketArn: arn:aws:s3:::<bucket name>
@@ -31,54 +31,56 @@ modelBucketArn: arn:aws:s3:::<bucket name>
     modelBucketArn: arn:aws-cn:s3:::<bucket name>
     ```
 
-### 设置静态Stable Diffusion运行时（必需）
+### 设置Stable Diffusion运行时（必需）
 
-针对不同的Stable Diffusion模型，您需要指定运行时的参数。运行时定义在 `modelsRuntime` 中，配置如下：
+您需要指定运行时的参数。运行时定义在 `modelsRuntime` 中，配置如下：
 
 ```yaml
 modelsRuntime:
 - name: "sdruntime" # 必要参数，运行时的名称，不能和其他运行时重名
   namespace: "default" # 必要参数，运行时所在的Kubernetes命名空间，不建议和其他运行时放置在相同的命名空间。
-  modelFilename: "v1-5-pruned-emaonly.safetensors" # 必要参数，该运行时使用的模型名称，不能和其他运行时重复。
-  type: "SDWebUI" # 必要参数，该运行时的类型，目前仅支持"SDWebUI"和"Others"
+  type: "sdwebui" # 必要参数，该运行时的类型，目前仅支持"sdwebui"和"comfyui"
+  modelFilename: "v1-5-pruned-emaonly.safetensors" # （SD Web UI）该运行时使用的模型名称，不能和其他运行时重复。
+  dynamicModel: false # （SD Web UI）该运行时是否允许动态加载模型。
 ```
 
-您可以在 `modelsRuntime` 段配置多个运行时，不同的运行时需要使用不同的Stable Diffusion模型。
+您可以在 `modelsRuntime` 段配置多个运行时。
 
 ### 设置自定义镜像（可选）
 
-如您在[步骤2](./image-building.md)中自行构建了镜像和/或Helm Chart，则需要在对应的运行时中指定镜像，配置如下：
+如您[自行构建了镜像和/或Helm Chart](./image-building.md)，则需要在对应的运行时中指定镜像，配置如下：
 
 ```yaml
 modelsRuntime:
 - name: "sdruntime"
   namespace: "default"
+  type: "sdwebui"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
-  type: "SDWebUI"
+  dynamicModel: false
   chartRepository: "" # 可选参数，如您构建了Helm Chart，则需要填入Chart所在的地址。需要包含协议前缀 (oci:// 或 https:// )
   chartVersion: "" # 可选参数，如您构建了Helm Chart，则需要填入Chart的版本
   extraValues: # 添加以下内容
     runtime:
       inferenceApi:
         image:
-          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/inference-api # Stable Diffusion 运行时镜像的地址.
-          tag: latest
+          repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/sdwebui # Stable Diffusion 运行时镜像的地址.
+          tag: latest # 镜像的Tag
       queueAgent:
         image:
           repository: <account_id>.dkr.ecr.<region>.amazonaws.com/sd-on-eks/queue-agent # Queue agent镜像的地址.
-          tag: latest
+          tag: latest # 镜像的Tag
 ```
 
 ### 设置基于 EBS 快照的镜像缓存（可选）
 
-如您在[步骤3](./ebs-snapshot.md)中构建了基于EBS快照的镜像缓存，则需要在对应的运行时中指定快照ID，配置如下：
+如您构建了[基于EBS快照的镜像缓存](./ebs-snapshot.md)，则需要在对应的运行时中指定快照ID，配置如下：
 
 ```yaml
 modelsRuntime:
 - name: "sdruntime"
   namespace: "default"
+  type: "sdwebui"
   modelFilename: "v1-5-pruned-emaonly.safetensors"
-  type: "SDWebUI"
   extraValues:
     karpenter: # 添加以下内容
       nodeTemplate:
@@ -92,21 +94,6 @@ modelsRuntime:
           snapshotID: snap-0123456789 # 修改为EBS快照ID
 ```
 
-### 配置动态Stable Diffusion运行时（可选）
-
-如您需要运行时根据传入的参数动态切换模型，您可以启用动态运行时。关于动态运行时的详细信息，请参见[架构概览](../architecture/architecture.md)。
-
-如需启用动态运行时，请在`dynamicModelRuntime` 配置项中设置：
-
-```yaml
-dynamicModelRuntime:
-  enabled: true # Enable dynamic model runtime by change the value to "true"
-  namespace: "default"
-  type: "SDWebUI"
-```
-
-`dynamicModelRuntime`的其他配置与`modelsRuntime`相同，但无需指定`modelFilename`.
-
 ### 其他详细设置（可选）
 
 如您需要对运行时进行详细配置，请参考[配置项](./configuration.md)。
@@ -118,11 +105,10 @@ dynamicModelRuntime:
 
 ```bash
 npm install
-npx cdk synth -q
-npx cdk deploy
+cdk deploy  --no-rollback --require-approval never
 ```
 
-部署一般需要 20-30 分钟。由于部署通过CloudFormation在AWS侧进行，当CDK CLI被意外关闭时，您无需重新进行部署。
+部署一般需要 15-20 分钟。由于部署通过CloudFormation在AWS侧进行，当CDK CLI被意外关闭时，您无需重新进行部署。
 
 ## 下一步
 
@@ -130,9 +116,9 @@ npx cdk deploy
 
 ```bash
 Outputs:
-SdOnEksStack.GetAPIKeyCommand = aws apigateway get-api-keys --query 'items[?id==`abcdefghij`].value' --include-values --output text
-SdOnEksStack.FrontApiEndpoint = https://abcdefghij.execute-api.us-east-1.amazonaws.com/prod/
-SdOnEKSStack.ConfigCommand = aws eks update-kubeconfig --name SdOnEKSStack --region us-east-1 --role-arn arn:aws:iam::123456789012:role/SdOnEKSStack-SdOnEKSStackAccessRole
+sdoneksStack.GetAPIKeyCommand = aws apigateway get-api-keys --query 'items[?id==`abcdefghij`].value' --include-values --output text
+sdoneksStack.FrontApiEndpoint = https://abcdefghij.execute-api.us-east-1.amazonaws.com/prod/
+sdoneksStack.ConfigCommand = aws eks update-kubeconfig --name sdoneksStack --region us-east-1 --role-arn arn:aws:iam::123456789012:role/sdoneksStack-sdoneksStackAccessRole
 ...
 ```
 

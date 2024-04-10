@@ -10,6 +10,7 @@ ComfyUI提供工作流编排功能，可以在界面上使用多种节点编排�
 ## 导出工作流
 
 在界面上设计完成工作流后，进行以下操作以导出工作流：
+
 * 选择菜单面板右上角的齿轮图标
 * 选择开启 `Enable Dev mode Options`
 * 选择 `Save(API Format)`，将工作流保存为文件。
@@ -24,7 +25,7 @@ ComfyUI提供工作流编排功能，可以在界面上使用多种节点编排�
           "id": "test-pipeline", // 必要，任务ID
           "runtime": "sdruntime", // 必要，任务使用的运行时名称
           "tasktype": "pipeline", // 必要，任务类型
-          "prefix": "output", // 可选，输出文件在S3桶中的前缀（即目录名）
+          "prefix": "output", // 必要，输出文件在S3桶中的前缀（即目录名）
           "context": "" // 可选，可放置任何信息，会在回调中包含
         },
         "content": {

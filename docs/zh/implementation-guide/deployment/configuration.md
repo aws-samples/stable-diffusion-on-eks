@@ -8,21 +8,17 @@
 
 | Parameter | Description | Required | Default |
 | --- | --- | --- | --- |
-| `stackName` | Name of the stack. The name will be added as a prefix of all resource name.  | Yes | `SdOnEKS` |
-| `modelBucketArn` | S3 bucket for model storage. Models file should be manual populated into the bucket. This parameter applies to all runtimes. | Yes | `""` |
-| `modelsRuntime` | Define Stable diffusion runtime. At least one runtime should be defined. | Yes | `- name: "sdruntime"  modelFilename: "v1-5-pruned-emaonly.ckpt"`
+| `stackName` | Name of the stack. The name will be added as a prefix of all resource name.  | Yes | `sdoneks` |
+| `modelBucketArn` | S3 bucket for model storage. Models file should be populated into the bucket. This parameter applies to all runtimes. | Yes | `""` |
+| `modelsRuntime` | Define Stable diffusion runtime. At least one runtime should be defined. | Yes | See definition below |
 | `modelsRuntime.name` | Name of individual Stable diffusion runtime. | Yes | `sdruntime` |
-| `modelsRuntime.namespace` | Namespace of individual Stable diffusion runtime. | Yes | `default` |
-| `modelsRuntime.type` | Type of individual Stable diffusion runtime. Currently only "SdWebUI" or "others" are supported. | Yes | `SdWebUI` |
+| `modelsRuntime.namespace` | Namespace of individual Stable diffusion runtime. Namespace will be created if not exists. | Yes | `default` |
+| `modelsRuntime.type` | Type of individual Stable diffusion runtime. Currently only `sdwebui` or `confyui` are supported. | Yes | `sdwebui` |
 | `modelsRuntime.chartRepository` | Override default helm chart repository. Protocol (`oci://` or `https://`)should be added as a prefix of repository. (Default: `https://aws-samples.github.io/stable-diffusion-on-eks/charts/`) | No | N/A |
-| `modelsRuntime.chartVersion` | Override version of helm chart. (Default: 0.1.0) | No | N/A |
-| `modelsRuntime.modelFilename` | File of model using in the runtime. Filename should be in `.ckpt` or `.safetensors` format. Filename should be quoted if contains number only. | Yes | `v1-5-pruned-emaonly.safetensors` |
+| `modelsRuntime.chartVersion` | Override version of helm chart. (Default: 1.0.0) | No | N/A |
+| `modelsRuntime.modelFilename` | (For SD Web UI only) Filename of model using in the runtime. Filename should be in `.ckpt` or `.safetensors` format. Filename should be quoted if contains number only. | No | `v1-5-pruned-emaonly.safetensors` |
+| `modelsRuntime.dynamicModel` | (For SD Web UI only) Switch to allow model be loaded by request. | No | `false` |
 | `modelsRuntime.extraValues` | Extra parameter passed to the runtime. See [values definition](#application-helm-chart) for detail. | No | N/A |
-| `dynamicModelRuntime.enabled` | Generate a runtime which allows models be switched by request. See multi model support for detail. | Yes | `false` |
-| `dynamicModelRuntime.namespace` | Namespace of dynamic model runtime. Required if `dynamicModelRuntime.enabled` is `true`. | No | `default` |
-| `dynamicModelRuntime.chartRepository` | Override default helm chart repository. (Default: `https://aws-samples.github.io/stable-diffusion-on-eks`) | No | N/A |
-| `dynamicModelRuntime.chartVersion` | Override version of helm chart. (Default: 0.1.0) | No | N/A |
-| `dynamicModelRuntime.extraValues` | Extra parameter passed to the runtime. See [values definition](#application-helm-chart) for detail. | No | N/A |
 
 ### 运行时配置
 
@@ -66,10 +62,12 @@ Stable diffusion 运行时通过Helm Chart进行部署。您可以通过 `models
 | `runtime.scaling.scaleOnInFlight` | When set to `true`, not visible (in-flight) messages will be counted in `ApproximateNumberOfMessage` | `false` |
 | `runtime.scaling.extraHPAConfig` | KEDA would feed values from this section directly to the HPA’s `behavior` field. Follow [Kubernetes documentation](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior) for details. | `{}` |
 | **Stable Diffusion Runtime** | | |
-| `runtime.inferenceApi.image.repository` | Image Repository of Runtime.  | `sdoneks/inference-api` |
+| `runtime.inferenceApi.image.repository` | Image Repository of Runtime.  | `public.ecr.aws/bingjiao/sd-on-eks/sdwebui` |
 | `runtime.inferenceApi.image.tag` | Image tag of Runtime.  | `latest` |
 | `runtime.inferenceApi.modelFilename` | Model filename of Runtime. Not changable. | Populated by CDK |
 | `runtime.inferenceApi.extraEnv` | Extra environment variable for Runtime. Should be in [Kubernetes format](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container). | `{}` |
+| `runtime.inferenceApi.modelMountPath` | Path for model folder inside container. | `/opt/ml/code/models` |
+| `runtime.inferenceApi.commandArguments` | Additional arguments passed to runtime. | `""` |
 | `runtime.inferenceApi.resources` | Resource request and limit for Runtime. |  |
 | **Queue Agent** | | |
 | `runtime.queueAgent.image.repository` | Image Repository of queue agent.  | `sdoneks/queue-agent` |

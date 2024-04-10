@@ -17,16 +17,21 @@ nav:
     - 开始部署:
       - 计划部署: implementation-guide/deployment/considerations.md
       - 快速开始: implementation-guide/deployment/index.md
-      - 配置项: implementation-guide/deployment/configuration.md
+      - 在中国区域部署: implementation-guide/deployment/aws-cn.md
+      - 手动部署:
+        - 构建镜像: implementation-guide/deployment/image-building.md
+        - 模型存储: implementation-guide/deployment/models.md
+        - 镜像缓存构建: implementation-guide/deployment/ebs-snapshot.md
+        - 配置项列表: implementation-guide/deployment/configuration.md
+        - 手动部署: implementation-guide/deployment/deploy.md
     - 使用指南:
       - API 调用规则: implementation-guide/usage/index.md
       - SD Web UI:
         - 文生图: implementation-guide/usage/text-to-image.md
         - 图生图: implementation-guide/usage/image-to-image.md
+        - 图像超分辨率放大: implementation-guide/usage/extra-single-image.md
       - ComfyUI:
         - Pipeline: implementation-guide/usage/pipeline.md
-      # - 使用ControlNet: implementation-guide/usage/controlnet.md
-      # - 使用LoRA: implementation-guide/usage/lora.md
       - 通知和回调: implementation-guide/usage/callback.md
     - 运维指南:
       - Kubernetes 集群管理: implementation-guide/operation/kubernetes-cluster.md
