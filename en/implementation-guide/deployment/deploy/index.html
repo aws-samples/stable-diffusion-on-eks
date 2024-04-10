@@ -11,6 +11,10 @@
         <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/deploy/">
       
       
+        <link rel="prev" href="../configuration/">
+      
+      
+        <link rel="next" href="../../usage/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -18,7 +22,7 @@
     
     
       
-        <title>Quick start - Stable Diffusion on Amazon EKS</title>
+        <title>Manual deploy - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -62,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#quick-start" class="md-skip">
+        <a href="#manual-deployment" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Quick start
+              Manual deploy
             
           </span>
         </div>
@@ -201,16 +205,20 @@
         
   
   
+    
+  
   
     
     
       
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../.." class="md-tabs__link">
           
   
@@ -291,23 +299,28 @@
       
   
   
+    
   
   
+  
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -318,7 +331,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             Implementation Guide
@@ -505,6 +518,8 @@
                 
   
   
+    
+  
   
   
     
@@ -514,11 +529,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" checked>
         
           
           <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
@@ -532,7 +547,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1_3">
             <span class="md-nav__icon md-icon"></span>
             Deployment
@@ -588,6 +603,130 @@
   
   
     <li class="md-nav__item">
+      <a href="../aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../configuration/" class="md-nav__link">
         
   
@@ -597,6 +736,162 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#edit-configuration-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edit Configuration File
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Edit Configuration File">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-model-bucket-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set Model Bucket (Required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-stable-diffusion-runtime-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set Stable Diffusion Runtime (Required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-custom-image-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set Custom Image (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-ebs-snapshot-based-image-cache-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set EBS Snapshot-based Image Cache (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-detailed-settings-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Detailed Settings (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Start Deployment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -740,6 +1035,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1007,7 +1323,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1234,37 +1550,64 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#provision-infrastructure-and-runtime" class="md-nav__link">
+  <a href="#install-prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
-      Provision infrastructure and runtime
+      Install Prerequisites
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Provision infrastructure and runtime">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#edit-configuration-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edit Configuration File
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Edit Configuration File">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#define-model-bucket" class="md-nav__link">
+  <a href="#set-model-bucket-required" class="md-nav__link">
     <span class="md-ellipsis">
-      Define Model Bucket
+      Set Model Bucket (Required)
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#define-runtime" class="md-nav__link">
+  <a href="#set-stable-diffusion-runtime-required" class="md-nav__link">
     <span class="md-ellipsis">
-      Define Runtime
+      Set Stable Diffusion Runtime (Required)
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#deploy" class="md-nav__link">
+  <a href="#set-custom-image-optional" class="md-nav__link">
     <span class="md-ellipsis">
-      Deploy
+      Set Custom Image (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-ebs-snapshot-based-image-cache-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set EBS Snapshot-based Image Cache (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-detailed-settings-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Detailed Settings (Optional)
     </span>
   </a>
   
@@ -1276,9 +1619,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#start-deployment" class="md-nav__link">
     <span class="md-ellipsis">
-      Usage
+      Start Deployment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
     </span>
   </a>
   
@@ -1302,78 +1654,99 @@
   
 
 
-<h1 id="quick-start">Quick start</h1>
-<h2 id="provision-infrastructure-and-runtime">Provision infrastructure and runtime</h2>
-<p>Required infrastructure and application is deployed via AWS CDK. We provide default configuration and image for quick start.</p>
-<p>Run the following command to clone the code:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>&lt;repo<span class="w"> </span>path&gt;
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>stable-diffusion-on-eks
+<h1 id="manual-deployment">Manual Deployment</h1>
+<p>Follow these steps to deploy this solution:</p>
+<h2 id="install-prerequisites">Install Prerequisites</h2>
+<p>Please install the following runtimes before deployment:</p>
+<ul>
+<li><a href="https://nodejs.org/en">Node.js</a> version 18 or later</li>
+<li><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">AWS CLI</a></li>
+<li><a href="https://docs.aws.amazon.com/cdk/v2/guide/cli.html">AWS CDK Toolkit</a></li>
+<li><a href="https://git-scm.com/downloads">git</a></li>
+</ul>
+<h2 id="edit-configuration-file">Edit Configuration File</h2>
+<p>The configuration for this solution is stored in the <code>config.yaml</code> file. We provide a configuration file template that you can customize according to your actual needs.</p>
+<h3 id="set-model-bucket-required">Set Model Bucket (Required)</h3>
+<p>Replace <code>&lt;bucket name&gt;</code> in <code>modelBucketArn</code> with the name of the S3 bucket where you store the models.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">modelBucketArn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arn:aws:s3:::&lt;bucket name&gt;</span>
 </span></code></pre></div>
-<p>Before deploy, you need to edit <code>config.yaml</code> and set parameters of runtimes.</p>
-<h3 id="define-model-bucket">Define Model Bucket</h3>
-<p>Set <code>modelBucketArn</code> to the S3 bucket created on previous section.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">modelBucketArn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arn:aws:s3:::&lt;bucket name&gt;</span>
+<div class="admonition warning">
+<p class="admonition-title">China Regions</p>
+<p>If you are using an AWS China Region, ensure that the partition in the ARN is <code>aws-cn</code>.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">modelBucketArn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arn:aws-cn:s3:::&lt;bucket name&gt;</span>
 </span></code></pre></div>
-<p>If you are deploying in AWS China region:
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">modelBucketArn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arn:aws-cn:s3:::&lt;bucket name&gt;</span>
-</span></code></pre></div></p>
-<h3 id="define-runtime">Define Runtime</h3>
-<p>You need to specify each runtime in <code>modelsRuntime</code> section. For each runtime, specify the following value:</p>
+</div>
+<h3 id="set-stable-diffusion-runtime-required">Set Stable Diffusion Runtime (Required)</h3>
+<p>You need to specify the parameters for the runtime. The runtime is defined in <code>modelsRuntime</code> as follows:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">modelsRuntime</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sdruntime&quot;</span><span class="w"> </span><span class="c1"># Required parameter, the name of the runtime, cannot be the same as other runtimes</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="w"> </span><span class="c1"># Required parameter, the Kubernetes namespace where the runtime is located, it is not recommended to place it in the same namespace as other runtimes.</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sdwebui&quot;</span><span class="w"> </span><span class="c1"># Required parameter, the type of this runtime, currently only &quot;sdwebui&quot; and &quot;comfyui&quot; are supported</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">modelFilename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1-5-pruned-emaonly.safetensors&quot;</span><span class="w"> </span><span class="c1"># (SD Web UI) The name of the model used by this runtime, cannot be the same as other runtimes.</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">dynamicModel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># (SD Web UI) Whether this runtime allows dynamic model loading.</span>
+</span></code></pre></div>
+<p>You can configure multiple runtimes in the <code>modelsRuntime</code> section.</p>
+<h3 id="set-custom-image-optional">Set Custom Image (Optional)</h3>
+<p>If you have <a href="../image-building/">built your own image and/or Helm Chart</a>, you need to specify the image in the corresponding runtime as follows:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">modelsRuntime</span><span class="p">:</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sdruntime&quot;</span><span class="w"> </span><span class="c1"># Name of runtime, should be unique</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="w"> </span><span class="c1"># Namespace of runtime, suggest deploy different runtimes on seperate namespaces</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">modelFilename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1-5-pruned-emaonly.safetensors&quot;</span><span class="w"> </span><span class="c1"># Model for this runtime, request will be routed by model filename.</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SDWebUI&quot;</span><span class="w"> </span><span class="c1"># Specify type of runtime. Different type of runtime represents different API Spec.</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">extraValues</span><span class="p">:</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="nt">inferenceApi</span><span class="p">:</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="nt">image</span><span class="p">:</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">          </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdoneks/inference-api</span><span class="w"> </span><span class="c1"># Image repository of your runtime</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">          </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"> </span><span class="c1"># Image tag of your runtime</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">queueAgent</span><span class="p">:</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="nt">image</span><span class="p">:</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdoneks/queue-agent</span><span class="w"> </span><span class="c1"># Image repository for queue agent</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"> </span><span class="c1"># Image tag of queue agent</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sdruntime&quot;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sdwebui&quot;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">modelFilename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1-5-pruned-emaonly.safetensors&quot;</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">dynamicModel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">chartRepository</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># Optional parameter, if you have built a Helm Chart, you need to fill in the address where the Chart is located. It should include the protocol prefix (oci:// or https://)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="c1"># Optional parameter, if you have built a Helm Chart, you need to fill in the version of the Chart</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">extraValues</span><span class="p">:</span><span class="w"> </span><span class="c1"># Add the following</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="nt">inferenceApi</span><span class="p">:</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="nt">image</span><span class="p">:</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">          </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;account_id&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com/sd-on-eks/sdwebui</span><span class="w"> </span><span class="c1"># The address of the Stable Diffusion runtime image.</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">          </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"> </span><span class="c1"># The tag of the image</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nt">queueAgent</span><span class="p">:</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="nt">image</span><span class="p">:</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">          </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;account_id&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com/sd-on-eks/queue-agent</span><span class="w"> </span><span class="c1"># The address of the Queue agent image.</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">          </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"> </span><span class="c1"># The tag of the image</span>
 </span></code></pre></div>
-<h3 id="deploy">Deploy</h3>
-<p>Run the following command to deploy the stack:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>npm<span class="w"> </span>install
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cdk<span class="w"> </span>synth
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>cdk<span class="w"> </span>deploy<span class="w"> </span>--all
+<h3 id="set-ebs-snapshot-based-image-cache-optional">Set EBS Snapshot-based Image Cache (Optional)</h3>
+<p>If you have built an <a href="../ebs-snapshot/">EBS snapshot-based image cache</a>, you need to specify the snapshot ID in the corresponding runtime as follows:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">modelsRuntime</span><span class="p">:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sdruntime&quot;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sdwebui&quot;</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">modelFilename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1-5-pruned-emaonly.safetensors&quot;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">extraValues</span><span class="p">:</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">karpenter</span><span class="p">:</span><span class="w"> </span><span class="c1"># Add the following</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">nodeTemplate</span><span class="p">:</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="nt">amiFamily</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bottlerocket</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="nt">dataVolume</span><span class="p">:</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">          </span><span class="nt">volumeSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80Gi</span><span class="w"> </span><span class="c1"># Do not modify to a value less than 80Gi</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">          </span><span class="nt">volumeType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gp3</span><span class="w"> </span><span class="c1"># Do not modify</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">          </span><span class="nt">deleteOnTermination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># Do not modify</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">          </span><span class="nt">iops</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000</span><span class="w"> </span><span class="c1"># Do not modify</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">          </span><span class="nt">throughput</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w"> </span><span class="c1"># Do not modify</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">          </span><span class="nt">snapshotID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">snap-0123456789</span><span class="w"> </span><span class="c1"># Replace with the EBS snapshot ID</span>
 </span></code></pre></div>
-<p>Deployment requires 20-30 minutes.</p>
-<h2 id="usage">Usage</h2>
-<p>After deployment completes, you can get endpoint and key of API on CDK output:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Outputs:
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>SdOnEksDataPlaneStack.APIKey<span class="w"> </span><span class="o">=</span><span class="w"> </span>1234567890abcdefghij
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>SdOnEksDataPlaneStack.FrontApiEndpoint<span class="w"> </span><span class="o">=</span><span class="w"> </span>https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>...
+<h3 id="other-detailed-settings-optional">Other Detailed Settings (Optional)</h3>
+<p>If you need to configure the runtime in detail, please refer to the <a href="../configuration/">configuration options</a>.</p>
+<h2 id="start-deployment">Start Deployment</h2>
+<p>After completing the configuration, run the following commands to deploy:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>npm<span class="w"> </span>install
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cdk<span class="w"> </span>deploy<span class="w">  </span>--no-rollback<span class="w"> </span>--require-approval<span class="w"> </span>never
 </span></code></pre></div>
-<p>You can try it out by making API call with prompt. Your request should follow API Spec of corresponding runtime. For Stable Diffusion Web UI, save the following content as a JSON file:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&quot;alwayson_scripts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="nt">&quot;task&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text-to-image&quot;</span><span class="p">,</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="nt">&quot;sd_model_checkpoint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1-5-pruned-emaonly.safetensors&quot;</span><span class="p">,</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="nt">&quot;id_task&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123&quot;</span><span class="p">,</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="nt">&quot;uid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123&quot;</span><span class="p">,</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">&quot;save_dir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;outputs&quot;</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="p">},</span>
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="nt">&quot;prompt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A dog&quot;</span><span class="p">,</span>
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nt">&quot;steps&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span>
-</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">512</span><span class="p">,</span>
-</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">512</span>
-</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="p">}</span>
+<p>The deployment generally takes 15-20 minutes. Since the deployment is performed on the AWS side through CloudFormation, you do not need to redeploy if the CDK CLI is accidentally closed.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>After the deployment is complete, you will see the following output:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Outputs:
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sdoneksStack.GetAPIKeyCommand<span class="w"> </span><span class="o">=</span><span class="w"> </span>aws<span class="w"> </span>apigateway<span class="w"> </span>get-api-keys<span class="w"> </span>--query<span class="w"> </span><span class="s1">&#39;items[?id==`abcdefghij`].value&#39;</span><span class="w"> </span>--include-values<span class="w"> </span>--output<span class="w"> </span>text
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>sdoneksStack.FrontApiEndpoint<span class="w"> </span><span class="o">=</span><span class="w"> </span>https://abcdefghij.execute-api.us-east-1.amazonaws.com/prod/
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>sdoneksStack.ConfigCommand<span class="w"> </span><span class="o">=</span><span class="w"> </span>aws<span class="w"> </span>eks<span class="w"> </span>update-kubeconfig<span class="w"> </span>--name<span class="w"> </span>sdoneksStack<span class="w"> </span>--region<span class="w"> </span>us-east-1<span class="w"> </span>--role-arn<span class="w"> </span>arn:aws:iam::123456789012:role/sdoneksStack-sdoneksStackAccessRole
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>...
 </span></code></pre></div>
-<p>Now you can use <code>curl</code> to test the solutions. Copy the following cURL command and paste it into the terminal window, replacing <code>1234567890abcdefghij</code> with content of <code>SdOnEksDataPlaneStack.APIKey</code>, <code>https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/</code> with the content of <code>SdOnEksDataPlaneStack.FrontApiEndpoint</code>, and <code>test.json</code> of filename you just created.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://abcdefghij.execute-api.ap-southeast-1.amazonaws.com/prod/<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;x-api-key: 1234567890abcdefghij&#39;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span>-d<span class="w"> </span>@test.json
-</span></code></pre></div>
-<p>You should get a successful response with a payload similar to the following:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span><span class="nt">&quot;id_task&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;task&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text-to-image&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sd_model_checkpoint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1-5-pruned-emaonly.safetensors&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;output_location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s3://sdoneksdataplanestack-outputs3bucket/123&quot;</span><span class="p">}</span>
-</span></code></pre></div>
-<p>You may need to wait for several minutes for instance launching and container starting without EBS snapshot. Once container launched and task is proceed, you can find generated image on <code>output_location</code>.</p>
+<p>Now, you can:</p>
+<ul>
+<li><a href="../../usage/">Send API requests</a> to use Stable Diffusion to generate images</li>
+<li><a href="../../operation/kubernetes-cluster/">Log in to the Kubernetes cluster</a> for maintenance operations</li>
+</ul>
 
 
 

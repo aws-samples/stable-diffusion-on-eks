@@ -11,6 +11,10 @@
         <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/image-building/">
       
       
+        <link rel="prev" href="../aws-cn/">
+      
+      
+        <link rel="next" href="../models/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -18,7 +22,7 @@
     
     
       
-        <title>镜像构建 - Stable Diffusion on Amazon EKS</title>
+        <title>构建镜像 - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -96,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              镜像构建
+              构建镜像
             
           </span>
         </div>
@@ -201,16 +205,20 @@
         
   
   
+    
+  
   
     
     
       
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../.." class="md-tabs__link">
           
   
@@ -291,23 +299,28 @@
       
   
   
+    
   
   
+  
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -318,7 +331,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             实施指南
@@ -505,6 +518,8 @@
                 
   
   
+    
+  
   
   
     
@@ -514,11 +529,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" checked>
         
           
           <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
@@ -532,7 +547,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1_3">
             <span class="md-nav__icon md-icon"></span>
             开始部署
@@ -588,15 +603,241 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
+      <a href="../aws-cn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    配置项
+    在中国区域部署
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            手动部署
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    构建镜像
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    构建镜像
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      构建镜像
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="构建镜像">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#amazon-ecr" class="md-nav__link">
+    <span class="md-ellipsis">
+      将镜像推送至Amazon ECR
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helm-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      构建并推送Helm Chart
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    模型存储
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    镜像缓存构建
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    配置项列表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -740,6 +981,27 @@
   
   <span class="md-ellipsis">
     图生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    图像超分辨率放大
   </span>
   
 
@@ -1293,15 +1555,20 @@
 <div class="admonition note">
 <p class="admonition-title">预构建镜像</p>
 <p>在评估和测试阶段，您可以使用我们预构建的镜像：
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker.io/sdoneks/queue-agent:latest
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker.io/sdoneks/inference-api:latest
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>SD Web UI: public.ecr.aws/bingjiao/sd-on-eks/sdwebui:latest
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ComfyUI: public.ecr.aws/bingjiao/sd-on-eks/comfyui:latest
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Queue Agent: public.ecr.aws/bingjiao/sd-on-eks/queue-agent:latest
 </span></code></pre></div>
-但由于<a href="https://docs.docker.com/docker-hub/download-rate-limit/">DockerHub的限流政策</a>，我们建议您将镜像转移至您的ECR镜像仓库中。</p>
+请注意，该镜像仅用于技术评估和测试用途，您需要自行负责使用该镜像所带来的许可证风险。</p>
 </div>
 <h2 id="_2">构建镜像</h2>
 <p>运行下方命令以构建<code>queue-agent</code>镜像：</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>queue-agent:latest<span class="w"> </span>src/backend/queue_agent/
 </span></code></pre></div>
+<div class="admonition example">
+<p class="admonition-title">示例运行时</p>
+<p>您可以使用社区提供的<a href="https://github.com/yubingjiaocn/stable-diffusion-webui-docker">示例 Dockerfile</a> 构建 <em>Stable Diffusion Web UI</em> 和 <em>ComfyUI</em> 的运行时容器镜像。请注意，该镜像仅用于技术评估和测试用途，请勿将该镜像部署至生产环境。</p>
+</div>
 <h3 id="amazon-ecr">将镜像推送至Amazon ECR</h3>
 <div class="admonition note">
 <p class="admonition-title">镜像仓库选择</p>
@@ -1327,20 +1594,36 @@
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>docker<span class="w"> </span>push<span class="w"> </span><span class="m">123456789012</span>.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
 </span></code></pre></div>
 <h2 id="helm-chart">构建并推送Helm Chart</h2>
-<p>解决方案通过Helm Chart部署。Helm Chart可以存储在兼容<a href="https://www.opencontainers.org/">OCI标准</a>的镜像仓库中。您可以将Helm Chart存储在Amazon ECR。</p>
+<p>解决方案通过Helm Chart部署。Helm Chart可以存储在任何一个可以通过Internet访问的HTTP服务器上，也可存储在兼容<a href="https://www.opencontainers.org/">OCI标准</a>的镜像仓库中。您可以将Helm Chart存储在Amazon ECR。</p>
+<div class="admonition bug">
+<p class="admonition-title">中国区域支持</p>
+<p>由于CDK框架的<a href="https://github.com/aws/aws-cdk/issues/28460">已知问题</a>，您无法将Helm Chart存储在中国区域的ECR镜像仓库中。我们正在积极修复此问题。</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">预构建Helm Chart</p>
 <p>一般情况下，您不需要对Helm Chart内容进行深度自定义。此时您可以直接使用我们预构建的Helm Chart。您可以通过<code>config.yaml</code>对运行时进行配置。</p>
 </div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">使用ECR镜像仓库</label><label for="__tabbed_2_2">使用HTTP服务器</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="admonition tip">
 <p class="admonition-title">首次推送</p>
 <p>Amazon ECR需要在推送前预先创建镜像仓库。</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">AWS CLI</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">AWS CLI</label><label for="__tabbed_3_2">AWS 管理控制台</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>运行下列命令以创建：
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>aws<span class="w"> </span>ecr<span class="w"> </span>create-repository<span class="w"> </span>--repository-name<span class="w"> </span>sd-on-eks/charts/sd-on-eks
 </span></code></pre></div></p>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>打开位于 https://console.aws.amazon.com/ecr/ 的 Amazon ECR 控制台。</li>
+<li>选择<strong>开始使用</strong>。</li>
+<li>对于 <strong>Visibility settings</strong>（可见性设置），请选择 <strong>Private</strong>（私密）。</li>
+<li>对于 <strong>Repository name</strong>（存储库名称），请输入<code>sd-on-eks/charts/sd-on-eks</code>。</li>
+<li>选择<strong>创建存储库</strong>。</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1349,6 +1632,37 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>helm<span class="w"> </span>package<span class="w"> </span>src/charts/sd_on_eks
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>helm<span class="w"> </span>push<span class="w"> </span>sd-on-eks-&lt;version&gt;.tgz<span class="w"> </span>oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/
 </span></code></pre></div>
+<p>在上传完成后，您需要修改<code>config.yaml</code>，在每个需要使用该Helm Chart的运行时下加入如下内容：</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">modelsRuntime</span><span class="p">:</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdruntime</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdwebui</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">chartRepository</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/&quot;</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="w"> </span><span class="c1"># 如您自定义Helm Chart的版本，则修改</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="admonition tip">
+<p class="admonition-title">访问控制</p>
+<p>请确保该HTTP服务器向Internet开放，并不设置任何的访问控制（如IP白名单等）。</p>
+</div>
+<p>运行下列命令以将Helm Chart打包:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>helm<span class="w"> </span>package<span class="w"> </span>src/charts/sd_on_eks
+</span></code></pre></div>
+<p>打包完成后，会输出一个名为 <code>sd-on-eks-&lt;version&gt;.tgz</code> 的文件。将该文件放入一个空文件夹中，并运行以下命令：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>helm<span class="w"> </span>repo<span class="w"> </span>index
+</span></code></pre></div>
+<p>您可以将生成的压缩包和 <code>index.yaml</code> 放入HTTP服务器中，假设该HTTP服务器域名为 <code>example.com</code> （IP地址也可），您需要修改<code>config.yaml</code>，在每个需要使用该Helm Chart的运行时下加入如下内容：</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">modelsRuntime</span><span class="p">:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdruntime</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdwebui</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">chartRepository</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://example.com/&quot;</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="w">  </span><span class="c1"># 如您自定义Helm Chart的版本，则修改</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
 
 
 

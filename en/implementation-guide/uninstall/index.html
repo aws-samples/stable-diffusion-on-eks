@@ -601,6 +601,128 @@
   
   
     <li class="md-nav__item">
+      <a href="../deployment/aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../deployment/configuration/" class="md-nav__link">
         
   
@@ -610,6 +732,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -753,6 +904,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1020,7 +1192,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../observability/tracing.md" class="md-nav__link">
+      <a href="../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1125,18 +1297,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pre-deletion-preparation" class="md-nav__link">
+  <a href="#preparation-before-deletion" class="md-nav__link">
     <span class="md-ellipsis">
-      Pre-Deletion Preparation
+      Preparation Before Deletion
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#deleting-the-solution" class="md-nav__link">
+  <a href="#delete-solution_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Deleting the Solution
+      Delete Solution
     </span>
   </a>
   
@@ -1323,18 +1495,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pre-deletion-preparation" class="md-nav__link">
+  <a href="#preparation-before-deletion" class="md-nav__link">
     <span class="md-ellipsis">
-      Pre-Deletion Preparation
+      Preparation Before Deletion
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#deleting-the-solution" class="md-nav__link">
+  <a href="#delete-solution_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Deleting the Solution
+      Delete Solution
     </span>
   </a>
   
@@ -1362,12 +1534,12 @@
 <p>The deployed solution can be deleted using CloudFormation.</p>
 <div class="admonition danger">
 <p class="admonition-title">Permanent Deletion</p>
-<p>All deleted resources will be permanently removed and cannot be recovered by any means.</p>
+<p>All deleted resources will be permanently deleted and cannot be recovered by any means.</p>
 </div>
 <h2 id="deletion-scope">Deletion Scope</h2>
 <ul>
 <li>
-<p>The following will be <strong>permanently deleted</strong>:</p>
+<p>The following <strong>will</strong> be permanently deleted:</p>
 <ul>
 <li>Amazon EKS cluster and all worker nodes</li>
 <li>SNS topics and all subscriptions</li>
@@ -1377,40 +1549,40 @@
 </ul>
 </li>
 <li>
-<p>The following will <strong>not be deleted</strong>:</p>
+<p>The following <strong>will not</strong> be deleted:</p>
 <ul>
 <li>S3 bucket storing output images</li>
 <li>S3 bucket storing models</li>
 </ul>
 </li>
 </ul>
-<h2 id="pre-deletion-preparation">Pre-Deletion Preparation</h2>
-<p>Before deleting the solution, ensure the following conditions are met:</p>
+<h2 id="preparation-before-deletion">Preparation Before Deletion</h2>
+<p>Before deleting the solution, please ensure that the solution meets the following conditions:</p>
 <ul>
-<li>All SQS queues have been emptied.</li>
-<li>No additional policies are attached to IAM roles.</li>
-<li>No additional resources (such as EC2 instances, ENIs, Cloud9 environments, etc.) exist within the VPC.</li>
+<li>All SQS queues have been emptied</li>
+<li>No additional policies are attached to any IAM roles</li>
+<li>No additional resources (such as EC2, ENI, Cloud9, etc.) exist in the VPC</li>
 </ul>
-<h2 id="deleting-the-solution">Deleting the Solution</h2>
-<p>You can delete the solution using either the CDK CLI or the AWS Management Console.</p>
+<h2 id="delete-solution_1">Delete Solution</h2>
+<p>You can delete this solution via the CDK CLI or the AWS Management Console.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">AWS Management Console</label><label for="__tabbed_1_2">AWS CDK</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
-<li>Navigate to the <a href="https://console.aws.amazon.com/cloudformation/home">AWS CloudFormation console</a></li>
+<li>Go to the <a href="https://console.aws.amazon.com/cloudformation/home">AWS CloudFormation Console</a></li>
 <li>Select <strong>Stacks</strong></li>
-<li>In the list, select <strong>SdOnEKSStack</strong> (or the name you customized)</li>
-<li>Select <strong>Delete</strong>, and in the pop-up dialog, choose <strong>Delete</strong></li>
+<li>In the list, select <strong>sdoneksStack</strong> (or your custom name)</li>
+<li>Select <strong>Delete</strong>, and in the pop-up dialog, select <strong>Delete</strong></li>
 </ul>
 </div>
 <div class="tabbed-block">
-<p>In the solution's source code directory, run the following command to delete the solution:</p>
+<p>In the solution source code directory, run the following command to delete the solution:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>npx<span class="w"> </span>cdk<span class="w"> </span>destroy
 </span></code></pre></div>
 </div>
 </div>
 </div>
-<p>Deleting the solution takes approximately 20-30 minutes.</p>
+<p>Deleting the solution will take approximately 20-30 minutes.</p>
 
 
 

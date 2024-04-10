@@ -694,6 +694,128 @@
   
   
     <li class="md-nav__item">
+      <a href="../../deployment/aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../deployment/configuration/" class="md-nav__link">
         
   
@@ -703,6 +825,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -846,6 +997,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1113,7 +1285,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1412,35 +1584,35 @@
 <h2 id="architecture-diagram">Architecture Diagram</h2>
 <p><img alt="Architecture Diagram" src="../../../images/architecture-diagram.png" /></p>
 <h2 id="components">Components</h2>
-<p>This solution has 3 main components:</p>
+<p>The solution consists of 3 main components:</p>
 <ul>
 <li>Serverless task scheduling and dispatching</li>
 <li>Stable Diffusion runtime based on Amazon EKS and Amazon EC2</li>
 <li>Management and maintenance components</li>
 </ul>
 <h3 id="task-scheduling-and-dispatching">Task Scheduling and Dispatching</h3>
-<p>This component has an API endpoint based on Amazon API Gateway. It also has a task dispatching part based on Amazon SNS and Amazon SQS.</p>
+<p>This component includes an API endpoint based on Amazon API Gateway, and a task dispatching part based on Amazon SNS and Amazon SQS.</p>
 <ul>
-<li>The user sends requests (model, prompt, etc.) to the API endpoint provided by Amazon API Gateway.</li>
-<li>Requests are validated by Amazon Lambda and sent to an Amazon SNS topic.</li>
-<li>Amazon SNS sends the requests to the corresponding runtime's SQS queue based on the runtime name in the request.</li>
+<li>Users send requests (model, prompt, etc.) to the API endpoint provided by Amazon API Gateway</li>
+<li>Requests are validated by Amazon Lambda and published to an Amazon SNS topic</li>
+<li>Amazon SNS publishes the requests to the corresponding SQS queue based on the runtime name specified in the request</li>
 </ul>
 <h3 id="stable-diffusion-runtime">Stable Diffusion Runtime</h3>
-<p>This component is a Stable Diffusion runtime based on Amazon EKS. It can scale elastically based on requests.</p>
+<p>This component includes a Stable Diffusion runtime based on Amazon EKS, which supports elastic scaling based on requests.</p>
 <p>For each runtime:</p>
 <ul>
-<li>During deployment, each runtime has its own Amazon SQS queue to receive requests.</li>
-<li>The Queue Agent receives tasks from the SQS queue and sends them to the Stable Diffusion runtime to generate images.</li>
-<li>The generated images are stored in an Amazon S3 bucket by the Queue Agent. A completion notification is sent to an Amazon SNS topic.</li>
-<li>When there are too many messages in the SQS queue, KEDA increases the number of runtime replicas based on the queue length. Karpenter starts new GPU instances to host the new replicas.</li>
-<li>When there are no more messages queued, KEDA reduces the number of replicas. Karpenter shuts down unnecessary GPU instances to save costs.</li>
+<li>Upon deployment, each runtime has a dedicated Amazon SQS queue to receive requests</li>
+<li>The Queue Agent receives tasks from the Amazon SQS queue and sends them to the Stable Diffusion runtime to generate images</li>
+<li>The generated images are stored by the Queue Agent in an Amazon S3 bucket, and a completion notification is published to an Amazon SNS topic</li>
+<li>When there are too many messages queued in the Amazon SQS queue, KEDA will scale out the runtime replicas based on the number of messages in the queue, and Karpenter will launch new GPU instances to host the new replicas.</li>
+<li>When there are no more messages queued in the Amazon SQS queue, KEDA will scale in the replicas, and Karpenter will terminate unnecessary GPU instances to save costs.</li>
 </ul>
 <h3 id="management-and-maintenance">Management and Maintenance</h3>
-<p>This solution provides complete observability and management components:</p>
+<p>This solution provides comprehensive observability and management components:</p>
 <ul>
 <li>Metrics monitoring and logging based on CloudWatch</li>
 <li>End-to-end tracing based on AWS X-Ray</li>
-<li>Infrastructure as code deployment using AWS CDK</li>
+<li>Infrastructure as Code deployment using AWS CDK</li>
 </ul>
 
 

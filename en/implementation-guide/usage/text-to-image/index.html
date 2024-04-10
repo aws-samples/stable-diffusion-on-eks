@@ -601,6 +601,128 @@
   
   
     <li class="md-nav__item">
+      <a href="../../deployment/aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../deployment/configuration/" class="md-nav__link">
         
   
@@ -610,6 +732,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -795,6 +946,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#model-switching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Switching
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#image-retrieval" class="md-nav__link">
     <span class="md-ellipsis">
       Image Retrieval
@@ -824,6 +984,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1091,7 +1272,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1336,6 +1517,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#model-switching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Switching
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#image-retrieval" class="md-nav__link">
     <span class="md-ellipsis">
       Image Retrieval
@@ -1365,9 +1555,10 @@
 <h1 id="text-to-image-sd-web-ui">Text-to-Image (SD Web UI)</h1>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>This request type is only applicable to the SD Web UI runtime.</p>
+<p>This request type is only applicable to SD Web UI runtime.</p>
 </div>
 <p>The most basic usage of Stable Diffusion is to input a prompt and generate a corresponding image.</p>
+<p>The content in the request will be passed directly to SD Web UI, but if there are links (HTTP or S3 URL), the content of the links will be converted to base64 encoded content and filled in the corresponding fields.</p>
 <h2 id="request-format">Request Format</h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">v1alpha2</label><label for="__tabbed_1_2">v1alpha1</label></div>
 <div class="tabbed-content">
@@ -1378,10 +1569,10 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-t2i&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Required, task ID</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">&quot;runtime&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sdruntime&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Required, runtime name used for the task</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">&quot;tasktype&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text-to-image&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Required, task type</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">&quot;prefix&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;output&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Optional, prefix (directory name) for output files in the S3 bucket</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">&quot;context&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="c1">// Optional, can include any information, will be included in the callback</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">&quot;prefix&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;output&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Required, prefix (directory name) of output files in S3 bucket</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">&quot;context&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="c1">// Optional, can contain any information, will be included in the callback</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">},</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Same specification as the SD Web UI text-to-image interface</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Same specification as SD Web UI text-to-image interface</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">&quot;alwayson_scripts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">&quot;prompt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A dog&quot;</span><span class="p">,</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">&quot;steps&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span>
@@ -1398,7 +1589,7 @@
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nt">&quot;task&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text-to-image&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Required, task type</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="nt">&quot;sd_model_checkpoint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1-5-pruned-emaonly.safetensors&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Required, base model name, associated with queue distribution or model switching</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="nt">&quot;id_task&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-t2i&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Required, task ID, will be used when uploading result images and returning responses</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="nt">&quot;save_dir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;outputs&quot;</span><span class="w"> </span><span class="c1">// Required, prefix (directory name) for output files in the S3 bucket</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="nt">&quot;save_dir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;outputs&quot;</span><span class="w"> </span><span class="c1">// Required, prefix (directory name) of output files in S3 bucket</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">},</span>
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="c1">// The following are official parameters, use default values or pass them directly</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">&quot;prompt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A dog&quot;</span><span class="p">,</span>
@@ -1431,8 +1622,17 @@
 </div>
 </div>
 </div>
+<h2 id="model-switching">Model Switching</h2>
+<p>If the corresponding runtime has <code>dynamicModel: true</code> set, you need to add the following content in the <code>alwayson_scripts</code> of the request:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">          </span><span class="nt">&quot;alwayson_scripts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">            </span><span class="nt">&quot;sd_model_checkpoint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1-5-pruned-emaonly.safetensors&quot;</span><span class="w"> </span><span class="c1">//Put the model name here</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">          </span><span class="p">},</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="p">}</span>
+</span></code></pre></div>
+<p>After receiving the request, SD Web UI will unload the current model and load the corresponding model from memory/S3 bucket. If the specified model does not exist, the request will directly return an error.</p>
 <h2 id="image-retrieval">Image Retrieval</h2>
-<p>After the image generation is complete, it will be stored in the S3 bucket path specified by <code>output_location</code>. If <code>batch_size</code> or other parameters for generating multiple images are set, each image will be automatically numbered and stored.</p>
+<p>After the image generation is completed, it will be stored in the S3 bucket path specified by <code>output_location</code>. If <code>batch_size</code> or other parameters for generating multiple images are set, each image will be automatically numbered and stored.</p>
 <p>The default storage format is lossless PNG, but if special formats (such as GIF) are involved, the system will automatically recognize and add the extension.</p>
 
 

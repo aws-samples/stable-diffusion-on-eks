@@ -601,15 +601,166 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment/configuration/" class="md-nav__link">
+      <a href="../../deployment/aws-cn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    配置项
+    在中国区域部署
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            手动部署
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    构建镜像
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    模型存储
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    镜像缓存构建
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    配置项列表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -797,6 +948,15 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
+      模型切换
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
       图片获取
     </span>
   </a>
@@ -824,6 +984,27 @@
   
   <span class="md-ellipsis">
     图生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    图像超分辨率放大
   </span>
   
 
@@ -1338,6 +1519,15 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
+      模型切换
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
       图片获取
     </span>
   </a>
@@ -1368,6 +1558,7 @@
 <p>此请求类型仅适用于SD Web UI运行时。</p>
 </div>
 <p>Stable Diffusion的最基本用法，输入Prompt，可以生成对应图像。</p>
+<p>请求中的内容将会直接传入SD Web UI，但如有链接（HTTP或S3 URL），则会将链接内容转为base64编码后的内容填入对应项。</p>
 <h2 id="_1">请求格式</h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">v1alpha2</label><label for="__tabbed_1_2">v1alpha1</label></div>
 <div class="tabbed-content">
@@ -1378,7 +1569,7 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-t2i&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// 必要，任务ID</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">&quot;runtime&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sdruntime&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// 必要，任务使用的运行时名称</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">&quot;tasktype&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text-to-image&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// 必要，任务类型</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">&quot;prefix&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;output&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// 可选，输出文件在S3桶中的前缀（即目录名）</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">&quot;prefix&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;output&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// 必要，输出文件在S3桶中的前缀（即目录名）</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">&quot;context&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="c1">// 可选，可放置任何信息，会在回调中包含</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">},</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// 与 SD Web UI text-to-image 接口相同规范</span>
@@ -1431,7 +1622,16 @@
 </div>
 </div>
 </div>
-<h2 id="_3">图片获取</h2>
+<h2 id="_3">模型切换</h2>
+<p>如对应运行时设置了 <code>dynamicModel: true</code>，则需要在请求的<code>alwayson_scripts</code> 中加入如下内容：</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">          </span><span class="nt">&quot;alwayson_scripts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">            </span><span class="nt">&quot;sd_model_checkpoint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1-5-pruned-emaonly.safetensors&quot;</span><span class="w"> </span><span class="c1">//此处放入模型名称</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">          </span><span class="p">},</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="p">}</span>
+</span></code></pre></div>
+<p>在接收到请求后，SD Web UI会卸载当前模型，并从内存/S3存储桶中加载对应的模型。如指定的模型不存在，则该请求直接返回错误。</p>
+<h2 id="_4">图片获取</h2>
 <p>在图像完成生成后，会存储到 <code>output_location</code> 所在的S3存储桶路径中。如设置了<code>batch_size</code>或其他生成多张图的参数，则每张图会自动编号后存入。</p>
 <p>默认存储格式为无损PNG，但如涉及到特殊格式（如GIF等），系统会自动识别并加扩展名。</p>
 

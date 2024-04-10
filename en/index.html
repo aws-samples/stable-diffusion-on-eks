@@ -429,9 +429,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#key-features" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      Key Features
     </span>
   </a>
   
@@ -650,6 +650,128 @@
   
   
     <li class="md-nav__item">
+      <a href="implementation-guide/deployment/aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="implementation-guide/deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="implementation-guide/deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="implementation-guide/deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="implementation-guide/deployment/configuration/" class="md-nav__link">
         
   
@@ -659,6 +781,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="implementation-guide/deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -802,6 +953,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="implementation-guide/usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1069,7 +1241,7 @@
   
   
     <li class="md-nav__item">
-      <a href="implementation-guide/observability/tracing.md" class="md-nav__link">
+      <a href="implementation-guide/observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1296,9 +1468,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#key-features" class="md-nav__link">
     <span class="md-ellipsis">
-      Features
+      Key Features
     </span>
   </a>
   
@@ -1323,23 +1495,23 @@
 
 
 <h1 id="stable-diffusion-on-eks">Stable Diffusion on EKS</h1>
-<p>Implementing a fast scaling and low cost Stable Diffusion inference solution with serverless and containers on AWS</p>
-<p>Stable Diffusion is a popular open source project for generating images using Gen AI. Building a scalable and cost efficient inference solution is a common challenge AWS customers facing. This project shows how to use serverless and container services to build an end-to-end low cost and fast scaling asyncronous image generation architecture. This repo contains the sample code and CDK deployment scripts, helping you to deploy this solution in a few steps.</p>
-<h2 id="features">Features</h2>
+<p>Implement a scalable and cost-effective Stable Diffusion image generation solution using serverless and container solutions on AWS</p>
+<p>Stable Diffusion is a popular open-source project that generates images using generative AI technology. Building a scalable and cost-effective inference solution is a common challenge faced by AWS customers. This project demonstrates how to build an end-to-end, cost-effective, and rapidly scalable asynchronous image generation architecture using serverless and container services.</p>
+<h2 id="key-features">Key Features</h2>
 <ul>
-<li>Asyncronous API and Serverless Event-Driven Architecture</li>
-<li>Image Generation with Stable Diffusion Web UI on Amazon EKS</li>
-<li>Automatic queue length based scaling with KEDA</li>
-<li>Automatic provisioning ec2 instances with Karpenter</li>
-<li>Scaling up new inference nodes within 2 minutes</li>
-<li>Saving up to 70% with GPU spot instances</li>
+<li>Event-driven architecture</li>
+<li>Autoscaling based on queue length using KEDA</li>
+<li>Automatic EC2 instance provisioning using Karpenter</li>
+<li>Scale new inference nodes within 2 minutes</li>
+<li>Save up to 70% cost using GPU Spot instances</li>
+<li>Support for various community Stable Diffusion runtimes</li>
 </ul>
 <div class="admonition abstract">
 <p class="admonition-title">Disclaimer</p>
+<p>This solution is for reference architecture and sample code provided to you under the <a href="https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/LICENSE">MIT-0 License</a>.</p>
+<p>This solution is for demonstration, proof of concept, or learning purposes only. You should not use this solution directly in your production account or for production or other critical data.</p>
+<p>Deploying this solution may incur AWS charges for creating or using AWS chargeable resources, such as running Amazon EC2 instances or using Amazon S3 storage.</p>
 </div>
-<p>This solution is provided solely as a reference architecture and example code, offered to you under the <a href="https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/LICENSE">MIT-0 License</a>.</p>
-<p>This solution is intended for demonstration, proof of concept, or learning purposes only. You should not deploy this solution directly in your production account or use it for production or other critical data.</p>
-<p>Deploying this solution may result in AWS charges due to the creation or use of chargeable AWS resources (such as running Amazon EC2 instances or using Amazon S3 storage).</p>
 
 
 

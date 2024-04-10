@@ -613,6 +613,128 @@
   
   
     <li class="md-nav__item">
+      <a href="../../deployment/aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../deployment/configuration/" class="md-nav__link">
         
   
@@ -622,6 +744,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -765,6 +916,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1032,7 +1204,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1271,14 +1443,16 @@
 <h1 id="cost-estimation">Cost Estimation</h1>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The cost estimation described in this section is only an example and may vary depending on your environment.</p>
+<p>The cost estimates described in this section are examples and may vary depending on your environment.</p>
 </div>
 <p>You will incur costs for using various Amazon Web Services when running the solution. The main factors affecting the cost of the solution include:</p>
 <ul>
-<li>Instance types and purchasing options chosen</li>
-<li>Volume of generated images</li>
-<li>Elastic scaling configurations</li>
+<li>The instance type and purchasing option you choose</li>
+<li>The number of images generated</li>
+<li>The Elastic Scaling configuration</li>
 </ul>
+<p>Taking the text-to-image task with 512x512, steps=16 as an example, using the g5.xlarge instance in the AWS US East (N. Virginia) region, the average generation speed per image is about 1.5s/image. According to the <a href="https://aws.amazon.com/ec2/instance-types/g5/">Amazon Web Services official page</a>, the on-demand pricing is $1.006/hour, and the average inference computing cost per thousand images is $0.42. If you choose a 1-year ISP ($0.604/hour), the average inference computing cost per thousand images is $0.25. If you choose a 3-year ISP ($0.402/hour), the average inference computing cost per thousand images can be as low as $0.17.</p>
+<p>In addition, other running costs of the solution include storage costs, on-demand costs for serverless services, and network data transfer costs. For detailed pricing formulas, please refer to the <a href="https://docs.aws.amazon.com/pricing-calculator/latest/userguide/getting-started.html">Pricing Calculator</a>.</p>
 
 
 

@@ -14,7 +14,7 @@
         <link rel="prev" href="considerations/">
       
       
-        <link rel="next" href="configuration/">
+        <link rel="next" href="aws-cn/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -703,15 +703,166 @@
   
   
     <li class="md-nav__item">
-      <a href="configuration/" class="md-nav__link">
+      <a href="aws-cn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    配置项
+    在中国区域部署
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            手动部署
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    构建镜像
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    模型存储
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    镜像缓存构建
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    配置项列表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -855,6 +1006,27 @@
   
   <span class="md-ellipsis">
     图生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    图像超分辨率放大
   </span>
   
 
@@ -1449,6 +1621,15 @@
 <li>使用我们提供的示例镜像，创建包含SD Web UI镜像的EBS快照</li>
 <li>创建一个含SD Web UI运行时的Stable Diffusion解决方案</li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>该脚本生成的配置文件仅为最简单的配置，只包含1个运行时，且无法进行自定义（如弹性伸缩阈值，自定义模型，自定义镜像等）。如需自定义配置，请运行以下命令：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./deploy.sh<span class="w"> </span>-d
+</span></code></pre></div>
+<p>该参数会使得部署脚本只完成部署前准备，但不真正进行部署。您可以根据<a href="configuration/">配置项</a>修改配置后，运行以下命令进行部署：</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cdk<span class="w"> </span>deploy<span class="w"> </span>--no-rollback<span class="w"> </span>--require-approval<span class="w"> </span>never
+</span></code></pre></div>
+</div>
 <h3 id="_6">部署参数</h3>
 <p>该脚本提供一些参数，以便您自定义部署的解决方案：</p>
 <ul>
@@ -1461,7 +1642,6 @@
 <li><code>-r, --runtime-name</code>: 指定部署的运行时名称，影响API调用时使用的名称。默认为<code>sdruntime</code>。</li>
 <li><code>-t, --runtime-type</code>: 指定部署的运行时类型，只接受<code>sdwebui</code>和<code>comfyui</code>。默认为<code>sdwebui</code>。</li>
 </ul>
-<p>如您需要部署多个运行时，或有其他参数需求（如自定义镜像），您可先使用<code>--dry-run</code>参数，使用脚本生成基础配置文件后再行修改。</p>
 <h2 id="_7">手动部署</h2>
 <p>您也可以不适用脚本，使用以下步骤手动在 AWS 上部署此解决方案。</p>
 <ol>

@@ -14,7 +14,7 @@
         <link rel="prev" href="considerations/">
       
       
-        <link rel="next" href="configuration/">
+        <link rel="next" href="aws-cn/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -647,18 +647,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#get-source-code" class="md-nav__link">
+  <a href="#get-the-source-code" class="md-nav__link">
     <span class="md-ellipsis">
-      Get Source Code
+      Get the Source Code
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#one-click-deploy" class="md-nav__link">
+  <a href="#one-click-deployment" class="md-nav__link">
     <span class="md-ellipsis">
-      One-Click Deploy
+      One-Click Deployment
     </span>
   </a>
   
@@ -703,6 +703,128 @@
   
   
     <li class="md-nav__item">
+      <a href="aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="configuration/" class="md-nav__link">
         
   
@@ -712,6 +834,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -855,6 +1006,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1122,7 +1294,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../observability/tracing.md" class="md-nav__link">
+      <a href="../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1368,18 +1540,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#get-source-code" class="md-nav__link">
+  <a href="#get-the-source-code" class="md-nav__link">
     <span class="md-ellipsis">
-      Get Source Code
+      Get the Source Code
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#one-click-deploy" class="md-nav__link">
+  <a href="#one-click-deployment" class="md-nav__link">
     <span class="md-ellipsis">
-      One-Click Deploy
+      One-Click Deployment
     </span>
   </a>
   
@@ -1427,47 +1599,55 @@
 
 
 <h1 id="overview">Overview</h1>
-<p>Before deploying the solution, it is recommended to review information about the architecture diagram and regional support in this guide. Then follow the instructions below to configure and deploy the solution to your account.</p>
+<p>Before deploying the solution, we recommend that you review the architecture diagram and regional support information in this guide, and then follow the instructions below to configure and deploy the solution to your account.</p>
 <h2 id="prerequisites">Prerequisites</h2>
-<p>Check if all considerations are met according to the <a href="considerations/">deployment planning</a> document.</p>
+<p>Check all considerations in the <a href="considerations/">Deployment Planning</a> document.</p>
 <h2 id="deployment-steps">Deployment Steps</h2>
-<p>We provide a one-click deployment script for quick start. Total deployment time is around 30 minutes.</p>
-<h3 id="get-source-code">Get Source Code</h3>
-<p>Run the following command to get the source code and deployment scripts:</p>
+<p>We provide a one-click deployment script to get started quickly. The total deployment time is approximately 30 minutes.</p>
+<h3 id="get-the-source-code">Get the Source Code</h3>
+<p>Run the following command to get the source code and deployment script:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/aws-samples/stable-diffusion-on-eks
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>stable-diffusion-on-eks
 </span></code></pre></div>
-<h3 id="one-click-deploy">One-Click Deploy</h3>
-<p>Run the following command to quickly deploy with minimal settings:</p>
+<h3 id="one-click-deployment">One-Click Deployment</h3>
+<p>Run the following command to deploy with the simplest setup quickly:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span>deploy
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./deploy.sh
 </span></code></pre></div>
 <p>The script will:</p>
 <ul>
-<li>Install required runtimes and tools</li>
-<li>Create an S3 bucket, download Stable Diffusion 1.5 base model from <a href="https://huggingface.co/runwayml/stable-diffusion-v1-5">HuggingFace</a> and place it in the bucket</li>
-<li>Create an EBS snapshot containing the SD Web UI image using our sample image</li>
-<li>Create a Stable Diffusion solution with SD Web UI runtime</li>
+<li>Install necessary runtimes and tools</li>
+<li>Create an S3 bucket, download the base model of Stable Diffusion 1.5 from <a href="https://huggingface.co/runwayml/stable-diffusion-v1-5">HuggingFace</a>, and place it in the bucket</li>
+<li>Create an EBS snapshot containing the SD Web UI image using the sample image we provide</li>
+<li>Create a Stable Diffusion solution with the SD Web UI runtime</li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The configuration file generated by this script is the simplest configuration, containing only 1 runtime, and cannot be customized (such as scaling thresholds, custom models, custom images, etc.). If you need to customize the configuration, please run the following command:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./deploy.sh<span class="w"> </span>-d
+</span></code></pre></div>
+<p>This parameter will make the deployment script complete the pre-deployment preparation only, but not actually deploy. You can modify the configuration according to the <a href="configuration/">Configuration</a>, and then run the following command to deploy:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cdk<span class="w"> </span>deploy<span class="w"> </span>--no-rollback<span class="w"> </span>--require-approval<span class="w"> </span>never
+</span></code></pre></div>
+</div>
 <h3 id="deployment-parameters">Deployment Parameters</h3>
 <p>The script provides some parameters for you to customize the deployed solution:</p>
 <ul>
 <li><code>-h, --help</code>: Show help information</li>
-<li><code>-n, --stack-name</code>: Customize solution name, affecting generated resource names. Default is <code>sdoneks</code>.</li>
-<li><code>-R, --region</code>: Region to deploy the solution. Defaults to current AWS profile region.</li>
-<li><code>-d, --dry-run</code>: Only generate config files, do not deploy.</li>
-<li><code>-b, --bucket</code>: Specify existing S3 bucket name to store models. The bucket must exist and be in same region as solution. You can manually create the S3 bucket following <a href="models/">this doc</a>.</li>
-<li><code>-s, --snapshot</code>: Specify existing EBS snapshot ID. You can build the EBS snapshot yourself following <a href="ebs-snapshot/">this doc</a>.</li>
-<li><code>-r, --runtime-name</code>: Specify deployed runtime name, affecting name used in API calls. Default is <code>sdruntime</code>.</li>
-<li><code>-t, --runtime-type</code>: Specify deployed runtime type, only accepts <code>sdwebui</code> and <code>comfyui</code>. Default is <code>sdwebui</code>.</li>
+<li><code>-n, --stack-name</code>: Customize the name of the deployed solution, affecting the naming of generated resources. Default is <code>sdoneks</code>.</li>
+<li><code>-R, --region</code>: The region where the solution is deployed. Default is the region of the current AWS configuration profile.</li>
+<li><code>-d, --dry-run</code>: Generate configuration files only, do not deploy.</li>
+<li><code>-b, --bucket</code>: Specify the name of an existing S3 bucket to store the model. The S3 bucket must already exist and be in the same region as the solution. You can manually create the S3 bucket according to <a href="models/">this document</a>.</li>
+<li><code>-s, --snapshot</code>: Specify an existing EBS snapshot ID. You can build the EBS snapshot yourself according to <a href="ebs-snapshot/">this document</a>.</li>
+<li><code>-r, --runtime-name</code>: Specify the name of the deployed runtime, affecting the name used when calling the API. Default is <code>sdruntime</code>.</li>
+<li><code>-t, --runtime-type</code>: Specify the type of the deployed runtime, only accepting <code>sdwebui</code> and <code>comfyui</code>. Default is <code>sdwebui</code>.</li>
 </ul>
-<p>If you need to deploy multiple runtimes, or have other parameter requirements (like custom image), you can first use <code>--dry-run</code> to generate base config files by the script, then modify them.</p>
 <h2 id="manual-deployment">Manual Deployment</h2>
-<p>You can also manually deploy this solution on AWS without using the script by following these steps:</p>
+<p>You can also deploy this solution on AWS manually without using the script by following these steps:</p>
 <ol>
-<li><a href="models/">Create Amazon S3 model bucket</a> and store required models in the bucket</li>
-<li><em>(Optional)</em> <a href="image-building/">Build container image</a></li>
-<li><em>(Optional)</em> <a href="ebs-snapshot/">Store container image in EBS cache to accelerate startup</a></li>
+<li><a href="models/">Create an Amazon S3 model bucket</a> and store the required models in the bucket</li>
+<li><em>(Optional)</em> <a href="image-building/">Build the container image</a></li>
+<li><em>(Optional)</em> <a href="ebs-snapshot/">Store the container image in an EBS cache to accelerate startup</a></li>
 <li><a href="deploy/">Deploy and launch the solution stack</a></li>
 </ol>
 

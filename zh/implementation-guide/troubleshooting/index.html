@@ -588,15 +588,166 @@
   
   
     <li class="md-nav__item">
-      <a href="../deployment/configuration/" class="md-nav__link">
+      <a href="../deployment/aws-cn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    配置项
+    在中国区域部署
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            手动部署
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    构建镜像
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    模型存储
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    镜像缓存构建
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    配置项列表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -740,6 +891,27 @@
   
   <span class="md-ellipsis">
     图生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    图像超分辨率放大
   </span>
   
 
@@ -1227,6 +1399,167 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      常见的问题排查手段
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="常见的问题排查手段">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lambda" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查Lambda的错误日志
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sns" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查SNS指标
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sqs" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查SQS指标
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#karpenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查Karpenter日志
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查运行时日志
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      部署问题
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="部署问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      我如何修改默认副本数？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      我如何更新运行时？
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      运行时问题
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="运行时问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#not-authorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      无法发送请求，返回Not Authorized
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#400" class="md-nav__link">
+    <span class="md-ellipsis">
+      无法发送请求，返回值为400
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      请求发送成功，但什么都没找到
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#out" class="md-nav__link">
+    <span class="md-ellipsis">
+      请求发送成功，但只找到.out文件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      提交问题
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1245,6 +1578,21 @@
 
 <h1 id="_1">故障排查</h1>
 <p>以下介绍在使用 Stable Diffusion on Amazon EKS 解决方案时可能遇到的错误或问题，以及解决方法。</p>
+<h2 id="_2">常见的问题排查手段</h2>
+<h3 id="lambda">检查Lambda的错误日志</h3>
+<h3 id="sns">检查SNS指标</h3>
+<h3 id="sqs">检查SQS指标</h3>
+<h3 id="karpenter">检查Karpenter日志</h3>
+<h3 id="_3">检查运行时日志</h3>
+<h2 id="_4">部署问题</h2>
+<h3 id="_5">我如何修改默认副本数？</h3>
+<h3 id="_6">我如何更新运行时？</h3>
+<h2 id="_7">运行时问题</h2>
+<h3 id="not-authorized">无法发送请求，返回Not Authorized</h3>
+<h3 id="400">无法发送请求，返回值为400</h3>
+<h3 id="_8">请求发送成功，但什么都没找到</h3>
+<h3 id="out">请求发送成功，但只找到.out文件</h3>
+<h2 id="_9">提交问题</h2>
 
 
 

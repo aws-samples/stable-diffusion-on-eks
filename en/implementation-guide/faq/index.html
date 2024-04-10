@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/faq/">
       
       
-        <link rel="prev" href="../observability/logging/">
+        <link rel="prev" href="../observability/tracing/">
       
       
         <link rel="next" href="../uninstall/">
@@ -601,6 +601,128 @@
   
   
     <li class="md-nav__item">
+      <a href="../deployment/aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../deployment/configuration/" class="md-nav__link">
         
   
@@ -610,6 +732,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -753,6 +904,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1020,7 +1192,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../observability/tracing.md" class="md-nav__link">
+      <a href="../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1327,33 +1499,33 @@
 <ul>
 <li>
 <p><strong>What is the Stable Diffusion on Amazon EKS solution?</strong></p>
-<p>The Stable Diffusion on Amazon EKS solution is a reference architecture for deploying Stable Diffusion on Amazon Web Services. This reference architecture is designed based on an event-driven architecture and leverages modern application services such as serverless and containers. With this solution, users can quickly deploy Stable Diffusion for inferencing and generating images on Amazon Web Services, meeting requirements for rapid on-demand scaling, high availability, and cost-effectiveness.</p>
+<p>The Stable Diffusion on Amazon EKS solution is a reference architecture for deploying Stable Diffusion on Amazon Web Services. This reference architecture is designed based on an event-driven architecture and leverages modern application services such as serverless and containers. With this solution, users can quickly deploy Stable Diffusion on Amazon Web Services for image generation inference, meeting requirements for rapid on-demand scaling, high availability, and low cost.</p>
 </li>
 <li>
-<p><strong>What makes this solution unique?</strong></p>
-<p>The Stable Diffusion on Amazon EKS solution is designed based on an event-driven architecture, utilizing KEDA for automatic scaling based on queue length. It can effectively handle high-concurrency inference requests and, with the help of Karpenter and Bottlerocket, rapidly scale new inference nodes, greatly reducing image generation wait times. Additionally, the solution supports the use of GPU Spot instances, enabling customers to utilize the required computing resources at a lower cost. The solution also supports multiple community Stable Diffusion runtimes and provides unified management through the Kubernetes API for underlying Amazon EKS, offering openness and flexibility. Customers can easily customize this reference architecture to meet their specific business requirements.</p>
+<p><strong>What are the unique features of this solution?</strong></p>
+<p>The Stable Diffusion on Amazon EKS solution is designed based on an event-driven architecture, utilizing KEDA for queue-length-based auto-scaling to handle high-concurrency image generation inference requests from the frontend. It also leverages Karpenter and Bottlerocket to quickly scale out new inference nodes, significantly reducing the waiting time for image generation. Additionally, this solution supports using GPU Spot instances, helping customers leverage the required compute resources for inference at a lower cost. Furthermore, the solution supports various community Stable Diffusion runtimes and provides a unified Kubernetes API for managing the underlying Amazon EKS, offering excellent openness and flexibility. Customers can also easily customize this reference architecture to meet their specific business requirements.</p>
 </li>
 <li>
-<p><strong>When is it more suitable for me to use Stable Diffusion on Amazon EKS?</strong></p>
-<p>Compared to other solutions using Stable Diffusion on Amazon Web Services, this solution is more suitable for business workloads with high concurrent requests or fluctuating demands, where low-latency image generation performance is crucial. Alternatively, for customers already using the Kubernetes technology stack as a resource scheduling and management platform or for customers with more customization requirements, this solution can provide additional benefits.</p>
+<p><strong>In what scenarios is the Stable Diffusion on Amazon EKS solution more suitable?</strong></p>
+<p>Compared to other solutions for using Stable Diffusion on Amazon Web Services, this solution is more suitable for workloads with high or fluctuating concurrent requests for image generation inference, or with stringent performance requirements for image generation latency. Additionally, customers who have already adopted the Kubernetes technology stack as their resource scheduling and management platform, or those with extensive customization requirements, can also benefit more from this solution.</p>
 </li>
 <li>
-<p><strong>What AWS services does this solution use?</strong></p>
+<p><strong>What AWS services are used in this solution?</strong></p>
 <p>Please refer to the <a href="../architecture/services-in-this-solution/">AWS Services</a> page.</p>
 </li>
 <li>
 <p><strong>How does AWS support this solution?</strong></p>
-<p>This solution is provided by the AWS Solutions Architecture team under the MIT-0 license. The solution currently only receives community support. If you encounter bugs in the solution code or have feature suggestions, please contact us through GitHub.</p>
-<p>If there are issues with AWS products or services mentioned in the solution, you can contact AWS support based on your support plan.</p>
-<p>The AWS Solutions Architecture team can provide solution discussions, workshops, and deployment support. If you need assistance, please contact your customer team or <a href="https://aws.amazon.com/cn/contact-us/">contact us</a> through this webpage.</p>
+<p>This solution is provided to you by the AWS Solutions Architect team under the MIT-0 license. Currently, it only offers community support. If you encounter any bugs in the solution code or have feature suggestions, please contact us through GitHub.</p>
+<p>If there are any issues with the AWS product services involved in the solution, you can contact the AWS Support team based on your purchased support plan.</p>
+<p>The AWS Solutions Architect team can provide solution discussions, workshops, and deployment support. If you need assistance, please contact your customer team or reach out to us through <a href="https://aws.amazon.com/contact-us/">this webpage</a>.</p>
 </li>
 <li>
 <p><strong>How do I deploy this solution?</strong></p>
-<p>We provide a one-click deployment template based on AWS CDK, allowing you to deploy this solution in your AWS account. You can customize the deployment through various configuration options in the configuration file. After deployment, you can further extend the solution.</p>
+<p>We provide a one-click deployment template based on AWS CDK, allowing you to deploy this solution in your AWS account. You can customize the deployment through various configuration options in the configuration file. You can also extend the solution after deployment.</p>
 </li>
 <li>
-<p><strong>Which instance types can I use?</strong></p>
-<p>Currently, you can use accelerated computing instances in the corresponding region. Instances such as g5, g4dn, and p3 have been tested and are supported. g3 instances are not supported due to driver issues. inf series instances are not supported at this time. CPU instance types generate images more slowly and are not recommended for use.</p>
+<p><strong>What instance types can I use?</strong></p>
+<p>Currently, you can use accelerated computing instances available in the corresponding region. Based on testing, you can use instance types such as g5, g4dn, and p3. The g3 instance type is not supported due to driver issues. The inf series instance types are currently not supported. CPU instances are not recommended for image generation as they are relatively slow.</p>
 </li>
 </ul>
 

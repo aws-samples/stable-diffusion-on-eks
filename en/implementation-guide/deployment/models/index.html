@@ -11,6 +11,10 @@
         <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/models/">
       
       
+        <link rel="prev" href="../image-building/">
+      
+      
+        <link rel="next" href="../ebs-snapshot/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -18,7 +22,7 @@
     
     
       
-        <title>Create S3 bucket and store model - Stable Diffusion on Amazon EKS</title>
+        <title>Model store - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -62,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#create-s3-bucket-and-store-model" class="md-skip">
+        <a href="#model-storage" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Create S3 bucket and store model
+              Model store
             
           </span>
         </div>
@@ -201,16 +205,20 @@
         
   
   
+    
+  
   
     
     
       
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../.." class="md-tabs__link">
           
   
@@ -291,23 +299,28 @@
       
   
   
+    
   
   
+  
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -318,7 +331,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             Implementation Guide
@@ -505,6 +518,8 @@
                 
   
   
+    
+  
   
   
     
@@ -514,11 +529,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" checked>
         
           
           <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
@@ -532,7 +547,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1_3">
             <span class="md-nav__icon md-icon"></span>
             Deployment
@@ -588,6 +603,188 @@
   
   
     <li class="md-nav__item">
+      <a href="../aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-bucket" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a Bucket
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#store-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Store Models
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../configuration/" class="md-nav__link">
         
   
@@ -597,6 +794,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -740,6 +966,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1007,7 +1254,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1227,6 +1474,32 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-bucket" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a Bucket
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#store-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Store Models
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1243,14 +1516,95 @@
   
 
 
-<h1 id="create-s3-bucket-and-store-model">Create S3 bucket and store model</h1>
-<p>Models should be stored in S3 bucket. Stable diffusion runtime will fetch model from S3 bucket at launch.</p>
-<p>Create S3 bucket by running the following command. Replace <code>&lt;bucket name&gt;</code> to your desired bucket name.</p>
+<h1 id="model-storage">Model Storage</h1>
+<p>The models required for this solution should be pre-stored in an S3 bucket.</p>
+<h2 id="create-a-bucket">Create a Bucket</h2>
+<p>Please follow these steps to create a bucket:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">AWS Management Console</label><label for="__tabbed_1_2">AWS CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li>Open the <a href="https://console.aws.amazon.com/s3/">Amazon S3 console</a>.</li>
+<li>In the left navigation pane, choose <strong>Buckets</strong>.</li>
+<li>Choose <strong>Create Bucket</strong>.</li>
+<li>In <strong>Bucket name</strong>, enter a name for your bucket. The name must follow the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html">bucket naming rules</a>.</li>
+<li>In <strong>AWS Region</strong>, choose the same region where you plan to deploy the solution.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Note</p>
+<p>Make sure the bucket is in the same AWS Region as your solution deployment. If you plan to deploy multiple copies of the solution across multiple regions, create a separate bucket in each region.</p>
+</div>
+<ul>
+<li>Choose <strong>Create Bucket</strong>.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Run the following command to create a bucket. Replace <code>&lt;bucket name&gt;</code> with the name you want to use for your bucket, and <code>us-east-1</code> with the AWS Region where you plan to deploy the solution:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>aws<span class="w"> </span>s3api<span class="w"> </span>create-bucket<span class="w"> </span>--bucket<span class="w"> </span>&lt;bucket<span class="w"> </span>name&gt;<span class="w"> </span>--region<span class="w"> </span>us-east-1
+</span></code></pre></div></p>
+</div>
+</div>
+</div>
+<h2 id="store-models">Store Models</h2>
+<p>Please store all the models you need to use in the S3 bucket, with the following directory structure:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>└── /
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    ├── CLIP
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    ├── Codeformer
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    ├── ControlNet
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    ├── ESRGAN
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ├── GFPGAN
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    ├── LDSR
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    ├── Lora
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ├── RealESRGAN
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    ├── ScuNET
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    ├── Stable-diffusion
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    ├── SwinIR
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    ├── VAE
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    ├── VAE-approx
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    ├── embeddings
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    └── hypernetworks
 </span></code></pre></div>
-<p>You can upload model to newly created S3 bucket by running the following command:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>aws<span class="w"> </span>s3<span class="w"> </span>cp<span class="w"> </span>&lt;model<span class="w"> </span>name&gt;<span class="w"> </span>s3://&lt;bucket<span class="w"> </span>name&gt;/Stable-diffusion/
-</span></code></pre></div>
+<p>Please place the models in their corresponding directories. The <code>Stable-diffusion</code> directory must exist and contain the Stable Diffusion model. Other directories can be omitted if there are no models for them.</p>
+<p>Currently, models in <code>.safetensors</code> and <code>.ckpt</code> formats are supported. If the models you downloaded from <a href="https://civitai.com/">Civitai</a> do not have an extension, please add the <code>.ckpt</code> extension.</p>
+<p>Please follow these steps to upload the models to the S3 bucket:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">AWS Management Console</label><label for="__tabbed_2_2">AWS CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="admonition warning">
+<p class="admonition-title">Note</p>
+<p>When uploading model files from mainland China to overseas, you may encounter slow upload speeds or connection interruptions. Since browser uploads do not support resuming from interruptions, it is not recommended to use the management console to upload models.</p>
+</div>
+<ul>
+<li>Open the <a href="https://console.aws.amazon.com/s3/">Amazon S3 console</a>.</li>
+<li>In the left navigation pane, choose <strong>Buckets</strong>.</li>
+<li>Select the bucket you created in the previous step, and navigate to the desired folder.</li>
+<li>If the corresponding folder does not exist:<ul>
+<li>Choose <strong>Create Folder</strong>.</li>
+<li>In <strong>Folder Name</strong>, enter the folder name.</li>
+<li>Choose <strong>Create folder</strong>.</li>
+<li>Repeat the above steps until the folder structure matches the one above.</li>
+</ul>
+</li>
+<li>Choose <strong>Upload</strong>.</li>
+<li>Choose <strong>Add files</strong>, and select the model files you want to upload.</li>
+<li>Choose <strong>Upload</strong>. Do not close the browser during the upload process.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Run the following command to upload the model files to the bucket. Replace <code>&lt;model name&gt;</code> with the name of your model file, <code>&lt;folder&gt;</code> with the model type, and <code>&lt;bucket name&gt;</code> with the name of your bucket:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>aws<span class="w"> </span>s3<span class="w"> </span>cp<span class="w"> </span>&lt;model<span class="w"> </span>name&gt;<span class="w"> </span>s3://&lt;bucket<span class="w"> </span>name&gt;/&lt;folder&gt;/
+</span></code></pre></div></p>
+<div class="admonition note">
+<p class="admonition-title">Tip</p>
+<p>When using the AWS CLI for uploading, you do not need to create the directory structure beforehand.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Tip</p>
+<p>You can use third-party tools like <a href="https://github.com/peak/s5cmd">s5cmd</a> to improve upload speed.</p>
+</div>
+</div>
+</div>
+</div>
 
 
 

@@ -601,6 +601,128 @@
   
   
     <li class="md-nav__item">
+      <a href="../../deployment/aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../deployment/configuration/" class="md-nav__link">
         
   
@@ -610,6 +732,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -753,6 +904,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1080,7 +1252,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1343,28 +1515,28 @@
 
 
 <h1 id="kubernetes-cluster-management">Kubernetes Cluster Management</h1>
-<p>You can use the <code>kubectl</code> command to connect to the cluster created by the solution, retrieve the current system status, and make customizations.</p>
+<p>You can use the <code>kubectl</code> command to connect to the cluster created by the solution, get the current system running status, and perform customizations.</p>
 <h2 id="install-kubectl">Install kubectl</h2>
-<p>Refer to the <a href="https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html">Installing or updating kubectl</a> documentation to install the <code>kubectl</code> command-line tool. Install a version of kubectl that is compatible with Kubernetes 1.28.</p>
+<p>You can refer to the <a href="https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html">Installing or updating kubectl</a> documentation to install the <code>kubectl</code> command-line tool. Please install kubectl compatible with Kubernetes 1.28.</p>
 <h2 id="log-in-to-the-kubernetes-cluster">Log in to the Kubernetes Cluster</h2>
 <p>You can find the command to connect to the EKS cluster from the CloudFormation output:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">AWS Management Console</label><label for="__tabbed_1_2">AWS CLI</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ul>
-<li>Go to the <a href="https://console.aws.amazon.com/cloudformation/home">AWS CloudFormation console</a></li>
-<li>Choose <strong>Stacks</strong></li>
+<li>Go to the <a href="https://console.aws.amazon.com/cloudformation/home">AWS CloudFormation Console</a></li>
+<li>Select <strong>Stacks</strong></li>
 <li>In the list, select <strong>SdOnEKSStack</strong> (or your custom name)</li>
-<li>Choose <strong>Output</strong></li>
+<li>Select <strong>Output</strong></li>
 <li>Record the value of the <strong>ConfigCommand</strong> item</li>
-<li>Run that command in your terminal.</li>
+<li>Execute the command in the terminal.</li>
 </ul>
 </div>
 <div class="tabbed-block">
-<p>Run the following command to retrieve the command:</p>
+<p>Run the following command to get the command:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>aws<span class="w"> </span>cloudformation<span class="w"> </span>describe-stacks<span class="w"> </span>--stack-name<span class="w"> </span>SdOnEKSStack<span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span>--query<span class="w"> </span><span class="s1">&#39;Stacks[0].Outputs[?OutputKey==`ConfigCommand`].OutputValue&#39;</span>
 </span></code></pre></div>
-<p>Run that command in your terminal.</p>
+<p>Execute the command in the terminal.</p>
 </div>
 </div>
 </div>

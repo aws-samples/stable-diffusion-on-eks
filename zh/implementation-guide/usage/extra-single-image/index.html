@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/models/">
+        <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/usage/extra-single-image/">
       
       
-        <link rel="prev" href="../image-building/">
+        <link rel="prev" href="../image-to-image/">
       
       
-        <link rel="next" href="../ebs-snapshot/">
+        <link rel="next" href="../pipeline/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>模型存储 - Stable Diffusion on Amazon EKS</title>
+        <title>图像超分辨率放大 - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#sd-web-ui" class="md-skip">
           跳转至
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              模型存储
+              图像超分辨率放大
             
           </span>
         </div>
@@ -518,8 +518,6 @@
                 
   
   
-    
-  
   
   
     
@@ -529,11 +527,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
         
           
           <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
@@ -547,7 +545,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_1_3">
             <span class="md-nav__icon md-icon"></span>
             开始部署
@@ -561,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../considerations/" class="md-nav__link">
+      <a href="../../deployment/considerations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -582,7 +580,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../deployment/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -603,11 +601,231 @@
   
   
     <li class="md-nav__item">
-      <a href="../aws-cn/" class="md-nav__link">
+      <a href="../../deployment/aws-cn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     在中国区域部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            手动部署
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    构建镜像
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    模型存储
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    镜像缓存构建
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    配置项列表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    使用指南
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            使用指南
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API 调用规则
   </span>
   
 
@@ -636,24 +854,24 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_1_4_2" id="__nav_1_4_2_label" tabindex="0">
             
   
   <span class="md-ellipsis">
-    手动部署
+    SD Web UI
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_1_3_4">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_4_2">
             <span class="md-nav__icon md-icon"></span>
-            手动部署
+            SD Web UI
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -664,11 +882,32 @@
   
   
     <li class="md-nav__item">
-      <a href="../image-building/" class="md-nav__link">
+      <a href="../text-to-image/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    构建镜像
+    文生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-to-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    图生图
   </span>
   
 
@@ -698,7 +937,7 @@
           
   
   <span class="md-ellipsis">
-    模型存储
+    图像超分辨率放大
   </span>
   
 
@@ -709,7 +948,7 @@
         
   
   <span class="md-ellipsis">
-    模型存储
+    图像超分辨率放大
   </span>
   
 
@@ -731,9 +970,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      请求格式
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      创建存储桶
+      响应格式
     </span>
   </a>
   
@@ -742,7 +990,16 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      存储模型
+      可使用的超分辨率模型
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      图片获取
     </span>
   </a>
   
@@ -752,245 +1009,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ebs-snapshot/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    镜像缓存构建
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    配置项列表
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../deploy/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    手动部署
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    使用指南
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1_4">
-            <span class="md-nav__icon md-icon"></span>
-            使用指南
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    API 调用规则
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_1_4_2" id="__nav_1_4_2_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    SD Web UI
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_4_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1_4_2">
-            <span class="md-nav__icon md-icon"></span>
-            SD Web UI
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/text-to-image/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    文生图
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/image-to-image/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    图生图
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/extra-single-image/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    图像超分辨率放大
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -1049,7 +1067,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/pipeline/" class="md-nav__link">
+      <a href="../pipeline/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1078,7 +1096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/callback/" class="md-nav__link">
+      <a href="../callback/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1481,9 +1499,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      请求格式
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      创建存储桶
+      响应格式
     </span>
   </a>
   
@@ -1492,7 +1519,16 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      存储模型
+      可使用的超分辨率模型
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      图片获取
     </span>
   </a>
   
@@ -1516,95 +1552,79 @@
   
 
 
-<h1 id="_1">模型存储</h1>
-<p>该解决方案所需要的模型应提前存储在S3存储桶中。</p>
-<h2 id="_2">创建存储桶</h2>
-<p>请按以下步骤创建存储桶：</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">AWS 管理控制台</label><label for="__tabbed_1_2">AWS CLI</label></div>
+<h1 id="sd-web-ui">单图像超分辨率放大 (SD Web UI)</h1>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>此请求类型仅适用于SD Web UI运行时。</p>
+<p>此请求类型仅提供<code>v1alpha2</code> API。</p>
+</div>
+<p>对于单个图片，使用超分辨率模型将图片放大。</p>
+<h2 id="_1">请求格式</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">v1alpha2</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<ul>
-<li>打开 <a href="https://console.aws.amazon.com/s3/">Amazon S3 控制台</a>。</li>
-<li>在左侧导航窗格中，选择 <strong>Buckets</strong>（桶）。</li>
-<li>选择 <strong>Create Bucket</strong>（创建桶）。</li>
-<li>在 <strong>Bucket name</strong>（桶名称）中输入存储桶的名称。名称需符合<a href="https://docs.aws.amazon.com/zh_cn/AmazonS3/latest/userguide/bucketnamingrules.html">存储桶命名规则</a>。</li>
-<li>在 <strong>AWS Region</strong> （AWS 区域）中，选择您准备部署解决方案的相同区域。</li>
-</ul>
-<div class="admonition warning">
-<p class="admonition-title">注意</p>
-<p>请确保该存储桶与您的解决方案部署在同一个 AWS 区域。如您希望在多个区域部署解决方案的多个副本，请在每个区域单独创建一个存储桶。</p>
-</div>
-<ul>
-<li>选择 <strong>Create Bucket</strong>（创建桶）</li>
-</ul>
-</div>
-<div class="tabbed-block">
-<p>运行以下命令以创建存储桶。将<code>&lt;bucket name&gt;</code>替换为您希望的存储桶名称，<code>us-east-1</code>替换成您准备部署解决方案的 AWS 区域：
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>aws<span class="w"> </span>s3api<span class="w"> </span>create-bucket<span class="w"> </span>--bucket<span class="w"> </span>&lt;bucket<span class="w"> </span>name&gt;<span class="w"> </span>--region<span class="w"> </span>us-east-1
-</span></code></pre></div></p>
-</div>
-</div>
-</div>
-<h2 id="_3">存储模型</h2>
-<p>请将所有需要使用的模型存储在S3存储桶中，目录格式如下：</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>└── /
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    ├── CLIP
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    ├── Codeformer
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    ├── ControlNet
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    ├── ESRGAN
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ├── GFPGAN
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    ├── LDSR
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    ├── Lora
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ├── RealESRGAN
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    ├── ScuNET
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    ├── Stable-diffusion
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    ├── SwinIR
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    ├── VAE
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    ├── VAE-approx
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    ├── embeddings
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    └── hypernetworks
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;task&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-extra&quot;</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">&quot;runtime&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sdruntime&quot;</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">&quot;tasktype&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra-single-image&quot;</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">&quot;prefix&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">&quot;context&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">&quot;resize_mode&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">&quot;show_extras_results&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">&quot;gfpgan_visibility&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">&quot;codeformer_visibility&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">&quot;codeformer_weight&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="nt">&quot;upscaling_resize&quot;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="nt">&quot;upscaling_resize_w&quot;</span><span class="p">:</span><span class="mi">512</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">      </span><span class="nt">&quot;upscaling_resize_h&quot;</span><span class="p">:</span><span class="mi">512</span><span class="p">,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">      </span><span class="nt">&quot;upscaling_crop&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">&quot;upscaler_1&quot;</span><span class="p">:</span><span class="s2">&quot;R-ESRGAN 4x+&quot;</span><span class="p">,</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="nt">&quot;upscaler_2&quot;</span><span class="p">:</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="nt">&quot;extras_upscaler_2_visibility&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">      </span><span class="nt">&quot;upscale_first&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">      </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="s2">&quot;https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png&quot;</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>请将模型放入对应的目录中。其中 <code>Stable-diffusion</code> 目录必须存在且存有Stable Diffusion模型。其余目录如无模型可不创建。</p>
-<p>目前支持 <code>.safetensors</code> 和 <code>.ckpt</code> 格式的模型。如您从<a href="https://civitai.com/">Civitai</a>下载的模型不带扩展名，请添加 <code>.ckpt</code> 扩展名。</p>
-<p>请按以下步骤将模型上传至S3存储桶中：</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">AWS 管理控制台</label><label for="__tabbed_2_2">AWS CLI</label></div>
+</div>
+</div>
+</div>
+<h2 id="_2">响应格式</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">v1alpha2</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="admonition warning">
-<p class="admonition-title">注意</p>
-<p>从中国大陆向海外上传模型文件时，可能会遇到模型上传缓慢或连接中途断开的情况。由于浏览器上传不支持断点续传，故不推荐使用管理控制台上传模型。</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;id_task&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-extra&quot;</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;runtime&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sdruntime&quot;</span><span class="p">,</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;output_location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s3://outputbucket/output/test-t2i&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+</span></code></pre></div>
 </div>
+</div>
+</div>
+<h2 id="_3">可使用的超分辨率模型</h2>
+<p>可使用的超分辨率模型与SD Web UI默认的模型一致：</p>
 <ul>
-<li>打开 <a href="https://console.aws.amazon.com/s3/">Amazon S3 控制台</a>。</li>
-<li>在左侧导航窗格中，选择 <strong>Buckets</strong>（桶）。</li>
-<li>选择上一步创建的存储桶，并进入所需的文件夹。</li>
-<li>如果对应的文件夹不存在：<ul>
-<li>选择 <strong>Create Folder</strong>（创建文件夹）</li>
-<li>在 <strong>Folder Name</strong>（文件夹名称）中，输入文件夹名称</li>
-<li>选择 <strong>Create folder</strong>（创建文件夹）</li>
-<li>重复以上操作，直到文件夹符合以上目录结构。</li>
+<li>Lanczos</li>
+<li>Nearest</li>
+<li>4x-UltraSharp</li>
+<li>ESRGAN_4X</li>
+<li>LDSR</li>
+<li>R-ESRGAN 4x+</li>
+<li>R-ESRGAN 4x+ Anime6B</li>
+<li>ScuNET GAN</li>
+<li>ScuNET PSNR</li>
+<li>SwinIR 4x</li>
 </ul>
-</li>
-<li>选择 <strong>Upload</strong>（上传）</li>
-<li>选择 <strong>Add files</strong> （添加文件），选择待上传的模型文件。</li>
-<li>选择 <strong>Upload</strong>。在上传过程中请不要关闭浏览器。</li>
-</ul>
-</div>
-<div class="tabbed-block">
-<p>运行以下命令以将模型文件上传至存储桶。将<code>&lt;model name&gt;</code>替换成为您的模型文件名，<code>&lt;folder&gt;</code>替换为模型类型， <code>&lt;bucket name&gt;</code>替换为您希望的存储桶名称：
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>aws<span class="w"> </span>s3<span class="w"> </span>cp<span class="w"> </span>&lt;model<span class="w"> </span>name&gt;<span class="w"> </span>s3://&lt;bucket<span class="w"> </span>name&gt;/&lt;folder&gt;/
-</span></code></pre></div></p>
-<div class="admonition note">
-<p class="admonition-title">提示</p>
-<p>采用AWS CLI上传时，无需预先创建目录结构。</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">提示</p>
-<p>您可以使用<a href="https://github.com/peak/s5cmd">s5cmd</a>等第三方工具提升上传速度。</p>
-</div>
-</div>
-</div>
-</div>
+<p>如您需要更多超分辨率模型，您可以根据模型类型，将其放入S3存储桶的<code>LDSR</code>, <code>SwinIR</code>, <code>ESRGAN</code>, <code>RealESRGAN</code>, <code>ScuNET</code>等目录。</p>
+<p>完成后，您需要重启Pod才能使新模型生效。</p>
+<h2 id="_4">图片获取</h2>
+<p>在图像完成生成后，会存储到 <code>output_location</code> 所在的S3存储桶路径中。默认存储格式为无损PNG，但如涉及到特殊格式（如GIF等），系统会自动识别并加扩展名。</p>
 
 
 

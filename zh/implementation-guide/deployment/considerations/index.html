@@ -688,15 +688,166 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
+      <a href="../aws-cn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    配置项
+    在中国区域部署
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            手动部署
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-building/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    构建镜像
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    模型存储
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    镜像缓存构建
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    配置项列表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手动部署
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -840,6 +991,27 @@
   
   <span class="md-ellipsis">
     图生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    图像超分辨率放大
   </span>
   
 
@@ -1424,31 +1596,7 @@
 <li>在不支持<code>g5</code>实例类型的区域部署时，您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
 </ul>
 <p><strong>在亚马逊云科技中国区域部署</strong></p>
-<div class="admonition danger">
-<p class="admonition-title">中国区域网络限制</p>
-<p>近期，我们发现在中国区部署该解决方案时，出现EBS无法部署，报错信息显示 <code>Waiter has timed out</code> 或 <code>Unexpected EOF</code>. 详情请参考对应<a href="https://github.com/aws-samples/stable-diffusion-on-eks/issues/53">Issue</a>.</p>
-<p>该问题的根因是部分组件的Helm Chart位于Github上，在中国区部署时，负责部署自定义资源的Lambda无法获取Helm Chart，导致报错。目前我们正在积极处理该问题，后续会将需要的Helm Chart和容器镜像复制到中国区域。</p>
-<p>如您在部署过程中遇到该问题，请暂时切换到海外区域进行测试，或自行搭建Helm Repo以临时解决此问题。</p>
-</div>
-<p>该解决方案可以在亚马逊云科技中国区域部署。</p>
-<table>
-<thead>
-<tr>
-<th>区域名称</th>
-<th>验证通过</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>中国 (宁夏)</td>
-<td><span class="twemoji icon_check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
-</tr>
-</tbody>
-</table>
-<p>在中国区域部署时，由于环境限制，需要进行以下处理，或可能面临以下问题：</p>
-<ul>
-<li>中国区域不支持默认的<code>g5</code>实例类型。您需要手工指定 Karpenter 使用的实例类型为 <code>g4dn</code> 或其他 GPU 实例类型。</li>
-</ul>
+<p>请参见<a href="../aws-cn/">在亚马逊云科技中国区域部署</a></p>
 <h2 id="iam">IAM 权限</h2>
 <p>部署该解决方案需要管理员或与之相当的权限。由于组件较多，我们暂不提供最小权限列表。</p>
 <h2 id="_3">服务配额</h2>

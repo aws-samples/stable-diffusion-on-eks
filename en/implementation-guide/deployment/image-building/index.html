@@ -11,6 +11,10 @@
         <link rel="canonical" href="https://aws-samples.github.io/stable-diffusion-on-eks/implementation-guide/deployment/image-building/">
       
       
+        <link rel="prev" href="../aws-cn/">
+      
+      
+        <link rel="next" href="../models/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -18,7 +22,7 @@
     
     
       
-        <title>Build from source - Stable Diffusion on Amazon EKS</title>
+        <title>Build image - Stable Diffusion on Amazon EKS</title>
       
     
     
@@ -62,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#build-from-source" class="md-skip">
+        <a href="#image-building" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Build from source
+              Build image
             
           </span>
         </div>
@@ -201,16 +205,20 @@
         
   
   
+    
+  
   
     
     
       
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../.." class="md-tabs__link">
           
   
@@ -291,23 +299,28 @@
       
   
   
+    
   
   
+  
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
-          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -318,7 +331,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             Implementation Guide
@@ -505,6 +518,8 @@
                 
   
   
+    
+  
   
   
     
@@ -514,11 +529,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" checked>
         
           
           <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
@@ -532,7 +547,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1_3">
             <span class="md-nav__icon md-icon"></span>
             Deployment
@@ -588,6 +603,203 @@
   
   
     <li class="md-nav__item">
+      <a href="../aws-cn/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploy on AWS China regions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_4" id="__nav_1_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Manual deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Build image
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#build-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build Images
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-images-to-amazon-ecr" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push Images to Amazon ECR
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-and-push-helm-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build and Push Helm Chart
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ebs-snapshot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EBS snapshot building
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../configuration/" class="md-nav__link">
         
   
@@ -597,6 +809,35 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manual deploy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -740,6 +981,27 @@
   
   <span class="md-ellipsis">
     Image-to-Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/extra-single-image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Super-Resolution
   </span>
   
 
@@ -1007,7 +1269,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../observability/tracing.md" class="md-nav__link">
+      <a href="../../observability/tracing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1234,27 +1496,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-image" class="md-nav__link">
+  <a href="#build-images" class="md-nav__link">
     <span class="md-ellipsis">
-      Build Image
+      Build Images
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#push-images-to-amazon-ecr" class="md-nav__link">
+    <span class="md-ellipsis">
+      Push Images to Amazon ECR
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#push-image-to-amazon-ecr" class="md-nav__link">
-    <span class="md-ellipsis">
-      Push image to Amazon ECR
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#build-and-push-helm-chart" class="md-nav__link">
     <span class="md-ellipsis">
-      Build and push helm chart
+      Build and Push Helm Chart
     </span>
   </a>
   
@@ -1278,32 +1546,123 @@
   
 
 
-<h1 id="build-from-source">Build from source</h1>
-<h2 id="build-image">Build Image</h2>
-<p>You can build queue agent container image on your environment from source. <code>queue-agent</code> is for fetching message from queue and convert message to API request to Stable Diffusion Runtime.</p>
-<p>To build <code>queue-agent</code> image, run the following command:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>queue-agent:latest<span class="w"> </span>src/backend/queue_agent/
+<h1 id="image-building">Image Building</h1>
+<p>You can build images from source code and store them in your image repository.</p>
+<div class="admonition danger">
+<p class="admonition-title">Runtime Selection</p>
+<p>You need to provide the Stable Diffusion runtime image yourself. You can get the supported Stable Diffusion runtimes from <a href="../considerations/#choose-stable-diffusion-runtime">Deployment Considerations</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Pre-built Images</p>
+<p>For evaluation and testing purposes, you can use our pre-built images:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>SD Web UI: public.ecr.aws/bingjiao/sd-on-eks/sdwebui:latest
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ComfyUI: public.ecr.aws/bingjiao/sd-on-eks/comfyui:latest
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Queue Agent: public.ecr.aws/bingjiao/sd-on-eks/queue-agent:latest
 </span></code></pre></div>
-<h2 id="push-image-to-amazon-ecr">Push image to Amazon ECR</h2>
-<p>Before pushing image, create reposirory in Amazon ECR by running the following command:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>aws<span class="w"> </span>ecr<span class="w"> </span>create-repository<span class="w"> </span>--repository-name<span class="w"> </span>sd-on-eks/queue-agent
+Please note that these images are for technical evaluation and testing purposes only, and you are responsible for any licensing risks associated with using these images.</p>
+</div>
+<h2 id="build-images">Build Images</h2>
+<p>Run the following command to build the <code>queue-agent</code> image:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>queue-agent:latest<span class="w"> </span>src/backend/queue_agent/
 </span></code></pre></div>
-<p>You can push image to Amazon ECR by running the following command. Replace <code>us-east-1</code> to your region and <code>123456789012</code> to your AWS account 12-digit ID:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>aws<span class="w"> </span>ecr<span class="w"> </span>get-login-password<span class="w"> </span>--region<span class="w"> </span>us-east-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>docker<span class="w"> </span>login<span class="w"> </span>--username<span class="w"> </span>AWS<span class="w"> </span>--password-stdin<span class="w"> </span><span class="m">123456789012</span>.dkr.ecr.us-east-1.amazonaws.com
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>tag<span class="w"> </span>queue-agent:latest<span class="w"> </span><span class="m">123456789012</span>.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>docker<span class="w"> </span>push<span class="w"> </span><span class="m">123456789012</span>.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
+<div class="admonition example">
+<p class="admonition-title">Example Runtimes</p>
+<p>You can use the <a href="https://github.com/yubingjiaocn/stable-diffusion-webui-docker">example Dockerfile</a> provided by the community to build the runtime container images for <em>Stable Diffusion Web UI</em> and <em>ComfyUI</em>. Please note that these images are for technical evaluation and testing purposes only and should not be deployed to production environments.</p>
+</div>
+<h3 id="push-images-to-amazon-ecr">Push Images to Amazon ECR</h3>
+<div class="admonition note">
+<p class="admonition-title">Image Repository Selection</p>
+<p>We recommend using Amazon ECR as the image repository, but you can also choose other repositories that support the <a href="https://www.opencontainers.org/">OCI standard</a>, such as Harbor.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">First-time Push</p>
+<p>Amazon ECR requires creating the image repository before pushing.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">AWS CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Run the following command to create:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>aws<span class="w"> </span>ecr<span class="w"> </span>create-repository<span class="w"> </span>--repository-name<span class="w"> </span>sd-on-eks/queue-agent
+</span></code></pre></div></p>
+</div>
+</div>
+</div>
+</div>
+<p>Run the following commands to log in to the image repository and push the image. Replace <code>us-east-1</code> with your AWS region, and <code>123456789012</code> with your AWS account ID:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>aws<span class="w"> </span>ecr<span class="w"> </span>get-login-password<span class="w"> </span>--region<span class="w"> </span>us-east-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>docker<span class="w"> </span>login<span class="w"> </span>--username<span class="w"> </span>AWS<span class="w"> </span>--password-stdin<span class="w"> </span><span class="m">123456789012</span>.dkr.ecr.us-east-1.amazonaws.com
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>docker<span class="w"> </span>tag<span class="w"> </span>queue-agent:latest<span class="w"> </span><span class="m">123456789012</span>.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>docker<span class="w"> </span>push<span class="w"> </span><span class="m">123456789012</span>.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/queue-agent:latest
 </span></code></pre></div>
-<h2 id="build-and-push-helm-chart">Build and push helm chart</h2>
-<p>Helm chart is packaged and stored in <a href="https://www.opencontainers.org/">OCI</a>-based registry. You can store helm chart in Amazon ECR.</p>
-<p>Before pushing charts, create reposirory in Amazon ECR by running the following command:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>aws<span class="w"> </span>ecr<span class="w"> </span>create-repository<span class="w"> </span>--repository-name<span class="w"> </span>sd-on-eks/charts/sd-on-eks
+<h2 id="build-and-push-helm-chart">Build and Push Helm Chart</h2>
+<p>The solution is deployed via a Helm Chart. The Helm Chart can be stored on any HTTP server accessible over the Internet or in an image repository compatible with the <a href="https://www.opencontainers.org/">OCI standard</a>. You can store the Helm Chart in Amazon ECR.</p>
+<div class="admonition bug">
+<p class="admonition-title">China Region Support</p>
+<p>Due to a <a href="https://github.com/aws/aws-cdk/issues/28460">known issue</a> with the CDK framework, you cannot store the Helm Chart in an ECR image repository in the China regions. We are actively working on fixing this issue.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Pre-built Helm Chart</p>
+<p>In general, you do not need to deeply customize the contents of the Helm Chart. In this case, you can directly use our pre-built Helm Chart. You can configure the runtime via <code>config.yaml</code>.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Using ECR Image Repository</label><label for="__tabbed_2_2">Using HTTP Server</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="admonition tip">
+<p class="admonition-title">First-time Push</p>
+<p>Amazon ECR requires creating the image repository before pushing.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">AWS CLI</label><label for="__tabbed_3_2">AWS Management Console</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Run the following command to create:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>aws<span class="w"> </span>ecr<span class="w"> </span>create-repository<span class="w"> </span>--repository-name<span class="w"> </span>sd-on-eks/charts/sd-on-eks
+</span></code></pre></div></p>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Open the Amazon ECR console at https://console.aws.amazon.com/ecr/.</li>
+<li>Choose <strong>Get started</strong>.</li>
+<li>For <strong>Visibility settings</strong>, choose <strong>Private</strong>.</li>
+<li>For <strong>Repository name</strong>, enter <code>sd-on-eks/charts/sd-on-eks</code>.</li>
+<li>Choose <strong>Create repository</strong>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<p>Run the following commands to log in to the image repository and push the Helm Chart. Replace <code>us-east-1</code> with your AWS region, and <code>123456789012</code> with your AWS account ID:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>helm<span class="w"> </span>package<span class="w"> </span>src/charts/sd_on_eks
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>helm<span class="w"> </span>push<span class="w"> </span>sd-on-eks-&lt;version&gt;.tgz<span class="w"> </span>oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/
 </span></code></pre></div>
-<p>Package and push helm chart to Amazon ECR by running the following command. Replace <code>us-east-1</code> to your region and <code>123456789012</code> to your AWS account 12-digit ID:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>helm<span class="w"> </span>package<span class="w"> </span>src/charts/sd_on_eks
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>helm<span class="w"> </span>push<span class="w"> </span>sd-on-eks-&lt;version&gt;.tgz<span class="w"> </span>oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/
+<p>After the upload is complete, you need to modify <code>config.yaml</code> and add the following content under each runtime that needs to use this Helm Chart:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">modelsRuntime</span><span class="p">:</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdruntime</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdwebui</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">chartRepository</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/&quot;</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="w"> </span><span class="c1"># Modify if you customize the Helm Chart version</span>
 </span></code></pre></div>
-<p>Now your chart is stored in Amazon ECR with <code>oci://123456789012.dkr.ecr.us-east-1.amazonaws.com/sd-on-eks/charts/sd-on-eks:&lt;version&gt;</code>.</p>
+</div>
+<div class="tabbed-block">
+<div class="admonition tip">
+<p class="admonition-title">Access Control</p>
+<p>Make sure the HTTP server is open to the Internet and does not have any access control (such as IP whitelisting) set up.</p>
+</div>
+<p>Run the following command to package the Helm Chart:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>helm<span class="w"> </span>package<span class="w"> </span>src/charts/sd_on_eks
+</span></code></pre></div>
+<p>After packaging, a file named <code>sd-on-eks-&lt;version&gt;.tgz</code> will be output. Place this file in an empty folder and run the following command:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>helm<span class="w"> </span>repo<span class="w"> </span>index
+</span></code></pre></div>
+<p>You can place the generated archive and <code>index.yaml</code> on the HTTP server. Assuming the domain name of the HTTP server is <code>example.com</code> (IP address is also acceptable), you need to modify <code>config.yaml</code> and add the following content under each runtime that needs to use this Helm Chart:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">modelsRuntime</span><span class="p">:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdruntime</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sdwebui</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">chartRepository</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://example.com/&quot;</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">chartVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="w"> </span><span class="c1"># Modify if you customize the Helm Chart version</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
 
 
 
