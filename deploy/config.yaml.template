@@ -16,11 +16,6 @@ modelsRuntime:
       nodeTemplate:
         amiFamily: Bottlerocket
         dataVolume:
-          volumeSize: 80Gi
-          volumeType: gp3
-          deleteOnTermination: true
-          iops: 4000
-          throughput: 1000
           snapshotID: ${SNAPSHOT_ID}
       provisioner:
         instanceType:

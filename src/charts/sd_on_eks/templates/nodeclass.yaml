@@ -1,0 +1,62 @@
+apiVersion: karpenter.k8s.aws/v1beta1
+kind: EC2NodeClass
+metadata:
+  name: {{ include "sdchart.fullname" . }}-nodetemplate-gpu
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+  {{- if .Values.runtime.labels }}
+  {{- toYaml .Values.runtime.labels | nindent 4 }}
+  {{- end }}
+spec:
+  amiFamily: {{ .Values.karpenter.nodeTemplate.amiFamily }}
+
+  subnetSelectorTerms:
+    - tags:
+      "aws-cdk:subnet-type": "Private"
+      "aws:cloudformation:stack-name": {{ .Values.global.stackName }}
+
+  securityGroupSelectorTerms:
+    - tags:
+        "aws:eks:cluster-name": {{ quote .Values.global.stackName }}
+
+  role: {{- Values.karpenter.nodeTemplate.iamRole }}
+
+  tags:
+    "stack": {{ .Values.global.stackName }}
+    "runtime": {{ .Release.Name }}
+    {{- if .Values.karpenter.nodeTemplate.tags }}
+    {{- toYaml .Values.karpenter.nodeTemplate.tags | nindent 4 }}
+    {{- end }}
+
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: optional
+
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: {{ .Values.karpenter.nodeTemplate.osVolume.volumeSize }}
+        volumeType: {{ .Values.karpenter.nodeTemplate.osVolume.volumeType }}
+        deleteOnTermination: {{ .Values.karpenter.nodeTemplate.osVolume.deleteOnTermination }}
+        iops: {{ .Values.karpenter.nodeTemplate.osVolume.iops }}
+        throughput: {{ .Values.karpenter.nodeTemplate.osVolume.throughput }}
+      {{- toYaml .Values.karpenter.nodeTemplate.osVolume | nindent 8 }}
+    {{- if .Values.karpenter.nodeTemplate.dataVolume }}
+    - deviceName: /dev/xvdb
+      ebs:
+        volumeSize: {{ .Values.karpenter.nodeTemplate.dataVolume.volumeSize }}
+        volumeType: {{ .Values.karpenter.nodeTemplate.dataVolume.volumeType }}
+        deleteOnTermination: {{ .Values.karpenter.nodeTemplate.dataVolume.deleteOnTermination }}
+        iops: {{ .Values.karpenter.nodeTemplate.dataVolume.iops }}
+        throughput: {{ .Values.karpenter.nodeTemplate.dataVolume.throughput }}
+        {{- if .Values.karpenter.nodeTemplate.dataVolume.snapshotID }}
+        snapshotID: {{ .Values.karpenter.nodeTemplate.dataVolume.snapshotID }}
+        {{- end }}
+    {{- end }}
+
+  {{- if .Values.karpenter.nodeTemplate.userData }}
+  userData: |-
+  {{- tpl .Values.karpenter.nodeTemplate.userData . | nindent 4 }}
+  {{- end }}

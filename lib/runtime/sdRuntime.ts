@@ -155,6 +155,8 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     })
     pvc.node.addDependency(ns)
 
+    const nodeRole = blueprints.getNamedResource("karpenter-node-role") as iam.IRole
+
     var generatedValues = {
       runtime: {
         type: this.options.type,
@@ -167,6 +169,11 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         persistence: {
           enabled: true,
           existingClaim: this.id+"-s3-model-storage-pvc"
+        }
+      },
+      karpenter: {
+        nodeTemplate: {
+          iamRole: nodeRole.roleName
         }
       }
     }
