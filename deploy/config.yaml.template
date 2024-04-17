@@ -28,6 +28,7 @@ modelsRuntime:
         capacityType:
           onDemand: true
           spot: true
+    runtime:
       scaling:
         queueLength: 10
         minReplicaCount: 0
