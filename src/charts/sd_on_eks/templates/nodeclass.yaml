@@ -19,7 +19,7 @@ spec:
     - tags:
         "aws:eks:cluster-name": {{ quote .Values.global.stackName }}
 
-  role: {{- Values.karpenter.nodeTemplate.iamRole }}
+  role: {{- .Values.karpenter.nodeTemplate.iamRole }}
 
   tags:
     "stack": {{ .Values.global.stackName }}
