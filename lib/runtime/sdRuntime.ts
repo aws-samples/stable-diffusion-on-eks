@@ -155,7 +155,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     })
     pvc.node.addDependency(ns)
 
-    const nodeRole = blueprints.getNamedResource("karpenter-node-role") as iam.IRole
+    const nodeRole = clusterInfo.cluster.node.findChild('karpenter-node-role') as iam.IRole
 
     var generatedValues = {
       runtime: {
@@ -173,7 +173,7 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
       },
       karpenter: {
         nodeTemplate: {
-          iamRole: nodeRole.roleArn.toString
+          iamRole: nodeRole.roleName
         }
       }
     }

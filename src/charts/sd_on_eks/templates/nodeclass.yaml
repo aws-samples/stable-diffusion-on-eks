@@ -12,18 +12,18 @@ spec:
 
   subnetSelectorTerms:
     - tags:
-      "aws-cdk:subnet-type": "Private"
-      "aws:cloudformation:stack-name": {{ .Values.global.stackName }}
+        "aws-cdk:subnet-type": "Private"
+        "aws:cloudformation:stack-name": {{ .Values.global.stackName }}
 
   securityGroupSelectorTerms:
     - tags:
         "aws:eks:cluster-name": {{ quote .Values.global.stackName }}
 
-  role: {{- .Values.karpenter.nodeTemplate.iamRole }}
+  role: {{ .Values.karpenter.nodeTemplate.iamRole }}
 
   tags:
-    "stack": {{ .Values.global.stackName }}
-    "runtime": {{ .Release.Name }}
+    stack: {{ .Values.global.stackName }}
+    runtime: {{ .Release.Name }}
     {{- if .Values.karpenter.nodeTemplate.tags }}
     {{- toYaml .Values.karpenter.nodeTemplate.tags | nindent 4 }}
     {{- end }}
@@ -42,7 +42,6 @@ spec:
         deleteOnTermination: {{ .Values.karpenter.nodeTemplate.osVolume.deleteOnTermination }}
         iops: {{ .Values.karpenter.nodeTemplate.osVolume.iops }}
         throughput: {{ .Values.karpenter.nodeTemplate.osVolume.throughput }}
-      {{- toYaml .Values.karpenter.nodeTemplate.osVolume | nindent 8 }}
     {{- if .Values.karpenter.nodeTemplate.dataVolume }}
     - deviceName: /dev/xvdb
       ebs:
