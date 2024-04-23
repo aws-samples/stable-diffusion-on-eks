@@ -29,7 +29,7 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   namespace: 'sdruntime',
   release: 'sdruntime',
   version: '1.1.0',
-  repository: 'oci://public.ecr.aws/bingjiao/sd-on-eks/charts',
+  repository: 'oci://public.ecr.aws/bingjiao/sd-on-eks/charts/sd-on-eks',
   values: {
     global: {
       awsRegion: cdk.Aws.REGION,
