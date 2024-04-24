@@ -1,14 +1,12 @@
 {
   "name": "stable-difussion-on-eks",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "bin": {
-    "stable-difussion-on-eks": "bin/stable-difussion-on-eks.js"
+    "stable-difussion-on-eks": "bin/stable-difussion-on-eks.ts"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "jest",
-    "cdk": "cdk"
+    "synth": "npx cdk synth -q",
+    "deploy": "npx cdk deploy --no-rollback --require-approval never"
   },
   "devDependencies": {
     "@types/jest": "^29.5.3",
