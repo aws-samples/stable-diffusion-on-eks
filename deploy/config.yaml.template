@@ -1,3 +1,6 @@
+# Auto generated config file
+# Run cdk deploy to deploy SD on EKS stack
+
 stackName: ${STACK_NAME}
 modelBucketArn: arn:aws:s3:::${MODEL_BUCKET}
 APIGW:
