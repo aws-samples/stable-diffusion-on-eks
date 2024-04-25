@@ -1,5 +1,5 @@
-stackName: sdoneks
-modelBucketArn: arn:aws:s3:::dummy-bucket
+stackName: sdoneks-comfy
+modelBucketArn: arn:aws:s3:::sdoneks-model-bucket-6dfc
 APIGW:
   stageName: dev
   throttle:
@@ -10,7 +10,7 @@ modelsRuntime:
   namespace: default
   modelFilename: v1-5-pruned-emaonly.safetensors
   dynamicModel: false
-  type: sdwebui
+  type: comfyui
   extraValues:
     karpenter:
       nodeTemplate:
@@ -21,7 +21,7 @@ modelsRuntime:
           deleteOnTermination: true
           iops: 4000
           throughput: 1000
-#           snapshotID:
+          snapshotID: snap-04a24b3b1971f4d09
       provisioner:
         instanceType:
         - g5.xlarge

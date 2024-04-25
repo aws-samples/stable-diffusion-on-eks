@@ -1,0 +1,103 @@
+stackName: str()
+modelBucketArn: str(starts_with="arn")
+APIGW:
+  stageName: str()
+  throttle:
+    rateLimit: int()
+    burstLimit: int()
+modelsRuntime: list(include('runtime'), min=1)
+---
+runtime:
+  name: str()
+  namespace: str()
+  modelFilename: str(required=False)
+  dynamicModel: bool(required=False)
+  type: enum('sdwebui', 'comfyui')
+  extraValues: include('extraValues')
+---
+ebs:
+  volumeSize: str(required=False)
+  volumeType: str(required=False)
+  deleteOnTermination: bool(required=False)
+  iops: int(min=3000, max=16000, required=False)
+  throughput: int(min=125, max=1000, required=False)
+  snapshotID: str(starts_with="snap", required=False)
+---
+extraValues:
+  karpenter: include('karpenter', required=False)
+  runtime: include('runtimeValues', required=False)
+---
+karpenter:
+  provisioner: include('provisioner', required=False)
+  nodeTemplate: include('nodeTemplate', required=False)
+---
+provisioner:
+  labels: map(str(), str(), required=False)
+  capacityType:
+    onDemand: bool(required=False)
+    spot: bool(required=False)
+  instanceType: list(str(), required=False)
+  extraRequirements: list(any(), required=False)
+  extraTaints: list(any(), required=False)
+  resourceLimits: include('resources', required=False)
+  consolidation: bool(required=False)
+  disruption: include('disruption', required=False)
+---
+disruption:
+  consolidateAfter: str(required=False)
+  expireAfter: str(required=False)
+---
+nodeTemplate:
+  securityGroupSelector: map(str(), str(), required=False)
+  subnetSelector: map(str(), str(), required=False)
+  tags: map(str(), str(), required=False)
+  amiFamily: enum('Bottlerocket', required=False)
+  osVolume: include('ebs', required=False)
+  dataVolume: include('ebs', required=False)
+  userData: str(required=False)
+---
+runtimeValues:
+  labels: map(str(), str(), required=False)
+  annotations: map(str(), str(), required=False)
+  scaling: include('scaling', required=False)
+  inferenceApi: include('inferenceApi', required=False)
+  queueAgent: include('inferenceApi', required=False)
+---
+scaling:
+  enabled: bool(required=False)
+  queueLength: int(min=1, required=False)
+  cooldownPeriod: int(min=1, required=False)
+  maxReplicaCount: int(min=0, required=False)
+  minReplicaCount: int(min=0, required=False)
+  pollingInterval: int(required=False)
+  scaleOnInFlight: bool(required=False)
+  extraHPAConfig: any(required=False)
+---
+image:
+  repository: str()
+  tag: str()
+---
+resources:
+  nvidia.com/gpu: str(required=False)
+  cpu: str(required=False)
+  memory: str(required=False)
+---
+inferenceApi:
+  image: include('image', required=False)
+  modelMountPath: str(required=False)
+  commandArguments: str(required=False)
+  extraEnv: map(str(), str(), required=False)
+  imagePullPolicy: enum('Always', 'IfNotPresent', 'Never')
+  resources:
+    limits: include('resources', required=False)
+    requests: include('resources', required=False)
+---
+queueAgent:
+  image: include('image', required=False)
+  extraEnv: map(str(), str())
+  imagePullPolicy: enum('Always', 'IfNotPresent', 'Never')
+  resources:
+    limits: include('resources', required=False)
+    requests: include('resources', required=False)
+  XRay:
+    enabled: bool(required=False)

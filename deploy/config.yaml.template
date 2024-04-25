@@ -1,3 +1,6 @@
+# Auto generated config file
+# Run cdk deploy to deploy SD on EKS stack
+
 stackName: ${STACK_NAME}
 modelBucketArn: arn:aws:s3:::${MODEL_BUCKET}
 APIGW:
@@ -16,11 +19,6 @@ modelsRuntime:
       nodeTemplate:
         amiFamily: Bottlerocket
         dataVolume:
-          volumeSize: 80Gi
-          volumeType: gp3
-          deleteOnTermination: true
-          iops: 4000
-          throughput: 1000
           snapshotID: ${SNAPSHOT_ID}
       provisioner:
         instanceType:
@@ -33,6 +31,7 @@ modelsRuntime:
         capacityType:
           onDemand: true
           spot: true
+    runtime:
       scaling:
         queueLength: 10
         minReplicaCount: 0

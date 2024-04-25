@@ -7,9 +7,11 @@ import logging
 import time
 import traceback
 
+from requests.exceptions import ReadTimeout
 from aws_xray_sdk.core import xray_recorder
 from jsonpath_ng import parse
 from modules import http_action, misc
+
 
 logger = logging.getLogger("queue-agent")
 
@@ -92,6 +94,13 @@ def handler(api_base_url: str, task_type: str, task_id: str, payload: dict, dyna
         response["image"] = imgOutputs
         response["content"] = content
         logger.info(f"End process {task_type} task with ID: {task_id}")
+    except ReadTimeout as e:
+        invoke_interrupt(api_base_url)
+        content = json.dumps(failed(task_id, e))
+        logger.error(f"{task_type} task with ID: {task_id} timeouted")
+        traceback.print_exc()
+        response["success"] = False
+        response["content"] = content
     except Exception as e:
         content = json.dumps(failed(task_id, e))
         logger.error(f"{task_type} task with ID: {task_id} finished with error")
@@ -178,6 +187,9 @@ def invoke_refresh_checkpoints(api_base_url: str) -> str:
 
 def invoke_unload_checkpoints(api_base_url: str) -> str:
     return http_action.do_invocations(api_base_url+"unload-checkpoint", {})
+
+def invoke_interrupt(api_base_url: str) -> str:
+    return http_action.do_invocations(api_base_url+"interrupt", {})
 
 def switch_model(api_base_url: str, name: str) -> str:
     opts = invoke_get_options(api_base_url)

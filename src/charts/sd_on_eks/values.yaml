@@ -16,7 +16,11 @@ karpenter:
     resourceLimits:
       nvidia.com/gpu: 100
     consolidation: true
+    disruption:
+      consolidateAfter: 30s
+      expireAfter: Never
   nodeTemplate:
+    iamRole: ""
     securityGroupSelector: {}
     subnetSelector: {}
     tags: {}

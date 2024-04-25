@@ -29,7 +29,7 @@ fi
 
 sudo pacapt install --noconfirm jq git wget unzip openssl bash-completion python3 python3-pip
 
-pip3 install -q awscurl==0.28 urllib3==1.26.6
+pip3 install -q yamale
 
 # kubectl
 if which kubectl > /dev/null

@@ -1,0 +1,67 @@
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: {{ include "sdchart.fullname" . }}-provisioner-gpu
+  labels:
+  {{- include "sdchart.labels" . | nindent 4 }}
+  {{- if .Values.runtime.labels }}
+  {{- toYaml .Values.runtime.labels | nindent 4 }}
+  {{- end }}
+spec:
+  template:
+    metadata:
+      {{- if .Values.karpenter.provisioner.labels }}
+      labels:
+      {{- toYaml .Values.karpenter.provisioner.labels | nindent 8 }}
+      {{- end }}
+      {{- if .Values.karpenter.provisioner.annotations }}
+      annotations:
+      {{- toYaml .Values.karpenter.provisioner.annotations | nindent 8 }}
+      {{- end }}
+    spec:
+      nodeClassRef:
+        apiVersion: karpenter.k8s.aws/v1beta1
+        kind: EC2NodeClass
+        name: {{ include "sdchart.fullname" . }}-nodetemplate-gpu
+      taints:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+      - effect: NoSchedule
+        key: runtime
+        value: {{ include "sdchart.fullname" . }}
+      {{- if .Values.karpenter.provisioner.extraTaints }}
+      {{- toYaml .Values.karpenter.provisioner.extraTaints | nindent 6 }}
+      {{- end }}
+      requirements:
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values:
+        {{- if .Values.karpenter.provisioner.capacityType.spot }}
+        - spot
+        {{- end }}
+        {{- if .Values.karpenter.provisioner.capacityType.onDemand }}
+        - on-demand
+        {{- end }}
+        {{- if .Values.karpenter.provisioner.instanceType }}
+      - key: node.kubernetes.io/instance-type
+        operator: In
+        values:
+        {{- toYaml .Values.karpenter.provisioner.instanceType | nindent 8 }}
+        {{- end }}
+      {{- if .Values.karpenter.provisioner.extraRequirements }}
+      {{- toYaml .Values.karpenter.provisioner.extraRequirements | nindent 6 }}
+      {{- end }}
+  disruption:
+    {{- if .Values.karpenter.provisioner.consolidation }}
+    consolidationPolicy: WhenUnderutilized
+    {{- else }}
+    consolidationPolicy: WhenEmpty
+    {{- end }}
+    {{- if eq .Values.karpenter.provisioner.consolidation false }}
+    consolidateAfter: {{ .Values.karpenter.provisioner.disruption.consolidateAfter }}
+    expireAfter: {{ .Values.karpenter.provisioner.disruption.expireAfter }}
+    {{- end }}
+  {{- if .Values.karpenter.provisioner.resourceLimits }}
+  limits:
+  {{- toYaml .Values.karpenter.provisioner.resourceLimits | nindent 4 }}
+  {{- end }}

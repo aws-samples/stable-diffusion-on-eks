@@ -160,7 +160,7 @@ const MngProps: blueprints.MngClusterProviderProps = {
   minSize: 2,
   maxSize: 2,
   desiredSize: 2,
-  version: eks.KubernetesVersion.V1_28,
+  version: eks.KubernetesVersion.V1_29,
   instanceTypes: [new ec2.InstanceType('m5.large')],
   amiType: eks.NodegroupAmiType.AL2_X86_64,
   enableSsmPermissions: true,
@@ -172,7 +172,7 @@ const MngProps: blueprints.MngClusterProviderProps = {
 
 // Deploy EKS cluster with all add-ons
 const blueprint = blueprints.EksBlueprint.builder()
-  .version(eks.KubernetesVersion.V1_28)
+  .version(eks.KubernetesVersion.V1_29)
   .addOns(...addOns)
   .resourceProvider(
     blueprints.GlobalResources.Vpc,

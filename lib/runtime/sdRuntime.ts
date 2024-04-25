@@ -28,8 +28,8 @@ export const defaultProps: blueprints.addons.HelmAddOnProps & SDRuntimeAddOnProp
   name: 'sdRuntimeAddOn',
   namespace: 'sdruntime',
   release: 'sdruntime',
-  version: '1.0.0',
-  repository: 'https://aws-samples.github.io/stable-diffusion-on-eks/charts',
+  version: '1.1.0',
+  repository: 'oci://public.ecr.aws/bingjiao/charts/sd-on-eks',
   values: {
     global: {
       awsRegion: cdk.Aws.REGION,
@@ -155,6 +155,8 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
     })
     pvc.node.addDependency(ns)
 
+    const nodeRole = clusterInfo.cluster.node.findChild('karpenter-node-role') as iam.IRole
+
     var generatedValues = {
       runtime: {
         type: this.options.type,
@@ -167,6 +169,11 @@ export default class SDRuntimeAddon extends blueprints.addons.HelmAddOn {
         persistence: {
           enabled: true,
           existingClaim: this.id+"-s3-model-storage-pvc"
+        }
+      },
+      karpenter: {
+        nodeTemplate: {
+          iamRole: nodeRole.roleName
         }
       }
     }

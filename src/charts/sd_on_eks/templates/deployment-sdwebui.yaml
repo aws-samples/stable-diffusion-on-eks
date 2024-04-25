@@ -37,16 +37,17 @@ spec:
       - name: inference-api
         image: {{ .Values.runtime.inferenceApi.image.repository }}:{{  .Values.runtime.inferenceApi.image.tag }}
         env:
-        - name: SD_MODEL_CHECKPOINT
-          value: {{ quote .Values.runtime.inferenceApi.modelFilename }}
         {{- if .Values.runtime.queueAgent.dynamicModel }}
         - name: DYNAMIC_SD_MODEL
           value: "true"
+        {{- else }}
+        - name: SD_MODEL_CHECKPOINT
+          value: {{ quote .Values.runtime.inferenceApi.modelFilename }}
         {{- end }}
         - name: API_ONLY
           value: "true"
         - name: CONFIG_FILE
-          value: "/opt/ml/code/config.json"
+          value: "/tmp/config.json"
         - name: EXTRA_CMD_ARG
           value: {{ .Values.runtime.inferenceApi.commandArguments }}
         {{- if .Values.runtime.inferenceApi.extraEnv }}
@@ -57,10 +58,9 @@ spec:
         volumeMounts:
         - mountPath: {{ .Values.runtime.inferenceApi.modelMountPath }}
           name: models
-        # Temporary disable config.json mount for dynamic runtime
-        #- mountPath: "/opt/ml/code/config.json"
-        #  name: config
-        #  subPath: config.json
+        - mountPath: "/tmp/config.json"
+          name: config
+          subPath: config.json
         imagePullPolicy: {{ .Values.runtime.inferenceApi.imagePullPolicy }}
         startupProbe:
           httpGet:
