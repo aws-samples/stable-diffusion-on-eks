@@ -13,6 +13,11 @@ Stable Diffusion is a popular open-source project that generates images using ge
 - Save up to 70% cost using GPU Spot instances
 - Support for various community Stable Diffusion runtimes
 
+!!! warning "Migration Notice"
+    This project has been migrated to [aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws](https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws) This repository and docs is for archive only and no longer receives update.
+
+    You can migrate your configuration by moving `config.yaml` to the new repository.
+
 !!! abstract "Disclaimer"
     This solution is for reference architecture and sample code provided to you under the [MIT-0 License](https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/LICENSE).
 

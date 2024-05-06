@@ -13,6 +13,11 @@ Stable Diffusion 是一个使用生成式AI技术生成图像的流行开源项�
 - 使用 GPU Spot 实例可节省高达 70% 的成本
 - 支持多种社区Stable Diffusion运行时
 
+!!! warning "迁移公告"
+    该项目已迁移至 [aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws](https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws) 存储库。原存储库和本文档已不再更新。
+
+    在您拉取新的存储库后，您可以将 `config.yaml` 迁移到新的存储库以实现配置迁移。
+
 !!! abstract "免责声明"
     该解决方案仅为参考架构和示例代码，按照[MIT-0协议](https://github.com/aws-samples/stable-diffusion-on-eks/blob/main/LICENSE)向您提供。
 
