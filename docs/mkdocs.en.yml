@@ -3,6 +3,7 @@ docs_dir: en
 site_dir: ../site/en
 theme:
   language: en
+  custom_dir: en/overrides
 
 nav:
   - Implementation Guide:

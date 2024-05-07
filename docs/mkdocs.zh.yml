@@ -3,6 +3,7 @@ docs_dir: zh
 site_dir: ../site/zh
 theme:
   language: zh
+  custom_dir: zh/overrides
 
 nav:
   - 实施指南:
