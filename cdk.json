@@ -54,6 +54,6 @@
     "@aws-cdk/core:includePrefixInUniqueNameGeneration": true,
     "@aws-cdk/aws-opensearchservice:enableOpensearchMultiAzWithStandby": true
   },
-  "requireApproval": "Never",
+  "requireApproval": "never",
   "rollback": false
 }

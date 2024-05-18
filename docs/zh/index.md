@@ -14,7 +14,7 @@ Stable Diffusion 是一个使用生成式AI技术生成图像的流行开源项�
 - 支持多种社区Stable Diffusion运行时
 
 !!! warning "迁移公告"
-    该项目已迁移至 [aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws](https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws) 存储库。原存储库和本文档已不再更新。
+    该项目已迁移至 [aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-on-aws](https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-on-aws) 存储库。原存储库和本文档已不再更新。
 
     在您拉取新的存储库后，您可以将 `config.yaml` 迁移到新的存储库以实现配置迁移。
 

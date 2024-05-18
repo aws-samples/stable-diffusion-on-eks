@@ -14,7 +14,7 @@ Stable Diffusion is a popular open-source project that generates images using ge
 - Support for various community Stable Diffusion runtimes
 
 !!! warning "Migration Notice"
-    This project has been migrated to [aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws](https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws) This repository and docs is for archive only and no longer receives update.
+    This project has been migrated to [aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-on-aws](https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-on-aws) This repository and docs is for archive only and no longer receives update.
 
     You can migrate your configuration by moving `config.yaml` to the new repository.
 
