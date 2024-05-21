@@ -1,4 +1,4 @@
-# NOTE: This repository will be migrated to https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-webui-on-aws after May 6th, and this repo will be archived at that time. Please bookmark new repository for further upgrade.
+# NOTE: This repository will be migrated to [aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-on-aws](https://github.com/aws-solutions-library-samples/guidance-for-asynchronous-inference-with-stable-diffusion-on-aws) after May 22, and this repo will be archived at that time. Please bookmark new repository for further upgrade.
 
 # Stable Diffusion on EKS
 
